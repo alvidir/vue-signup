@@ -1,0 +1,153 @@
+a {
+  color: #3888ca;
+  font-weight: normal;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+h1 {
+   margin: 0;
+   padding: 0;
+}
+
+div {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  /*background: gold;*/ /** <-- For the demo **/
+}
+
+button {
+  background: transparent;
+  border: none;
+  border: none;
+  outline: none;
+  height: 21px;
+  margin-bottom: 5px;
+}
+
+button:hover{
+  background: #e1e1e1;
+}
+
+button:active{
+  background-color:#8e8e8e;
+}
+
+input:focus{
+  outline-width: 0;
+  -moz-box-shadow:    inset 0px 0px 3px 1px #00000055;
+  -webkit-box-shadow: inset 0px 0px 3px 1px #00000055;
+  box-shadow:         inset 0px 0px 3px 1px #00000055;
+}
+
+#link-button {
+  margin-left: 5px;
+}
+
+#link-icon {
+  height: 20px;
+}
+
+#app-title {
+  font-size: 21px;
+}
+
+#app-name {
+  font-size: 24px;
+}
+
+#panel {
+  background: #1e1e1e;
+}
+
+#credentials {
+  margin-top: 8%;
+  margin-bottom: 15%;
+  text-align: center;
+}
+
+#login-button {
+  background: rgb(62, 155, 70);
+  color: white;
+  font-size: 16px;
+  height: 35px;
+  width: 80%;
+  border: 1px solid;
+  border-color: #366938;
+  margin-bottom: 10px;
+}
+
+#actions {
+  width: 100%;
+  text-align: center;
+}
+
+#preferences {
+  height: fit-content;
+  padding: 5%;
+}
+
+.banner {
+  padding-top: 5%;
+  text-align: center;
+}
+
+.banner .logo {
+  margin: auto 0;
+  padding-top: 10px;
+  height: 70px;
+}
+
+.banner .text {
+  margin-left: 10px;
+}
+
+.field {
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.field .input {
+  margin-top: 10px;
+  padding-left: 10px;
+  border: 1px solid;
+  border-color: #bbbbbb;
+  width: 80%;
+  height: 25px;
+  font-size: 16px;
+}
+
+.title {
+  width: 80%;
+  text-align: left;
+}
+
+.rcorner {
+  border-radius: 6px;
+}
+
+.rcorner-top-only{
+  border-radius: 6px 6px 0px 0px;
+}
+
+.rcorner-bottom-only{
+  border-radius: 0px 0px 6px 6px;
+}
+
+.wrapper {
+  margin-top: 5%;
+  border: 1px dashed;
+  border-color: #6e6e6e;
+  max-width: 350px;
+  height: fit-content;
+  box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sign-in-card {
+  display: block;
+  height: 100%;
+  /*background: #db0d9d;*/
+}

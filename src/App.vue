@@ -5,12 +5,12 @@
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
-import SignInCard from './components/SignInCard.vue'
+import SignInCard from './components/SignInCard'
 
 export default {
   name: 'App',
   components: {
-    SignInCard
+    SignInCard,
   },
 }
 </script>
@@ -21,12 +21,17 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
+  padding-bottom: 5%;
+  height: fit-content;
+}
+
+html {
+  /* overflow: hidden; */
   height: 100%;
 }
 
-html, body {
-  /* overflow: hidden; */
-  height: 100%;
+body {
+  height: fit-content;
 }
 
 @media (prefers-color-scheme: light) {

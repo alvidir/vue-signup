@@ -1,0 +1,11 @@
+<label class="container">
+    <input
+        v-bind="$attrs"
+        class="input"
+        type="checkbox"
+        :checked="checked"
+        @change="$emit('update:checked', $event.target.checked)"
+    />
+    <span class="switch"></span>
+    <small class="label">{{ label }}</small>
+</label>
