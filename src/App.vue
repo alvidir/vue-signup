@@ -1,26 +1,45 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <!-- img alt="Vue logo" src="./assets/logo.png" -->
+  <SignInCard/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from './components/HelloWorld.vue'
+import SignInCard from './components/SignInCard.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    SignInCard
+  },
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  
+  height: 100%;
 }
+
+html, body {
+  /* overflow: hidden; */
+  height: 100%;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background: #FFF;
+    color: #333;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #333;
+    color: #FFF;
+  }
+}
+
 </style>
