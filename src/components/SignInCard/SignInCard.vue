@@ -11,12 +11,13 @@ import image_logo_light from "../../assets/logo.light.png"
 import image_link_dark from "../../assets/link.dark.svg"
 import image_link_light from "../../assets/link.light.svg"
 import SwitchButton from '../SwitchButton'
+var proto = require('../gRPC')
 
 export default {
   name: 'SignInCard',
   props: {
     theme_switch: {
-      type: Function(),
+      type: Function,
       required: false,
     }
   },
@@ -30,12 +31,16 @@ export default {
           dark_theme: false,
           signin: true,
           loading: false,
+          username: "",
+          email: "",
+          password: "",
+          repeat_password: "",
       }
   },
 
   watch: {
-    signin() {
-
+    email: function(new_val, old_val) {
+      console.log(new_val + old_val)
     }
   },
 
@@ -72,6 +77,7 @@ export default {
 
     login_button_clicked() {
       this.loading = true
+      proto.login_request(this.email, this.password, "hello-world")
     },
 
     signup_button_clicked() {

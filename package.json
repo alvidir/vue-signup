@@ -13,13 +13,12 @@
     "google-protobuf": "^3.12.4",
     "grpc": "^1.24.3",
     "grpc-tools": "^1.9.1",
-    "grpc-web": "^1.2.0",
-    "protobufjs": "^6.10.1",
+    "grpc-web": "^1.2.1",
+    "protobufjs": "^6.10.2",
     "protoc-gen-grpc": "^1.4.1",
     "protoc-gen-grpc-web": "^1.2.0",
     "vue": "^3.0.0",
-    "vue-spinner": "^1.0.4",
-    "vue-spinners": "^1.0.2"
+    "vue-spinner": "^1.0.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

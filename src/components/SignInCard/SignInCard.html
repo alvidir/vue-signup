@@ -21,7 +21,7 @@
         </div>
         <div class="field">
             <div class="title">Password <br> </div>
-            <input class="input rcorner" type="password" v-model="password">
+            <input class="input rcorner" type="password" v-model="password"> <br>
         </div>
         <div class="field"  v-if="!signin">
             <div class="title">Repeat password <br> </div>
@@ -30,7 +30,8 @@
         </div>
         <div id="actions">
             <button class="rcorner" id="login-button" @click="login_button_clicked">
-                <text> {{get_sign_button_text}} </text>
+                <text v-if="!loading"> {{get_sign_button_text}} </text>
+                <scale-loader id="loader" :loading="loading" height="20px"></scale-loader>
             </button>
             <a href="#" ><br>Forgot password?</a> | 
             <a href="#" @click="signup_button_clicked"><strong>{{get_signin_option}}</strong></a>

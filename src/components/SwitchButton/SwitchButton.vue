@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: "Switch",
+    name: "SwitchButton",
     inheritAttrs: false,
     props: {
       label: {

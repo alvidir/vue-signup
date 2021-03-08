@@ -79,6 +79,7 @@ input:focus{
   width: 80%;
   border: 1px solid;
   border-color: #366938;
+  padding-top: 5px;
   margin-bottom: 10px;
 }
 
@@ -91,6 +92,11 @@ input:focus{
   height: fit-content;
   width: 120px;
   margin: 5%;
+}
+
+#loader {
+  margin: auto;
+  height: fit-content;
 }
 
 
