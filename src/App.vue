@@ -1,6 +1,8 @@
 <template>
-  <!-- img alt="Vue logo" src="./assets/logo.png" -->
-  <SignInCard/>
+  <div id="background" v-bind:class="{ dark: dark_theme, light: !dark_theme}" >
+    <!-- img alt="Vue logo" src="./assets/logo.png" -->
+    <SignInCard :theme_switch="theme_switch"/>
+  </div>
 </template>
 
 <script>
@@ -12,6 +14,19 @@ export default {
   components: {
     SignInCard,
   },
+
+  data () {
+      return {
+          dark_theme: false,
+      }
+  },
+
+  methods: {
+    theme_switch(dark_theme) {
+      this.dark_theme = dark_theme
+    },
+  },
+
 }
 </script>
 
@@ -21,8 +36,27 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
-  padding-bottom: 5%;
-  height: fit-content;
+  /*padding-bottom: 5%;*/
+  width: 100%;
+  height: 100%;
+}
+
+#background {
+  width: 100%;
+  height: 100%;
+  padding-top: 5%;
+
+  transition: background-color 0.25s ease-in-out;
+}
+
+.light {
+  background: #FFF;
+  color: #333;
+}
+
+.dark {
+  background: #333;
+    color: #FFF;
 }
 
 html {
@@ -31,9 +65,12 @@ html {
 }
 
 body {
-  height: fit-content;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
 }
 
+/*
 @media (prefers-color-scheme: light) {
   body {
     background: #FFF;
@@ -46,5 +83,5 @@ body {
     color: #FFF;
   }
 }
-
+*/
 </style>

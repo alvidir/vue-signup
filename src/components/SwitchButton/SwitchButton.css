@@ -41,7 +41,7 @@
     --light-gray: #e2e8f0;
     --gray: #cbd5e0;
     --dark-gray: #a0aec0;
-    --teal: #4fd1c5;
+    --teal: #505050;
     --dark-teal: #319795;
 
     /* Make the container element rounded */
@@ -91,3 +91,16 @@
     border-color: var(--dark-teal);
 }
 */
+
+.status {
+    width: 100%;
+    height: 100%;
+    margin: auto 15%;
+    font-size: 16px;
+    align-items: center;
+}
+
+.on {
+    text-align: left;
+    color: #FFF;
+}

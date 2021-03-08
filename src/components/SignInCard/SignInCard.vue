@@ -14,7 +14,12 @@ import SwitchButton from '../SwitchButton'
 
 export default {
   name: 'SignInCard',
-  props: {},
+  props: {
+    theme_switch: {
+      type: Function(),
+      required: false,
+    }
+  },
 
   components: {
     SwitchButton,
@@ -24,6 +29,7 @@ export default {
       return {
           dark_theme: false,
           signin: true,
+          loading: false,
       }
   },
 
@@ -53,6 +59,10 @@ export default {
     get_sign_button_text() {
       return this.signin? "Sign in" : "Sign up"
     },
+
+    get_action_title() {
+      return this.signin? 'Sign in with' : 'Sign up to'
+    }
   },
 
   methods: {
@@ -61,22 +71,25 @@ export default {
     },
 
     login_button_clicked() {
-
+      this.loading = true
     },
 
     signup_button_clicked() {
       this.signin = !this.signin
     },
 
-    onChangeEventHandler() {
+    theme_button_clicked() {
       this.dark_theme = !this.dark_theme
+      if (this.theme_switch) {
+        this.theme_switch(this.dark_theme)
+      }
     },
 
   },
 
   mounted() {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        this.dark_theme = true
+        this.theme_button_clicked()
     }
   }
 }

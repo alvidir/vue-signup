@@ -1,11 +1,11 @@
-<div class="wrapper rcorner" >
-    <div class="sign-in-card rcorner">
+<div class="wrapper rcorner">
+    <div class="sign-in-card rcorner" >
         <div class="rcorner-top-only banner">
         <img class="logo" :src="get_logo"/>
         <p class="text">
-            <text id="app-title">Sign in with </text>
-            <text id="app-name">Alvidir</text>
-            <button class="rcorner" id="link-button" @click="link_button_clicked">
+            <text id="app-title">{{get_action_title}}</text>
+            <text id="app-name"> Alvidir</text>
+            <button class="rcorner" v-bind:class="{ dark: dark_theme}" id="link-button" @click="theme_has_changed">
             <img id="link-icon" :src="get_link"/>
             </button>
         </p>
@@ -36,7 +36,7 @@
             <a href="#" @click="signup_button_clicked"><strong>{{get_signin_option}}</strong></a>
         </div>
         <div id="preferences">
-            <SwitchButton label='Dark theme' :checked="dark_theme" @change="onChangeEventHandler"/>
+            <SwitchButton label='Dark theme' :checked="dark_theme" @change="theme_button_clicked"/>
         </div>
     </div>
 </div>

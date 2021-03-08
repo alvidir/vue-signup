@@ -6,6 +6,10 @@
         :checked="checked"
         @change="$emit('update:checked', $event.target.checked)"
     />
-    <span class="switch"></span>
+    <span class="switch">
+        <div class="status" v-bind:class="{ on: checked }">
+            <small v-if="checked">on</small>
+        </div>
+    </span>
     <small class="label">{{ label }}</small>
 </label>
