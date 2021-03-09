@@ -1,7 +1,7 @@
-const {LoginRequest} = require('../../proto/user/session_pb')
-const {SessionClient} = require('../../proto/user/session_grpc_web_pb.js')
+const {LoginRequest} = require('./proto/user/session_pb')
+const {SessionClient} = require('./proto/user/session_grpc_web_pb.js')
 
-const session_client = new SessionClient('http://127.0.0.1:5000')
+const session_client = new SessionClient('http://127.0.0.1:5050')
 //const metadata = {'Access-Control-Allow-Origin': '*'};
 
 export function login_request(ident, pwd, app) {
@@ -10,7 +10,7 @@ export function login_request(ident, pwd, app) {
     request.setPwd(pwd)
     request.setApp(app)
 
-    session_client.logout(request, {}, async (err, response) => {
+    session_client.login(request, {}, async (err, response) => {
         if (err) {
             console.log(err.code);
             console.log(err.message);

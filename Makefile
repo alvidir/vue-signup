@@ -5,7 +5,7 @@ protofiles:
 	rm -rf .tmp
 
 proto:
-	protoc -I=. ./proto/user/*.proto --plugin ./node_modules/.bin/protoc-gen-grpc-web --js_out=import_style=commonjs:./src --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./src
+	protoc -I=. ./proto/user/*.proto --plugin ./node_modules/.bin/protoc-gen-grpc-web --js_out=import_style=commonjs:./src/components/gRPC --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./src/components/gRPC
 
 run:
 	npm run serve

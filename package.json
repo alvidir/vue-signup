@@ -14,6 +14,7 @@
     "grpc": "^1.24.3",
     "grpc-tools": "^1.9.1",
     "grpc-web": "^1.2.1",
+    "http2": "^3.3.7",
     "protobufjs": "^6.10.2",
     "protoc-gen-grpc": "^1.4.1",
     "protoc-gen-grpc-web": "^1.2.0",
