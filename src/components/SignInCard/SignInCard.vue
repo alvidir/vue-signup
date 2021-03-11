@@ -11,7 +11,8 @@ import image_logo_light from "../../assets/logo.light.png"
 import image_link_dark from "../../assets/link.dark.svg"
 import image_link_light from "../../assets/link.light.svg"
 import SwitchButton from '../SwitchButton'
-var proto = require('../gRPC')
+
+var proto = require('../../services/user')
 
 export default {
   name: 'SignInCard',
@@ -35,6 +36,7 @@ export default {
           email: "",
           password: "",
           repeat_password: "",
+          error: null,
       }
   },
 
@@ -77,7 +79,7 @@ export default {
 
     login_button_clicked() {
       this.loading = true
-      proto.login_request(this.email, this.password, "hello-world")
+      proto.login_request(this.email, this.password, "hello-world", this.login_callback)
     },
 
     signup_button_clicked() {
@@ -91,6 +93,15 @@ export default {
       }
     },
 
+    async login_callback(err, response) {      
+      if (err) {
+        this.error = `${err.code}:${err.message}`;
+      } else {
+          console.log(response.getMessage());
+      }
+      
+      this.loading = false
+    }
   },
 
   mounted() {

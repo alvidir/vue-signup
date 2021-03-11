@@ -1,32 +1,36 @@
-<div class="wrapper rcorner">
+<div class="wrapper rcorner" v-bind:class="{ error: error}">
     <div class="sign-in-card rcorner" >
         <div class="rcorner-top-only banner">
-        <img class="logo" :src="get_logo"/>
-        <p class="text">
-            <text id="app-title">{{get_action_title}}</text>
-            <text id="app-name"> Alvidir</text>
-            <button class="rcorner" v-bind:class="{ dark: dark_theme}" id="link-button" @click="theme_has_changed">
-            <img id="link-icon" :src="get_link"/>
-            </button>
-        </p>
+            <img class="logo" :src="get_logo"/>
+            <p class="text">
+                <text id="app-title">{{get_action_title}}</text>
+                <text id="app-name"> Alvidir</text>
+                <button class="rcorner" v-bind:class="{ dark: dark_theme}" id="link-button" @click="theme_has_changed">
+                <img id="link-icon" :src="get_link"/>
+                </button>
+            </p>
+        </div>
+        <div v-if="error" class="rcorner warning error">
+            <img id="error-icon" src="@/assets/error.red.svg">&nbsp;
+            <text>Got some error</text>
         </div>
         <div id="credentials">
-        <div class="field" v-if="!signin">
-            <div class="title">Username <br> </div>
-            <input class="input rcorner" type="text" v-model="username">
-        </div>
-        <div class="field">
-            <div class="title"> <text v-if="signin"> Username /</text> Email <br> </div>
-            <input class="input rcorner" type="text" v-model="email">
-        </div>
-        <div class="field">
-            <div class="title">Password <br> </div>
-            <input class="input rcorner" type="password" v-model="password"> <br>
-        </div>
-        <div class="field"  v-if="!signin">
-            <div class="title">Repeat password <br> </div>
-            <input class="input rcorner" type="password" v-model="password_repeat">
-        </div>
+            <div class="field" v-if="!signin">
+                <div class="title">Username <br> </div>
+                <input class="input rcorner" v-bind:class="{'dark-input': dark_theme, error: error}" type="text" v-model="username">
+            </div>
+            <div class="field">
+                <div class="title"> <text v-if="signin"> Username /</text> Email <br> </div>
+                <input class="input rcorner" v-bind:class="{'dark-input': dark_theme, error: error}" type="text" v-model="email">
+            </div>
+            <div class="field">
+                <div class="title">Password <br> </div>
+                <input class="input rcorner" v-bind:class="{'dark-input': dark_theme, error: error}" type="password" v-model="password"> <br>
+            </div>
+            <div class="field"  v-if="!signin">
+                <div class="title">Repeat password <br> </div>
+                <input class="input rcorner" v-bind:class="{'dark-input': dark_theme, error: error}" type="password" v-model="password_repeat">
+            </div>
         </div>
         <div id="actions">
             <button class="rcorner" id="login-button" @click="login_button_clicked">
