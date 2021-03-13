@@ -1,4 +1,4 @@
-const {LoginRequest} = require('./proto/session_pb')
+const {LoginRequest, SignupRequest} = require('./proto/session_pb')
 const {SessionClient} = require('./proto/session_grpc_web_pb.js')
 
 const session_client = new SessionClient('http://127.0.0.1:5050')
@@ -11,7 +11,13 @@ export function login_request(ident, pwd, app, callback) {
     request.setApp(app)
 
     session_client.login(request, {}, callback);
+}
 
-    console.log("PROTO")
-    console.log(request.getIdent())
+export function signup_request(name, email, pwd, callback) {
+    var request = new SignupRequest();
+    request.setName(name)
+    request.setEmail(email)
+    request.setPwd(pwd)
+
+    session_client.signup(request, {}, callback);
 }

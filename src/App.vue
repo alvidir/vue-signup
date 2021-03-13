@@ -1,7 +1,10 @@
 <template>
-  <div id="background" v-bind:class="{ dark: dark_theme, light: !dark_theme}" >
-    <!-- img alt="Vue logo" src="./assets/logo.png" -->
-    <SignInCard :theme_switch="theme_switch"/>
+  <div id="main" v-bind:class="{ dark: darkTheme, light: !darkTheme}" >
+    <div id="separator"></div>
+    <div id="wrapper">
+      <SignInCard id="card" :theme-switch="themeSwitch"/>
+    </div>
+    <div id="separator"></div>
   </div>
 </template>
 
@@ -17,16 +20,20 @@ export default {
 
   data () {
       return {
-          dark_theme: false,
+          darkTheme: false,
+          label: null,
       }
   },
-
+/* Full height */
   methods: {
-    theme_switch(dark_theme) {
-      this.dark_theme = dark_theme
+    themeSwitch(darkTheme) {
+      this.darkTheme = darkTheme
     },
   },
 
+  mounted() {
+    
+  }
 }
 </script>
 
@@ -35,18 +42,29 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
-  /*padding-bottom: 5%;*/
-  width: 100%;
-  height: 100%;
+  background-color: transparent;
 }
 
-#background {
+#main {
   width: 100%;
   height: 100%;
-  padding-top: 5%;
-
   transition: background-color 0.25s ease-in-out;
+}
+
+#separator {
+  height: 5%;
+}
+
+#card {
+  height: fit-content;
+  max-width: 350px;
+  min-width: 270px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#wrapper {
+  width: 100%;
 }
 
 .light {
@@ -56,32 +74,13 @@ export default {
 
 .dark {
   background: #333;
-    color: #FFF;
+  color: #FFF;
 }
 
-html {
-  /* overflow: hidden; */
+/** do not set height: 100% here!!! */
+html, body {
   height: 100%;
+  margin: 0 auto;
 }
 
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0px;
-}
-
-/*
-@media (prefers-color-scheme: light) {
-  body {
-    background: #FFF;
-    color: #333;
-  }
-}
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #333;
-    color: #FFF;
-  }
-}
-*/
 </style>

@@ -12,8 +12,6 @@ h1 {
 
 div {
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
   /*background: gold;*/ /** <-- For the demo **/
 }
 
@@ -38,24 +36,12 @@ button:active{
   background-color:#8e8e8e;
 }
 
-.dark:hover{
+.dark-clicky:hover{
   background: #4e4e4e;
 }
 
-.dark:active{
+.dark-clicky:active{
   background-color:#a1a1a1;
-}
-
-input {
-  background: transparent;
-  transition: color 0.25s ease-in-out;
-}
-
-input:focus{
-  outline-width: 0;
-  -moz-box-shadow:    inset 0px 0px 3px 1px #aeaeae90;
-  -webkit-box-shadow: inset 0px 0px 3px 1px #aeaeae90;
-  box-shadow:         inset 0px 0px 3px 1px #aeaeae90;
 }
 
 #link-button {
@@ -75,9 +61,7 @@ input:focus{
 }
 
 #credentials {
-  margin-top: 8%;
-  margin-bottom: 15%;
-  text-align: center;
+  margin-bottom: 30px;
 }
 
 #login-button {
@@ -108,19 +92,10 @@ input:focus{
   height: fit-content;
 }
 
-#error-icon {
-  display: inline-flex;
-  height: 20px;
-}
-
-.warning {
-  height: fit-content;
-  width: 83%;
-  margin: auto, 10px;
-  color: #e04f5f;
-  padding: 5px;
-  display: flex;
-  align-items:center
+.input-field {
+  width: 80%;
+  margin: 5px auto;
+  overflow: hidden;
 }
 
 .dark-input {
@@ -137,38 +112,23 @@ input:focus{
 .banner {
   padding-top: 5%;
   text-align: center;
+  margin-bottom: 30px;
 }
 
-.banner .logo {
+.logo {
   margin: auto 0;
   padding-top: 10px;
   height: 70px;
 }
 
-.banner .text {
+.text {
   margin-left: 10px;
-}
-
-.field {
-  width: 100%;
-  margin-bottom: 10px;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.field .input {
-  margin-top: 10px;
-  padding-left: 10px;
-  border: 1px solid;
-  border-color: #bbbbbb;
-  width: 80%;
-  height: 25px;
-  font-size: 14px;
 }
 
 .title {
   width: 80%;
   text-align: left;
+  margin-left: 10%;
 }
 
 .rcorner {
@@ -183,13 +143,19 @@ input:focus{
   border-radius: 0px 0px 6px 6px;
 }
 
-.wrapper {
-  border: 1px dashed;
-  border-color: #6e6e6e;
-  max-width: 350px;
+.card {
   height: fit-content;
-  box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.1);
   transition: color 0.25s ease-in-out;
+}
+
+@media (min-width: 360px) {
+  /* if screen is to much little then the card becomes non-outlined*/
+  .card {
+    border: 1px dashed;
+    border-color: #6e6e6e;
+    box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.25s ease-in-out;
+  }
 }
 
 .error {
@@ -197,6 +163,5 @@ input:focus{
 }
 
 .sign-in-card {
-  display: block;
   height: 100%;
 }
