@@ -12,7 +12,7 @@ import linkDark from "../../assets/link.dark.svg"
 import linkLight from "../../assets/link.light.svg"
 import SwitchButton from '../SwitchButton'
 import Warning from '../warning'
-import Field from '../Field'
+import Credentials from '../Credentials'
 
 var proto = require('../../services/user')
 
@@ -31,7 +31,7 @@ export default {
 
   components: {
     SwitchButton,
-    Field,
+    Credentials,
     Warning,
   },
 
@@ -45,6 +45,12 @@ export default {
             code: null,
             title: null,
             subtitle: null,
+            cases: {
+              name: "Special characters are not allowed in your name. Neather more than 32 characters.",
+              email: "This does not looks like an email...",
+              password: "Your password must contains upper and lower case, as well as numbers and special characters.",
+              repeat: "Does not match your password.",
+            }
           },
 
           regex: {
@@ -77,15 +83,12 @@ export default {
 
     submit() {
       this.loading = true
-      var name = this.$refs.email.getValue()
-      var email = this.$refs.password.getValue()
+      var content = this.$refs.credentials.getContent()
 
       if (this.signin) {
-        proto.login_request(email, password, "hello-world", this.callback)
+        proto.login_request(content.email, content.password, "hello-world", this.callback)
       } else {
-        var password = this.$refs.name.getValue()
-        // var repeat = this.$refs.repeat.getValue()
-        proto.signup_request(name, email, password, this.callback)
+        proto.signup_request(content.name, content.email, content.password, this.callback)
       }
     },
 
@@ -98,30 +101,6 @@ export default {
       if (this.themeSwitch) {
         this.themeSwitch(this.dark)
       }
-    },
-
-    onFieldChanged(id, new_value) {
-      if (!new_value || new_value.lenght == 0) {
-        return null
-      } 
-
-      if (id === 'password') {
-        this.regex.repeat = '^' + new_value + '$'
-      }
-
-      if (!this.signin && !new_value.match(this.regex[id])) {
-        if (id === 'name') {
-          return "Special characters are not allowed in your nickname"
-        } else if (id === 'email') {
-          return "This does not looks like an email..."
-        } else if (id === 'password') {
-          return "Your password must contains upper and lower case, as well as numbers and special characters"
-        } else if (id === 'repeat') {
-          return "Does not match your password"
-        }
-      }
-
-      return null
     },
 
     async callback(err) {      

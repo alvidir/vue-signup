@@ -42,7 +42,7 @@ export default {
 
   data () {
       return {
-          value: null,
+          value: '',
           error: null,
       }
   },
@@ -60,12 +60,13 @@ export default {
       return this.value
     },
 
-    check(regex, msg) {
-      if (regex && !this.value.match(regex)) {
+    match(regex, msg) {
+      if (regex && this.value && !this.value.match(regex)) {
         this.error = msg
         return false
       }
 
+      this.error = null
       return true
     }
   },
