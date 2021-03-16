@@ -68,6 +68,10 @@ export default {
 
       this.error = null
       return true
+    },
+
+    setError(msg) {
+      this.error = msg
     }
   },
 

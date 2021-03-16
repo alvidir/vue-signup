@@ -1,27 +1,16 @@
 <div class="card rcorner" v-bind:class="{ 'dark': dark}">
-    <div class="sign-in-card rcorner" >
-        <div class="rcorner-top-only banner">
-            <img class="logo" :src="getMainLogo"/>
-            <p class="text">
-                <text id="app-title">{{signin? 'Sign in with' : 'Sign up for'}}</text>
-                <text id="app-name"> Alvidir</text>
-                <button class="rcorner" v-bind:class="{ 'dark-clicky': dark}" id="link-button" @click="linkButtonClicked">
-                    <img id="link-icon" :src="getLinkIcon"/>
-                </button>
-            </p>
-        </div>
-        <Warning :code="error.code" :title="error.title" :subtitle="error.subtitle"/>
-        <Credentials ref="credentials" :dark="dark" :hide="signin"/>
-        <div id="actions">
-            <button class="rcorner" id="login-button" @click="submit">
-                <text v-if="!loading">{{signin? "Sign in" : "Sign up"}} </text>
-                <scale-loader id="loader" :loading="loading" height="20px"></scale-loader>
-            </button>
-            <a href="#" ><br>Forgot password?</a> | 
-            <a href="#" @click="optionSwitch"><strong>{{signin? "Sign up for Alvidir" : "Sign in with Alvidir"}}</strong></a>
-        </div>
-        <div id="preferences">
-            <SwitchButton label='Dark theme' :checked="dark" @change="switchTheme"/>
-        </div>
+    <Banner id="banner" :dark="dark" :title="signin? 'Sign in with' : 'Sign up for'"/>
+    <Warning :code="error.code" :title="error.title" :subtitle="error.subtitle"/>
+    <Credentials id="credentials" ref="credentials" :dark="dark" :all="!signin" :onChange="onChange"/>
+    <div id="actions">
+        <button class="rcorner" id="login-button" @click="submit" v-bind="{disabled: !(enabled || signin)}">
+            <text v-if="!loading">{{signin? "Sign in" : "Sign up"}} </text>
+            <scale-loader id="loader" :loading="loading" height="20px"></scale-loader>
+        </button>
+        <a href="#" ><br>Forgot password?</a> | 
+        <a href="#" @click="optionSwitch"><strong>{{signin? "Sign up for Alvidir" : "Sign in with Alvidir"}}</strong></a>
+    </div>
+    <div id="preferences">
+        <SwitchButton label='Dark theme' :checked="dark" @change="switchTheme"/>
     </div>
 </div>

@@ -6,10 +6,7 @@
 </style>
 
 <script>
-import logoDark from "../../assets/logo.dark.png"
-import logoLight from "../../assets/logo.light.png"
-import linkDark from "../../assets/link.dark.svg"
-import linkLight from "../../assets/link.light.svg"
+import Banner from '../Banner'
 import SwitchButton from '../SwitchButton'
 import Warning from '../warning'
 import Credentials from '../Credentials'
@@ -30,6 +27,7 @@ export default {
   },
 
   components: {
+    Banner,
     SwitchButton,
     Credentials,
     Warning,
@@ -40,6 +38,7 @@ export default {
           dark: false,
           signin: true,
           loading: false,
+          enabled: false,
 
           error: {
             code: null,
@@ -63,24 +62,10 @@ export default {
   },
 
   computed: {
-    getMainLogo(){
-      if (this.dark) {
-        return logoLight
-      } else {
-        return logoDark
-      }
-    },
-
-    getLinkIcon(){
-      return this.dark? linkLight : linkDark
-    },
+    
   },
 
   methods: {
-    linkButtonClicked(){
-      
-    },
-
     submit() {
       this.loading = true
       var content = this.$refs.credentials.getContent()
@@ -94,6 +79,10 @@ export default {
 
     optionSwitch() {
       this.signin = !this.signin
+      this.$nextTick(function () {
+        // container IS finished rendering to the DOM
+        this.$refs.credentials.check()
+      })
     },
 
     switchTheme() {
@@ -103,9 +92,20 @@ export default {
       }
     },
 
+    onChange(id, error) {
+      if (error) {
+        this.enabled = false
+        return
+      }
+
+      if (!this.signin && this.$refs.credentials) {
+        this.enabled = !this.$refs.credentials.hasEmpty() &&
+                        this.$refs.credentials.check()
+      }
+    },
+
     async callback(err) {      
       if (err) {
-        console.log(`${err.code} | ${err.message}`)
         this.error.code = err.code;
         this.error.title = "Some error"
         this.error.subtitle = err.message

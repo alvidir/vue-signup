@@ -11,7 +11,7 @@ import Field from '../Field'
 export default {
   name: 'Credentials',
   props: {
-    hide: {
+    all: {
       type: Boolean,
       required: false,
       default: false,
@@ -21,6 +21,11 @@ export default {
       type: Boolean,
       required: false,
       default: false,
+    },
+
+    onChange: {
+      type: Function,
+      required: false,
     }
   },
 
@@ -41,23 +46,35 @@ export default {
             name: `^[-_A-Za-z0-9.]{1,32}$`,
             email: `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,32}$`,
             password: `^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,32}$`,
-            repeat: null,
-          }
+          },
       }
   },
 
   watch: {  },
 
   methods: { 
-    isOk() {
-      var failed = false
-      this.regex.array.forEach(element => {
-        if (this.$refs[element.key] && !this.$refs[element.key].match(element.value, this.errors[element.key])) {
-          failed = true 
-        }
-      });
+    check() {
+      var nerr = 0
+      if (this.all) {
+        nerr += this.$refs.name.match(this.regex.name, this.errors.name)? 0 : 1
+        nerr += this.$refs.email.match(this.regex.email, this.errors.email)? 0 : 1
+        nerr += this.$refs.password.match(this.regex.password, this.errors.password)? 0 : 1
+        nerr += this.$refs.repeat.getValue() === this.$refs.password.getValue()? 0 : 1
+      } else {
+        nerr += this.$refs.password.match(this.regex.password, null)? 0 : 1
+        nerr += (this.$refs.email.match(this.regex.name, null) ||
+                 this.$refs.email.match(this.regex.email, null))? 0 : 1
+      }
 
-      return failed
+      console.log(nerr)
+      return nerr == 0
+    },
+
+    hasEmpty() {
+      return (!this.$refs.name || this.$refs.name.getValue() === '') ||
+             (!this.$refs.email || this.$refs.email.getValue() === '') ||
+             (!this.$refs.password || this.$refs.password.getValue() === '') ||
+             (!this.$refs.repeat || this.$refs.repeat.getValue() === '')
     },
 
     getContent() {
@@ -69,33 +86,42 @@ export default {
       }
     },
 
-    onFieldChanged(id, new_value) {
-      if (!new_value || new_value.lenght == 0) {
+    onUpdate(id, new_value) {
+      if (!new_value) {
+        // called when some input gets empty
+        if (id === 'password') {
+          this.$refs.repeat.setError(null)
+        }
+
         return null
       } 
 
-      if (id === 'password') {
-        if (new_value) {
-          this.regex.repeat = '^' + new_value + '$'
-        } else {
-          this.regex.repeat = null
-        }
-
-        if (this.$refs.repeat) {
-          this.$refs.repeat.match(this.regex.repeat, this.errors.repeat)
-        }
+      var error = null
+      if (this.$refs.repeat && (id === 'password' || id === 'repeat')) {
+        // checking the password and repeat fields do match
+        var subject = id === 'repeat'? this.$refs.password : this.$refs.repeat
+        error = subject.getValue() === new_value? null : this.errors.repeat
+        this.$refs.repeat.setError(error)
+        
+        // the error here is for the repeat field, not for password
+        error = id === 'password'? null : error
       }
 
-      if (!this.hide && !new_value.match(this.regex[id])) {
-        return this.errors[id]
+      if (this.all && this.regex[id] &&
+          !new_value.match(this.regex[id])) {
+        error = this.errors[id]
       }
 
-      return null
+      if (this.onChange) {
+        this.onChange(id, error)
+      }
+
+      return error
     },
   },
 
   mounted() {
-
+  
   }
 }
 </script>
