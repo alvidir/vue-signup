@@ -2,16 +2,17 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" src='./Banner.css' >
+<style scoped lang="scss" src='./Banner.scss' >
 </style>
 
 <script lang="ts">
+import { defineComponent } from "vue";
 import logoDark from "../../assets/logo.dark.png"
 import logoLight from "../../assets/logo.light.png"
 import linkDark from "../../assets/link.dark.svg"
 import linkLight from "../../assets/link.light.svg"
 
-export default {
+export default defineComponent({
   name: 'Banner',
   props: {
     name: {
@@ -61,5 +62,5 @@ export default {
   mounted() {
 
   }
-}
+})
 </script>

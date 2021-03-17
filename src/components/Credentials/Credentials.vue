@@ -2,13 +2,14 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" src='./Credentials.css' >
+<style scoped lang="scss" src='./Credentials.scss' >
 </style>
 
 <script lang="ts">
+import { defineComponent } from "vue";
 import Field from '../Field'
 
-export default {
+export default defineComponent({
   name: 'Credentials',
   props: {
     all: {
@@ -123,5 +124,5 @@ export default {
   mounted() {
   
   }
-}
+})
 </script>

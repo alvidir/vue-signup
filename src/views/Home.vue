@@ -5,6 +5,10 @@
   </div>
 </template>
 
+<style lang="scss" scoped>
+@import "../scss/_globals.scss";
+</style>
+
 <script lang="ts">
 import { defineComponent } from "vue";
 import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src

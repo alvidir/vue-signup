@@ -1,13 +1,14 @@
-<template src='./Field.html' >
+<template src="./Field.html" >
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" src='./Field.css' >
+<style scoped lang="scss" src="./Field.scss" >
 </style>
 
 <script lang="ts">
-export default {
-  name: 'Field',
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "Field",
   props: {
     id: {
       type: String,
@@ -15,7 +16,7 @@ export default {
     },
     title: {
       type: String,
-      required: false,
+      required: true,
     },
     type: {
       type: String,
@@ -42,8 +43,8 @@ export default {
 
   data () {
       return {
-          value: '',
-          error: null,
+          value: "",
+          error: "",
       }
   },
 
@@ -60,17 +61,17 @@ export default {
       return this.value
     },
 
-    match(regex, msg) {
+    match(regex: string, msg: string): boolean {
       if (regex && this.value && !this.value.match(regex)) {
         this.error = msg
         return false
       }
 
-      this.error = null
+      this.error = ""
       return true
     },
 
-    setError(msg) {
+    setError(msg: string) {
       this.error = msg
     }
   },
@@ -78,5 +79,5 @@ export default {
   mounted() {
 
   }
-}
+})
 </script>

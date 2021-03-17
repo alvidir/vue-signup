@@ -1,13 +1,15 @@
-<template src='./Field.html' >
+<template src="./Signin.html">
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" src='./Field.css' >
+<style scoped lang="scss" src="./Signin.scss">
 </style>
 
 <script lang="ts">
-export default {
-  name: 'Field',
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "Field",
   props: {
     id: {
       type: String,
@@ -15,7 +17,7 @@ export default {
     },
     title: {
       type: String,
-      required: false,
+      required: true,
     },
     type: {
       type: String,
@@ -42,15 +44,15 @@ export default {
 
   data () {
       return {
-          value: '',
-          error: '',
+          value: "",
+          error: "",
       }
   },
 
   watch: {
-    value: function(new_val: string) {
+    value: function(newVal: string) {
       if (this.onChange) {
-        this.error = this.onChange(this.id, new_val)
+        this.error = this.onChange(this.id, newVal)
       }
     }
   },
@@ -66,7 +68,7 @@ export default {
         return false
       }
 
-      this.error = ''
+      this.error = ""
       return true
     },
 
@@ -74,9 +76,5 @@ export default {
       this.error = msg
     }
   },
-
-  mounted() {
-
-  }
-}
+});
 </script>

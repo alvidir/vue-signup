@@ -2,11 +2,12 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" src='./Warning.css' >
+<style scoped lang="scss" src='./Warning.scss' >
 </style>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
   name: 'Warning',
   props: {
     code: {
@@ -47,5 +48,5 @@ export default {
   mounted() {
 
   }
-}
+})
 </script>

@@ -1,23 +1,24 @@
 <template src='./SwitchButton.html'>
 </template>
 
-<style scoped lang="scss" src='./SwitchButton.css'>
+<style scoped lang="scss" src='./SwitchButton.scss'>
 </style>
 
 <script lang="ts">
-  export default {
-    name: "SwitchButton",
-    inheritAttrs: false,
-    props: {
-      label: {
-        type: String,
-        required: true,
-      },
-
-      checked: {
-        type: Boolean,
-        required: true,
-      },
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "SwitchButton",
+  inheritAttrs: false,
+  props: {
+    label: {
+      type: String,
+      required: true,
     },
-  };
+
+    checked: {
+      type: Boolean,
+      required: true,
+    },
+  },
+});
 </script>

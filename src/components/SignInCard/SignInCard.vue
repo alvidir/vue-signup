@@ -2,10 +2,11 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" src='./SignInCard.css' >
+<style scoped lang="scss" src='./SignInCard.scss' >
 </style>
 
 <script lang="ts">
+import { defineComponent } from "vue";
 import Banner from '../Banner'
 import SwitchButton from '../SwitchButton'
 import Warning from '../warning'
@@ -13,7 +14,7 @@ import Credentials from '../Credentials'
 
 var proto = require('../../services/user')
 
-export default {
+export default defineComponent({
   name: 'SignInCard',
   props: {
     themeSwitch: {
@@ -122,5 +123,5 @@ export default {
         this.switchTheme()
     }
   }
-}
+})
 </script>

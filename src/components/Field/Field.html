@@ -3,7 +3,7 @@
         <text class="hid-box" v-bind:class="{'show-box': value, error: error}">{{title}}</text>
     </div>
     <input :placeholder="title" class="rcorner" v-bind:class="{'dark-input': dark, 'error-box': error}" :type="type" v-model="value">
-    <div id="warning" class="box error" v-bind:class="{double: line === 'double', hidden: !error}">
+    <div id="warning" class="box error" v-bind:class="{double: line === 'double', hidden: !error.length}">
         {{error}}
     </div>
 </div>

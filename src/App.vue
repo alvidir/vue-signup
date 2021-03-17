@@ -1,12 +1,42 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <router-link to="/">Home</router-link> |
+  <router-link to="/signin">Signin</router-link>
   </div>
-  <router-view />
+  <router-view v-bind:class="{dark: dark}"/>
 </template>
 
+
+<script lang="tp">
+import { defineComponent } from "@vue/composition-api"
+
+export default defineComponent({
+  name: "App",
+  data() {
+    return {
+      dark: false
+    }
+  },
+  mounted() {
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        this.dark = true;
+    }
+  }
+})
+</script>
+
 <style lang="scss">
+@import "./scss/_globals.scss";
+
+.light {
+  $bg-primary: $bg-primary-light;
+}
+
+.dark {
+  $bg-primary: $bg-primary-dark;
+  background: $bg-primary;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
