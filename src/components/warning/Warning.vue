@@ -2,10 +2,10 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped src='./Warning.css' >
+<style scoped lang="scss" src='./Warning.css' >
 </style>
 
-<script>
+<script lang="ts">
 export default {
   name: 'Warning',
   props: {

@@ -2,10 +2,10 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped src='./SignInCard.css' >
+<style scoped lang="scss" src='./SignInCard.css' >
 </style>
 
-<script>
+<script lang="ts">
 import Banner from '../Banner'
 import SwitchButton from '../SwitchButton'
 import Warning from '../warning'

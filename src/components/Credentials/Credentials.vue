@@ -2,10 +2,10 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped src='./Credentials.css' >
+<style scoped lang="scss" src='./Credentials.css' >
 </style>
 
-<script>
+<script lang="ts">
 import Field from '../Field'
 
 export default {

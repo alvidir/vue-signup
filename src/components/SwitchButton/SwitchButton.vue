@@ -1,10 +1,10 @@
 <template src='./SwitchButton.html'>
 </template>
 
-<style scoped src='./SwitchButton.css'>
+<style scoped lang="scss" src='./SwitchButton.css'>
 </style>
 
-<script>
+<script lang="ts">
   export default {
     name: "SwitchButton",
     inheritAttrs: false,

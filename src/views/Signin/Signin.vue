@@ -43,12 +43,12 @@ export default {
   data () {
       return {
           value: '',
-          error: null,
+          error: '',
       }
   },
 
   watch: {
-    value: function(new_val) {
+    value: function(new_val: string) {
       if (this.onChange) {
         this.error = this.onChange(this.id, new_val)
       }
@@ -60,17 +60,17 @@ export default {
       return this.value
     },
 
-    match(regex, msg) {
+    match(regex: string, msg: string): boolean {
       if (regex && this.value && !this.value.match(regex)) {
         this.error = msg
         return false
       }
 
-      this.error = null
+      this.error = ''
       return true
     },
 
-    setError(msg) {
+    setError(msg: string): void {
       this.error = msg
     }
   },

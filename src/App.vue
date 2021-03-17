@@ -1,86 +1,30 @@
 <template>
-  <div id="main" v-bind:class="{ dark: darkTheme, light: !darkTheme}" >
-    <div id="separator"></div>
-    <div id="wrapper">
-      <SignInCard id="card" :theme-switch="themeSwitch"/>
-    </div>
-    <div id="separator"></div>
+  <div id="nav">
+    <router-link to="/">Home</router-link> |
+    <router-link to="/about">About</router-link>
   </div>
+  <router-view />
 </template>
 
-<script>
-// import HelloWorld from './components/HelloWorld.vue'
-import SignInCard from './components/SignInCard'
-
-export default {
-  name: 'App',
-  components: {
-    SignInCard,
-  },
-
-  data () {
-      return {
-          darkTheme: false,
-          label: null,
-      }
-  },
-/* Full height */
-  methods: {
-    themeSwitch(darkTheme) {
-      this.darkTheme = darkTheme
-    },
-  },
-
-  mounted() {
-    
-  }
-}
-</script>
-
-<style>
+<style lang="scss">
 #app {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: transparent;
+  text-align: center;
+  color: #2c3e50;
 }
 
-#main {
-  width: 100%;
-  height: 100%;
-  transition: background-color 0.25s ease-in-out;
-}
+#nav {
+  padding: 30px;
 
-#separator {
-  height: 5%;
-}
+  a {
+    font-weight: bold;
+    color: #2c3e50;
 
-#card {
-  height: fit-content;
-  max-width: 350px;
-  min-width: 270px;
-  margin-left: auto;
-  margin-right: auto;
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
-
-#wrapper {
-  width: 100%;
-}
-
-.light {
-  background: #FFF;
-  color: #333;
-}
-
-.dark {
-  background: #333;
-  color: #FFF;
-}
-
-/** do not set height: 100% here!!! */
-html, body {
-  height: 100%;
-  margin: 0 auto;
-}
-
 </style>

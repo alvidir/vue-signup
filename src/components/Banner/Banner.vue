@@ -2,10 +2,10 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped src='./Banner.css' >
+<style scoped lang="scss" src='./Banner.css' >
 </style>
 
-<script>
+<script lang="ts">
 import logoDark from "../../assets/logo.dark.png"
 import logoLight from "../../assets/logo.light.png"
 import linkDark from "../../assets/link.dark.svg"
