@@ -1,9 +1,7 @@
-<template src="./Signin.html">
-</template>
+<template src="./Signin.html" />
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" src="./Signin.scss">
-</style>
+<style scoped lang="scss" src="./Signin.scss" />
 
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -13,68 +11,68 @@ export default defineComponent({
   props: {
     id: {
       type: String,
-      required: false,
+      required: false
     },
     title: {
       type: String,
-      required: true,
+      required: true
     },
     type: {
       type: String,
       required: false,
-      default: "text",
+      default: "text"
     },
     line: {
       type: String,
       required: false,
-      default: "single",
+      default: "single"
     },
     dark: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     onChange: {
       type: Function,
-      required: false,
+      required: false
     }
   },
 
   components: {},
 
-  data () {
-      return {
-          value: "",
-          error: "",
-      }
+  data() {
+    return {
+      value: "",
+      error: ""
+    };
   },
 
   watch: {
     value: function(newVal: string) {
       if (this.onChange) {
-        this.error = this.onChange(this.id, newVal)
+        this.error = this.onChange(this.id, newVal);
       }
     }
   },
 
-  methods: { 
+  methods: {
     getValue() {
-      return this.value
+      return this.value;
     },
 
     match(regex: string, msg: string): boolean {
       if (regex && this.value && !this.value.match(regex)) {
-        this.error = msg
-        return false
+        this.error = msg;
+        return false;
       }
 
-      this.error = ""
-      return true
+      this.error = "";
+      return true;
     },
 
     setError(msg: string): void {
-      this.error = msg
+      this.error = msg;
     }
-  },
+  }
 });
 </script>

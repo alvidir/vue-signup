@@ -1,11 +1,10 @@
 <template>
   <div id="nav">
-  <router-link to="/">Home</router-link> |
-  <router-link to="/signin">Signin</router-link>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/signin">Signin</router-link>
   </div>
-  <router-view v-bind:class="{dark: dark}"/>
+  <router-view v-bind:class="{ dark: dark }" />
 </template>
-
 
 <script lang="tp">
 import { defineComponent } from "@vue/composition-api"
@@ -28,12 +27,8 @@ export default defineComponent({
 <style lang="scss">
 @import "./scss/_globals.scss";
 
-.light {
-  $bg-primary: $bg-primary-light;
-}
-
 .dark {
-  $bg-primary: $bg-primary-dark;
+  @import "./scss/_globals.dark.scss";
   background: $bg-primary;
 }
 
