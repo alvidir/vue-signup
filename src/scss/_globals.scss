@@ -7,6 +7,7 @@ $text-regular: $bg-theme-dark !default;
 $text-error: #e04f5f !default;
 
 $lapse-primary:  0.375s ease-in-out;
+$lapse-fast:  0.25s ease-in-out;
 
 text {
     transition: color $lapse-primary;
@@ -25,6 +26,7 @@ input {
     height: 30px;
     font-size: 14px;
     transition: color $lapse-primary;
+    outline:none;
 
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -37,7 +39,7 @@ input {
     &.transparent {
         background: transparent;
         border: 1px solid;
-        border-color: #bbbbbb;
+        border-color: #9c9c9c;
         padding-left: 10px;
 
         &:focus{

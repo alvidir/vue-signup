@@ -1,6 +1,6 @@
 <div>
     <div id="title" class="box" v-bind:class="{hidden: !value}">
-        <text class="hidder" v-bind:class="{'show': value, error: error}">
+        <text v-bind:class="{error: error}">
             <strong>{{title}}</strong>
         </text>
     </div>

@@ -15,7 +15,7 @@ import Field from "@/components/Field";
 import Controller from "@/components/Field";
 
 export default defineComponent({
-  name: "Home",
+  name: "Signin",
   components: {
     SwitchButton,
     Warning,
@@ -30,7 +30,6 @@ export default defineComponent({
   methods: {
     onChange() {
       console.log("Change")
-      return "trololo"
     },
 
     getIconByTheme(name: string) {
@@ -39,6 +38,10 @@ export default defineComponent({
       } else if (name === "link") {
         return this.dark ? LinkIconLight : LinkIconDark;
       }
+    },
+
+    example() {
+      console.log("CLICK")
     }
   }
 });

@@ -40,7 +40,7 @@ export default defineComponent({
     value: function(value) {
       if (this.onChange) {
         const err = this.onChange(this.id, value);
-        this.error = err? err : this.error;
+        this.error = err && err.length? err : "";
       }
     }
   },
@@ -52,12 +52,12 @@ export default defineComponent({
 
     match(regex: string, msg: string): boolean {
       if (regex && this.value && !this.value.match(regex)) {
-        this.error = msg
-        return false
+        this.error = msg && msg.length? msg : "";
+        return false;
       }
 
-      this.error = ""
-      return true
+      this.error = "";
+      return true;
     },
 
     setError(msg: string) {

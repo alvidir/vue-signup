@@ -1,22 +1,57 @@
 @import "@/scss/_globals.scss";
-$max-width: 300px;
+$dyn-separation: 5%;
+$const-separation: 20px;
 
-#preferences {
-  max-width: $max-width;
+.card {
+  @extend .rcorner;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 10px;
+  margin-top: $dyn-separation/2;
+  margin-bottom: $dyn-separation/2;
+
+  transition: all $lapse-primary;
+}
+
+@media (min-width: 500px) {
+  /* if screen is to much little then the card becomes non-outlined*/
+  .card {
+    border: 1px dashed;
+    border-color: #6e6e6e;
+    box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.25s ease-in-out;
+    transition: all $lapse-primary;
+  }
 }
 
 .dark {
   @import "@/scss/_global.dark.scss";
 }
 
-.logo {
-  margin: auto 0;
-  padding-top: 10px;
-  height: 90px;
-}
+.banner {
+  padding-top: $const-separation;
+  padding-bottom: $const-separation;
 
-.link-icon {
-  height: 24px;
+  .logo {
+    margin: auto 0;
+    padding-top: 10px;
+    height: 80px;
+  }
+
+  .link {
+    margin-left: 5px;
+    height: 22px;
+  }
+
+  text {
+    &.prefix {
+      font-size: 21px;
+    }
+    
+    &.appname {
+      font-size: 24px;
+    }
+  }
 }
 
 .submit {
@@ -26,7 +61,7 @@ $max-width: 300px;
   font-size: 16px;
   height: 35px;
   width: 100%;
-  /* max-width: $max-width; */
+  margin-top: $dyn-separation/2;
 
   &:hover {
     background: #56bb5f;
@@ -41,22 +76,6 @@ $max-width: 300px;
   }
 }
 
-text {
-  transition: color $lapse-primary;
-
-  &.prefix {
-    font-size: 24px;
-  }
-  
-  &.appname {
-    font-size: 28px;
-  }
-}
-
-img {
-  transition: src $lapse-primary;
-}
-
 .routes {
   color: $text-regular;
   margin-top: 10px;
@@ -66,5 +85,15 @@ img {
     font-weight: normal;
     text-decoration: none;
     font-size: 15px;
+  }
+}
+
+.credentials {
+  padding-top: $const-separation;
+  padding-bottom: $const-separation;
+
+  .credential {
+    margin-top: $dyn-separation/2;
+    margin-bottom: $dyn-separation/2;
   }
 }
