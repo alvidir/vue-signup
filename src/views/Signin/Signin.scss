@@ -1,88 +1,70 @@
-input {
-  background: transparent;
-  transition: color 0.25s ease-in-out;
-  border: 1px solid;
-  border-color: #bbbbbb;
-  padding-left: 10px;
-  width: 100%;
-  height: 30px;
-  font-size: 14px;
-  margin: 0;
+@import "@/scss/_globals.scss";
+$max-width: 300px;
 
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+#preferences {
+  max-width: $max-width;
 }
 
-input:focus{
-  outline-width: 0;
-  -moz-box-shadow:    inset 0px 0px 3px 1px #aeaeae90;
-  -webkit-box-shadow: inset 0px 0px 3px 1px #aeaeae90;
-  box-shadow:         inset 0px 0px 3px 1px #aeaeae90;
+.dark {
+  @import "@/scss/_global.dark.scss";
+}
+
+.logo {
+  margin: auto 0;
+  padding-top: 10px;
+  height: 90px;
+}
+
+.link-icon {
+  height: 24px;
+}
+
+.submit {
+  border: 1px solid;
+  border-color: #366938;
+  background: #3e9b46;
+  font-size: 16px;
+  height: 35px;
+  width: 100%;
+  /* max-width: $max-width; */
+
+  &:hover {
+    background: #56bb5f;
+  }
+
+  &:active {
+    background: #3e9b46;
+  }
+
+  text {
+    color: white;
+  }
 }
 
 text {
-  padding-left: 5px;
+  transition: color $lapse-primary;
+
+  &.prefix {
+    font-size: 24px;
+  }
+  
+  &.appname {
+    font-size: 28px;
+  }
 }
 
-#title {
-  width: 100%;
-  padding: 2px 0;
-  text-align: left;
-  font-size: 15px;
-  overflow: hidden;
-  margin-bottom: 3px;
+img {
+  transition: src $lapse-primary;
 }
 
-#warning {
-  width: 100%;
-  font-size: 12px;
-  padding-top: 2px;
-}
+.routes {
+  color: $text-regular;
+  margin-top: 10px;
 
-.error {
-  color: #e04f5f;
-}
-
-.error-box {
-  border-color: #e04f5f !important;
-}
-
-.dark-input {
-  color: #FFF;
-}
-
-.rcorner {
-  border-radius: 6px;
-}
-
-.field {
-  width: 100%;
-  height: fit-content;
-}
-
-.box {
-  height: 15px;
-  width: 100%;
-  transition: height .25s ease-out;
-}
-
-.box.double {
-  height: 30px;
-}
-
-.box.hidden {
-  height: 0;
-}
-
-.hid-box {
-  top: 100%;
-  position: relative;
-  transition: all .25s ease-out;
-  height: 100%;
-}
-
-.show-box{
-  top: 0%;
-  padding-bottom: 10px;
+  .route { 
+    color: #3888ca;
+    font-weight: normal;
+    text-decoration: none;
+    font-size: 15px;
+  }
 }

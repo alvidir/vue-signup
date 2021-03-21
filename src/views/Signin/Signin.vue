@@ -1,77 +1,44 @@
-<template src="./Signin.html" />
+<template src="./Signin.html"> </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" src="./Signin.scss" />
+<style scoped lang="scss" src="./Signin.scss"></style>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import MainLogoLight from "@/assets/logo.light.png";
+import MainLogoDark from "@/assets/logo.dark.png";
+import LinkIconLight from "@/assets/link.light.svg";
+import LinkIconDark from "@/assets/link.dark.svg";
+import Warning from "@/components/Warning";
+import SwitchButton from "@/components/SwitchButton";
+import Field from "@/components/Field";
+import Controller from "@/components/Field";
 
 export default defineComponent({
-  name: "Field",
+  name: "Home",
+  components: {
+    SwitchButton,
+    Warning,
+    Field
+  },
+
   props: {
-    id: {
-      type: String,
-      required: false
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    type: {
-      type: String,
-      required: false,
-      default: "text"
-    },
-    line: {
-      type: String,
-      required: false,
-      default: "single"
-    },
-    dark: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    onChange: {
-      type: Function,
-      required: false
-    }
-  },
-
-  components: {},
-
-  data() {
-    return {
-      value: "",
-      error: ""
-    };
-  },
-
-  watch: {
-    value: function(newVal: string) {
-      if (this.onChange) {
-        this.error = this.onChange(this.id, newVal);
-      }
-    }
+    dark: Boolean,
+    onSwitchTheme: Function
   },
 
   methods: {
-    getValue() {
-      return this.value;
+    onChange() {
+      console.log("Change")
+      return "trololo"
     },
 
-    match(regex: string, msg: string): boolean {
-      if (regex && this.value && !this.value.match(regex)) {
-        this.error = msg;
-        return false;
+    getIconByTheme(name: string) {
+      if (name === "main") {
+        return this.dark ? MainLogoLight : MainLogoDark;
+      } else if (name === "link") {
+        return this.dark ? LinkIconLight : LinkIconDark;
       }
-
-      this.error = "";
-      return true;
-    },
-
-    setError(msg: string): void {
-      this.error = msg;
     }
   }
 });

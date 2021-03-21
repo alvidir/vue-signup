@@ -1,8 +1,50 @@
 /// @type Color
-$bg-primary: #FFF !default;
-$bg-secondary: #EEE !default;
+$bg-theme-light: #FFF;
+$bg-theme-dark: #333;
+$bg-primary: $bg-theme-light !default;
 
-$text-regular: #333 !default;
+$text-regular: $bg-theme-dark !default;
 $text-error: #e04f5f !default;
 
-$border-color: #6e6e6e !default;
+$lapse-primary:  0.375s ease-in-out;
+
+text {
+    transition: color $lapse-primary;
+
+    &.error {
+        color: $text-error !important;
+    }
+}
+
+.rcorner {
+    border-radius: 6px;
+}
+
+input {
+    width: 100%;
+    height: 30px;
+    font-size: 14px;
+    transition: color $lapse-primary;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    &.error {
+        border-color: $text-error !important;
+    }
+
+    &.transparent {
+        background: transparent;
+        border: 1px solid;
+        border-color: #bbbbbb;
+        padding-left: 10px;
+
+        &:focus{
+            outline-width: 0;
+            -moz-box-shadow:    inset 0px 0px 3px 1px #aeaeae90;
+            -webkit-box-shadow: inset 0px 0px 3px 1px #aeaeae90;
+            box-shadow:         inset 0px 0px 3px 1px #aeaeae90;
+        }
+    }
+}

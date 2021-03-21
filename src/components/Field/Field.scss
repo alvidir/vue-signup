@@ -1,59 +1,15 @@
-input {
-  background: transparent;
-  transition: color 0.25s ease-in-out;
-  border: 1px solid;
-  border-color: #bbbbbb;
-  padding-left: 10px;
-  width: 100%;
-  height: 30px;
-  font-size: 14px;
-  margin: 0;
-
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-input:focus{
-  outline-width: 0;
-  -moz-box-shadow:    inset 0px 0px 3px 1px #aeaeae90;
-  -webkit-box-shadow: inset 0px 0px 3px 1px #aeaeae90;
-  box-shadow:         inset 0px 0px 3px 1px #aeaeae90;
-}
-
-text {
-  padding-left: 5px;
-}
+@import "@/scss/_globals.scss";
 
 #title {
   width: 100%;
-  padding: 2px 0;
-  text-align: left;
   font-size: 15px;
   overflow: hidden;
-  margin-bottom: 3px;
 }
 
 #warning {
   width: 100%;
-  font-size: 12px;
+  font-size: 14px;
   padding-top: 2px;
-}
-
-.error {
-  color: #e04f5f;
-}
-
-.error-box {
-  border-color: #e04f5f !important;
-}
-
-.dark-input {
-  color: #FFF;
-}
-
-.rcorner {
-  border-radius: 6px;
 }
 
 .field {
@@ -62,22 +18,25 @@ text {
 }
 
 .box {
-  height: 15px;
+  height: 20px;
   width: 100%;
   transition: height .25s ease-out;
-}
+  /** overflow-x: hidden; */
+  text-align: left;
 
-.box.double {
-  height: 30px;
-}
+  &.double {
+    height: 30px;
+  }
 
-.box.hidden {
-  height: 0;
+  &.hidden {
+    height: 0;
+  }
 }
 
 .hid-box {
   top: 100%;
   position: relative;
+  color: transparent;
   transition: all .25s ease-out;
   height: 100%;
 }
@@ -85,4 +44,5 @@ text {
 .show-box{
   top: 0%;
   padding-bottom: 10px;
+  color: $text-regular !important;
 }

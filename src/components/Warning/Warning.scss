@@ -1,0 +1,29 @@
+@import "@/scss/_globals.scss";
+
+div {
+  display: flex; /*require for items aligment*/
+  height: fit-content;
+  width: fit-content;
+
+  align-items:center;
+  text-align: center;
+  line-height: 14px;
+  
+
+  img {
+    margin: 0 10px;
+    display: inline-flex;
+    height: 18px;
+  }
+
+  text {
+    color: $text-error;
+    font-size: 14px;
+    font-weight: 900;
+    text-align: left;
+
+    .subtitle {
+      font-weight: 500;
+    }
+  }
+}

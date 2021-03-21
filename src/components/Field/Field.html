@@ -1,9 +1,11 @@
-<div class="field">
+<div>
     <div id="title" class="box" v-bind:class="{hidden: !value}">
-        <text class="hid-box" v-bind:class="{'show-box': value, error: error}">{{title}}</text>
+        <text class="hidder" v-bind:class="{'show': value, error: error}">
+            <strong>{{title}}</strong>
+        </text>
     </div>
-    <input :placeholder="title" class="rcorner" v-bind:class="{'dark-input': dark, 'error-box': error}" :type="type" v-model="value">
+    <input :placeholder="title" class="rcorner transparent" v-bind:class="{error: error}" :type="type" v-model="value">
     <div id="warning" class="box error" v-bind:class="{double: line === 'double', hidden: !error.length}">
-        {{error}}
+        <text v-bind:class="{error: error}">{{error}}</text>
     </div>
 </div>

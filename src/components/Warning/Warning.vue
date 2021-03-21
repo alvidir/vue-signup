@@ -25,28 +25,6 @@ export default defineComponent({
       required: false,
       default: "Some other data about the error, if any :)",
     },
-  },
-
-  components: {},
-
-  data () {
-      return {
-          
-      }
-  },
-
-  watch: {
-
-  },
-
-  computed: {  },
-
-  methods: { 
-    
-  },
-
-  mounted() {
-
   }
 })
 </script>

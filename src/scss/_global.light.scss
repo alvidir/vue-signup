@@ -1,0 +1,27 @@
+/// @type Color
+$bg-primary: $bg-theme-light;
+$text-regular: $bg-theme-dark;
+
+button {
+    &.transparent {
+        background: transparent;
+        outline: none;
+        border: none;
+
+        &::-moz-focus-inner {
+            border: 0;
+        }
+    
+        &:hover{
+            background: #EEE;
+        }
+    
+        &:active{
+            background: transparent;
+        }
+    }
+}
+
+text {
+    color: $text-regular;
+}

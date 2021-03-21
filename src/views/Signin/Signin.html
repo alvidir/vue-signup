@@ -1,3 +1,27 @@
 <div>
-    <h1>Signin page</h1>
+    <img class="logo" :src="getIconByTheme('main')"/>
+</div>
+<p>
+    <text class="prefix">Sign in with</text>
+    <text class="appname">&nbsp;Alvidir</text>
+    <button class="transparent" @click="onClick">
+        <img class="link-icon" :src="getIconByTheme('link')"/>
+    </button>
+</p>
+<Warning code="12"/>
+<form v-bind:class="{ dark: dark }">
+    <Field id="ident" :dark="dark" title="Username / Email" :onChange="onChange"/>
+    <Field id="password" :dark="dark" title="Password" type="password"/>
+    <button type="submit" class="rcorner submit" v-bind="{disabled: !(enabled || signin)}">
+        <text v-if="!loading">Sign in</text>
+        <scale-loader id="loader" :loading="loading" height="20px"></scale-loader>
+    </button>
+</form>
+<div class="routes">
+    <router-link class="route" to="/you-loser">Forgot password?</router-link>
+    <text> | </text>
+    <router-link class="route" to="/signup"><strong>Sign up for Alvidir</strong></router-link>
+</div>
+<div id="preferences">
+    <SwitchButton label='Dark theme' :checked="dark" @change="onSwitchTheme"/>
 </div>

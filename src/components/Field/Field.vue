@@ -10,33 +10,21 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "Field",
   props: {
-    id: {
+    id: String,
+    dark: Boolean,
+    onChange: Function,
+    line: {
       type: String,
-      required: false,
+      default: "single",
+    },
+    type: {
+      type: String,
+      default: "text",
     },
     title: {
       type: String,
       required: true,
     },
-    type: {
-      type: String,
-      required: false,
-      default: "text",
-    },
-    line: {
-      type: String,
-      required: false,
-      default: "single",
-    },
-    dark: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    onChange: {
-      type: Function,
-      required: false,
-    }
   },
 
   components: {},
@@ -49,9 +37,10 @@ export default defineComponent({
   },
 
   watch: {
-    value: function(new_val) {
+    value: function(value) {
       if (this.onChange) {
-        this.error = this.onChange(this.id, new_val)
+        const err = this.onChange(this.id, value);
+        this.error = err? err : this.error;
       }
     }
   },
@@ -74,10 +63,6 @@ export default defineComponent({
     setError(msg: string) {
       this.error = msg
     }
-  },
-
-  mounted() {
-
   }
 })
 </script>
