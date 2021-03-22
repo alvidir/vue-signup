@@ -1,17 +1,17 @@
 <div class="card">
     <div class="banner">
-        <img class="logo" :src="getIconByTheme('main')"/>
+        <img class="logo" :src="getIconByTheme()"/>
         <div>
             <text class="prefix">Sign in with</text>
             <text class="appname">&nbsp;Alvidir</text>
-            <img class="link" :src="getIconByTheme('link')"/>
+            <img class="link" src="@/assets/link.svg"/>
         </div>
     </div>
-    <Warning code="0"/>
+    <Warning :code="error.code"/>
     <div class="credentials">
-        <Field class="credential" id="ident" :dark="dark" title="Username / Email" :onChange="onChange"/>
-        <Field class="credential" id="password" :dark="dark" title="Password" type="password"/>
-        <button class="rcorner submit" :onClick="example">
+        <Field class="credential" ref="id" id="ident" :error="error.ident" :dark="dark" title="Username / Email" />
+        <Field class="credential" ref="pwd" id="password" :error="error.password" :dark="dark" title="Password" type="password"/>
+        <button class="rcorner submit" :onClick="submit">
             <text id="action" v-if="!loading">Sign in</text>
             <scale-loader id="loader" :loading="loading" height="20px"></scale-loader>
         </button>

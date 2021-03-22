@@ -7,12 +7,11 @@
 import { defineComponent } from "vue";
 import MainLogoLight from "@/assets/logo.light.png";
 import MainLogoDark from "@/assets/logo.dark.png";
-import LinkIconLight from "@/assets/link.light.svg";
-import LinkIconDark from "@/assets/link.dark.svg";
 import Warning from "@/components/Warning";
 import SwitchButton from "@/components/SwitchButton";
-import Field from "@/components/Field";
-import Controller from "@/components/Field";
+import Field, { Controller as FieldController } from "@/components/Field";
+import RegexFactory from "@/utils/regex";
+//import {loginRequest} from '@/services/user';
 
 export default defineComponent({
   name: "Signin",
@@ -27,21 +26,67 @@ export default defineComponent({
     onSwitchTheme: Function
   },
 
-  methods: {
-    onChange() {
-      console.log("Change")
-    },
+  data () {
+      return {
+          loading: false,
+          error: {
+            code: 0,
+            ident: "",
+            password: "",
 
-    getIconByTheme(name: string) {
-      if (name === "main") {
-        return this.dark ? MainLogoLight : MainLogoDark;
-      } else if (name === "link") {
-        return this.dark ? LinkIconLight : LinkIconDark;
+            cases: {
+              fieldRequired: "Required field."
+            }
+          }
       }
+  },
+
+  methods: {
+    getIconByTheme() {
+        return this.dark ? MainLogoLight : MainLogoDark;
     },
 
-    example() {
-      console.log("CLICK")
+    submit() {
+      const idField = this.$refs.id as FieldController;
+      if (idField.getValue().length == 0) {
+        this.error.ident = this.error.cases.fieldRequired;
+      } else {
+        this.error.ident = "";
+      }
+
+      const pwdField = this.$refs.pwd as FieldController;
+       if (pwdField.getValue().length == 0) {
+        this.error.password = this.error.cases.fieldRequired;
+      } else {
+        this.error.password = "";
+      }
+
+      if (this.error.ident.length ||
+          this.error.password.length) {
+        return
+      }
+
+      if ((!RegexFactory.check('name', idField.getValue()) &&
+          !RegexFactory.check('name', idField.getValue())) ||
+          !RegexFactory.check('password', pwdField.getValue())){
+        this.error.code = 1;
+        return
+      }
+      
+      this.loading = true;
+      //loginRequest(idField.getValue(), pwdField.getValue(), "hello-world", this.callback)
+    },
+
+    async callback(err: any) {      
+      if (err) {
+        this.error.code = err.code;
+        //this.error.title = "Some error"
+        //this.error.subtitle = err.message
+      } else {
+        this.error.code = 0
+      }
+      
+      this.loading = false
     }
   }
 });
