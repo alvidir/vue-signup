@@ -5,7 +5,6 @@ $text-regular: $bg-theme-dark;
 button {
     &.transparent {
         background: transparent;
-        outline: none;
         border: none;
 
         &::-moz-focus-inner {

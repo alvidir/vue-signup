@@ -10,21 +10,8 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: 'Warning',
   props: {
-    code: {
-      type: Number,
-      required: false,
-      default: 0,
-    },
-    title: {
-      type: String,
-      required: false,
-      default: "Got some error",
-    },
-    subtitle: {
-      type: String,
-      required: false,
-      default: "Some other data about the error, if any :)",
-    },
+    title: String,
+    subtitle: String
   }
 })
 </script>

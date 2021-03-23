@@ -11,7 +11,7 @@ import Warning from "@/components/Warning";
 import SwitchButton from "@/components/SwitchButton";
 import Field, { Controller as FieldController } from "@/components/Field";
 import RegexFactory from "@/utils/regex";
-//import {loginRequest} from '@/services/user';
+import {loginRequest} from '@/proto/user';
 
 export default defineComponent({
   name: "Signin",
@@ -29,13 +29,16 @@ export default defineComponent({
   data () {
       return {
           loading: false,
+
           error: {
-            code: 0,
+            title: "",
+            subtitle: "Make sure your credentials are alright",
             ident: "",
             password: "",
 
             cases: {
-              fieldRequired: "Required field."
+              fieldRequired: "Required field.",
+              invalidCreds: "Invalid username or password",
             }
           }
       }
@@ -69,21 +72,19 @@ export default defineComponent({
       if ((!RegexFactory.check('name', idField.getValue()) &&
           !RegexFactory.check('name', idField.getValue())) ||
           !RegexFactory.check('password', pwdField.getValue())){
-        this.error.code = 1;
+        this.error.title = this.error.cases.invalidCreds
         return
       }
       
       this.loading = true;
-      //loginRequest(idField.getValue(), pwdField.getValue(), "hello-world", this.callback)
+      loginRequest(idField.getValue(), pwdField.getValue(), "hello-world", this.callback)
     },
 
-    async callback(err: any) {      
+    async callback(err: any) {    
       if (err) {
-        this.error.code = err.code;
-        //this.error.title = "Some error"
-        //this.error.subtitle = err.message
+        this.error.title = this.error.cases.invalidCreds
       } else {
-        this.error.code = 0
+        this.error.title = ""
       }
       
       this.loading = false

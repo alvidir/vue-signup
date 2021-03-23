@@ -2,6 +2,11 @@
 $dyn-separation: 10vh;
 $const-separation: 20px;
 
+#loader {
+  padding-top: 3px;
+}
+
+
 .card {
   @extend .rcorner;
   max-width: 320px;

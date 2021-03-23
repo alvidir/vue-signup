@@ -18,9 +18,7 @@ export class Regex {
 
         const regex = this.register.get(key);
         const got = str.match(regex);
-        if (!got) return false;
-
-        return got.length == str.length;
+        return (got != null && got.length == 1);
     }
 }
 

@@ -7,7 +7,7 @@
             <img class="link" src="@/assets/link.svg"/>
         </div>
     </div>
-    <Warning :code="error.code"/>
+    <Warning :title="error.title" :subtitle="error.subtitle"/>
     <div class="credentials">
         <Field class="credential" ref="id" id="ident" :error="error.ident" :dark="dark" title="Username / Email" />
         <Field class="credential" ref="pwd" id="password" :error="error.password" :dark="dark" title="Password" type="password"/>
