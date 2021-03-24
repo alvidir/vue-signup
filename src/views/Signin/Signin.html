@@ -1,8 +1,8 @@
-<div class="card">
+<div class="card" @keyup.enter="submit()">
     <div class="banner">
         <img class="logo" :src="getIconByTheme()"/>
         <div>
-            <text class="prefix">Sign in with</text>
+            <text class="prefix">Sign in to</text>
             <text class="appname">&nbsp;Alvidir</text>
             <img class="link" src="@/assets/link.svg"/>
         </div>
@@ -11,7 +11,7 @@
     <div class="credentials">
         <Field class="credential" ref="id" id="ident" :error="error.ident" :dark="dark" title="Username / Email" />
         <Field class="credential" ref="pwd" id="password" :error="error.password" :dark="dark" title="Password" type="password"/>
-        <button class="rcorner submit" :onClick="submit">
+        <button type="submit" class="rcorner submit" :onClick="submit">
             <text id="action" v-if="!loading">Sign in</text>
             <scale-loader id="loader" :loading="loading" height="20px"></scale-loader>
         </button>

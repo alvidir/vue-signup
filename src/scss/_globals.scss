@@ -17,6 +17,14 @@ text {
     }
 }
 
+small {
+    transition: color $lapse-primary;
+    
+    &.error {
+        color: $text-error !important;
+    }
+}
+
 .rcorner {
     border-radius: 6px;
 }

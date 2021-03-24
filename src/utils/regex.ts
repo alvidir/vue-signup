@@ -6,7 +6,7 @@ export class Regex {
     register = new Map();
 
     constructor() {
-        this.register.set('name', `^[-_A-Za-z0-9.]{1,32}$`);
+        this.register.set('name', `^[-_A-Za-z0-9.]{1,24}$`);
         this.register.set('email', `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,32}$`);
         this.register.set('password', `^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,32}$`);
     }

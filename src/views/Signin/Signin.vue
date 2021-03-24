@@ -30,11 +30,15 @@ export default defineComponent({
       return {
           loading: false,
 
+          guest: {
+            name: "Alvidir",
+          },
+
           error: {
-            title: "",
-            subtitle: "Make sure your credentials are alright",
             ident: "",
             password: "",
+            title: "",
+            subtitle: "Make sure your credentials are alright",
 
             cases: {
               fieldRequired: "Required field.",
@@ -87,7 +91,7 @@ export default defineComponent({
         this.error.title = ""
       }
       
-      this.loading = false
+      //this.loading = false
     }
   }
 });
