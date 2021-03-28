@@ -1,3 +1,3 @@
-import Signup from './Signup.vue';
+import Signup from "./Signup.vue";
 
 export default Signup;

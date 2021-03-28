@@ -1,0 +1,36 @@
+@import "@/scss/_globals.scss";
+@import "../Field.scss";
+
+input {
+    width: 80%;
+    border-right: 0px !important;
+}
+
+button {
+    width: 20%;
+    height: 30px;
+    overflow: hidden;
+
+    border: 1px solid;
+    border-color: darkgoldenrod;
+    border-left: 0px !important;
+    background: #ec9900;
+
+    &:hover {
+        background: #ca8709;
+    }
+
+    &:active {
+        border-color: #707070;
+        background: #808080;
+    }
+
+    &:disabled {
+        border-color: #707070;
+        background-color: #808080;
+    }
+
+    text {
+        color: white;
+    }
+}

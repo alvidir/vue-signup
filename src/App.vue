@@ -1,8 +1,4 @@
 <template>
-  <!-- div id="nav" -->
-  <!-- router-link to="/">Home</router-link-->
-  <!-- router-link to="/signin">Signin</router-link-->
-  <!-- /div -->
   <router-view :dark="dark" :onSwitchTheme="onSwitchTheme" />
 </template>
 

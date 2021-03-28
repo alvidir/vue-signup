@@ -1,0 +1,18 @@
+<div>
+    <div id="title" class="box" v-bind:class="{hidden: !value}">
+        <text v-bind:class="{error: error}">
+            <strong>{{title}}</strong>
+        </text>
+    </div>
+    <input class="rcorner right-only transparent"
+           :placeholder="title"
+           :type="type"
+           v-bind:class="{error: error}"
+           v-model="value">
+    <button class="rcorner left-only" :onClick="onClick" v-bind="{disabled: !enabled}">
+        <text>{{inner}}</text>
+    </button>
+    <div id="warning" class="box error" v-bind:class="{double: line === 'double', hidden: !error || !error.length}">
+        <small v-bind:class="{error: error}">{{error}}</small>
+    </div>
+</div>

@@ -27,6 +27,14 @@ small {
 
 .rcorner {
     border-radius: 6px;
+
+    &.left-only {
+        border-radius: 0 6px 6px 0;
+    }
+
+    &.right-only {
+        border-radius: 6px 0 0 6px;
+    }
 }
 
 input {
