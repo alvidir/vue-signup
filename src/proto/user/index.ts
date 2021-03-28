@@ -13,11 +13,11 @@ export function loginRequest(ident: string, pwd: string, app: string, callback: 
     sessionClient.login(request, null, callback);
 }
 
-//export function signupRequest(name: string, email: string, pwd: string, callback: any) {
-//    //let request = new SignupRequest();
-//    //request.setName(name)
-//    //request.setEmail(email)
-//    //request.setPwd(pwd)
-//
-//    sessionClient.signup(/*request*/ null, {}, callback);
-//}
+export function signupRequest(name: string, email: string, pwd: string, callback: any) {
+    const request = new SignupRequest();
+    request.setName(name);
+    request.setEmail(email);
+    request.setPwd(pwd);
+
+    sessionClient.signup(request, null, callback);
+}

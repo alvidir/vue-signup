@@ -30,13 +30,10 @@ export default defineComponent({
       return {
           loading: false,
 
-          guest: {
-            name: "Alvidir",
-          },
-
           error: {
             ident: "",
             password: "",
+            
             title: "",
             subtitle: "Make sure your credentials are alright",
 
@@ -91,7 +88,7 @@ export default defineComponent({
         this.error.title = ""
       }
       
-      //this.loading = false
+      this.loading = false
     }
   }
 });

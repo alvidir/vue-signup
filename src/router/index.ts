@@ -11,6 +11,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/signin",
     name: "Signin",
     component: () => import("@/views/Signin")
+  },
+  {
+    path: "/signup",
+    name: "Signup",
+    component: () => import("@/views/Signup")
   }
 ];
 

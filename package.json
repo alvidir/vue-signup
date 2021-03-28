@@ -7,8 +7,10 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@types/crypto-js": "^4.0.1",
     "@vue/composition-api": "^1.0.0-rc.5",
     "core-js": "^3.6.5",
+    "crypto-js": "^4.0.0",
     "file-loader": "^4.3.0",
     "google-auth-library": "^6.0.6",
     "google-protobuf": "^3.12.4",
