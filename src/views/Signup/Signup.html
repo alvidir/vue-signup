@@ -9,10 +9,10 @@
     </div>
     <Warning :title="error.title" :subtitle="error.subtitle"/>
     <div class="credentials">
-        <Field :onChange="onChange" class="credential" :dark="dark" ref="name" id="name" :error="error.name" title="Username" />
-        <Field :onChange="onChange" class="credential" :dark="dark" ref="email" id="email" :error="error.email" title="Email" />
-        <Field :onChange="onChange" class="credential" :dark="dark" ref="pwd" id="pwd" :error="error.password" title="Password" type="password"/>
-        <Field :onChange="onChange" class="credential" :dark="dark" ref="repeat" id="repeat" :error="error.repeat" title="Repeat password" type="password"/>
+        <Field max="24" :onChange="onChange" class="credential" :dark="dark" ref="name" id="name" :error="error.name" title="Username" />
+        <Field max="32" :onChange="onChange" class="credential" :dark="dark" ref="email" id="email" :error="error.email" title="Email" />
+        <Field max="32" :onChange="onChange" class="credential" :dark="dark" ref="pwd" id="pwd" :error="error.password" title="Password" type="password"/>
+        <Field max="32" :onChange="onChange" class="credential" :dark="dark" ref="repeat" id="repeat" :error="error.repeat" title="Repeat password" type="password"/>
         <button type="submit" class="rcorner submit" :onClick="submit">
             <text id="action" v-if="!loading">Sign up</text>
             <scale-loader id="loader" :loading="loading" height="20px"></scale-loader>

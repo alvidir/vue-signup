@@ -1,19 +1,21 @@
-<template src="./InnerActionField.html" >
+<template src="./Deferred.html" >
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" src="./InnerActionField.scss" >
+<style scoped lang="scss" src="./Deferred.scss" >
 </style>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "InnerActionField",
+  name: "Deferred",
   props: {
     id: String,
     dark: Boolean,
     onChange: Function,
     onInnerAction: Function,
+    max: Number,
+    seconds: Number,
     line: {
       type: String,
       default: "single",
@@ -31,11 +33,6 @@ export default defineComponent({
       required: false,
       default: "Send",
     },
-    enabled: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     error: String
   },
 
@@ -44,6 +41,7 @@ export default defineComponent({
   data () {
       return {
           value: "",
+          enabled: true,
       }
   },
 
@@ -61,6 +59,7 @@ export default defineComponent({
     },
 
     onClick() {
+      this.enabled = false;
       if(this.onInnerAction) {
         this.onInnerAction();
       }

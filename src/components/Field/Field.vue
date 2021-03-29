@@ -13,6 +13,7 @@ export default defineComponent({
     id: String,
     dark: Boolean,
     onChange: Function,
+    max: Number,
     line: {
       type: String,
       default: "single",

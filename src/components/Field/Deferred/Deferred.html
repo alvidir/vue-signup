@@ -4,13 +4,11 @@
             <strong>{{title}}</strong>
         </text>
     </div>
-    <input class="rcorner right-only transparent"
-           :placeholder="title"
-           :type="type"
-           v-bind:class="{error: error}"
-           v-model="value">
-    <button class="rcorner left-only" :onClick="onClick" v-bind="{disabled: !enabled}">
-        <text>{{inner}}</text>
+    <input :placeholder="title" class="rcorner transparent" v-bind:class="{error: error}" :maxlength="max" :type="type" v-model="value">
+    <button class="rcorner" :onClick="onClick" v-bind="{disabled: !enabled}">
+        <div class="inner">
+            <text>{{inner}}</text>
+        </div>
     </button>
     <div id="warning" class="box error" v-bind:class="{double: line === 'double', hidden: !error || !error.length}">
         <small v-bind:class="{error: error}">{{error}}</small>

@@ -4,7 +4,7 @@
             <strong>{{title}}</strong>
         </text>
     </div>
-    <input :placeholder="title" class="rcorner transparent" v-bind:class="{error: error}" :type="type" v-model="value">
+    <input :placeholder="title" class="rcorner transparent" :maxlength="max" v-bind:class="{error: error}" :type="type" v-model="value">
     <div id="warning" class="box error" v-bind:class="{double: line === 'double', hidden: !error || !error.length}">
         <small v-bind:class="{error: error}">{{error}}</small>
     </div>

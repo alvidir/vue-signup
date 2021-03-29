@@ -9,8 +9,9 @@ import MainLogoLight from "@/assets/logo.light.png";
 import MainLogoDark from "@/assets/logo.dark.png";
 import Warning from "@/components/Warning";
 import SwitchButton from "@/components/SwitchButton";
-import InnerActionField, { Controller as FieldController } from "@/components/Field/InnerActionField";
 import RegexFactory from "@/utils/regex";
+import DeferredField from "@/components/Field/Deferred";
+import {Controller as FieldController} from "@/components/Field";
 import {loginRequest} from '@/proto/user';
 
 export default defineComponent({
@@ -18,7 +19,7 @@ export default defineComponent({
   components: {
     SwitchButton,
     Warning,
-    InnerActionField
+    DeferredField,
   },
 
   props: {
@@ -43,7 +44,13 @@ export default defineComponent({
               fieldRequired: "Required field.",
               invalidCreds: "Invalid username or password",
             }
-          }
+          },
+
+          messages: [
+            {
+              body: "As soon as you click to Send, an email with the 6code is going to you. Provide it down below."
+            }
+          ]
       }
   },
 
@@ -67,19 +74,19 @@ export default defineComponent({
       } else {
         this.error.ident = "";
       }
-
+      
       const pwdField = this.$refs.pwd as FieldController;
        if (pwdField.getValue().length == 0) {
         this.error.password = this.error.cases.fieldRequired;
       } else {
         this.error.password = "";
       }
-
+      
       if (this.error.ident.length ||
           this.error.password.length) {
         return
       }
-
+      
       if ((!RegexFactory.check('name', idField.getValue()) &&
           !RegexFactory.check('name', idField.getValue())) ||
           !RegexFactory.check('password', pwdField.getValue())){
