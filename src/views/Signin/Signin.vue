@@ -51,6 +51,7 @@ export default defineComponent({
     },
 
     submit() {
+      this.loading = true;
       const idField = this.$refs.id as FieldController;
       if (idField.getValue().length == 0) {
         this.error.ident = this.error.cases.fieldRequired;
@@ -77,7 +78,6 @@ export default defineComponent({
         return
       }
       
-      this.loading = true;
       loginRequest(idField.getValue(), pwdField.getValue(), "hello-world", this.callback)
     },
 

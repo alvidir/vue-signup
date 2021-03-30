@@ -11,7 +11,7 @@
     <div class="credentials">
         <Field class="credential" ref="id" id="ident" :error="error.ident" :dark="dark" title="Username / Email" />
         <Field class="credential" ref="pwd" id="password" :error="error.password" :dark="dark" title="Password" type="password"/>
-        <button type="submit" class="rcorner submit" :onClick="submit">
+        <button type="submit" class="rcorner submit" :onClick="submit" v-bind="{disabled: loading}">
             <text id="action" v-if="!loading">Sign in</text>
             <scale-loader id="loader" :loading="loading" height="20px"></scale-loader>
         </button>

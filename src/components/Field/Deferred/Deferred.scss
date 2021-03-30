@@ -1,13 +1,8 @@
 @import "@/scss/_globals.scss";
 @import "@/components/Field/Field.scss";
 
-.inner {
-    text-align: center;
-
-    text {
-        font-size: 14px;
-        
-    }
+.field {
+    display: inline-flex;
 }
 
 input {
@@ -18,11 +13,20 @@ input {
 button {
     width: 20%;
     height: 30px;
-    overflow: hidden;
+    transition: background-color $lapse-fast;
+    display: inline-flex;
+    
 
     border: 1px solid;
     border-color: #da910c;
-    background: #f8a813;
+    background-color: #f8a813;
+
+    text {
+        margin: auto;
+        width: 100%;
+        font-size: 14px;
+        color: white;
+    }
 
     &:hover {
         background: #da910c;
@@ -30,15 +34,30 @@ button {
 
     &:active {
         border-color: #da910c;
-        background: #f8a813;
+        background-color: #f8a813;
     }
 
     &:disabled {
-        border-color: #707070;
-        background-color: #808080;
+        border-color: #9870c0;
+        background-color: #795997;
+
+        text {
+            color: #e0c2ff;
+            font-size: 15px;
+
+            small {
+                color: #e0c2ff;
+                font-size: 14px;
+                font-weight: 600;
+            }
+        }
     }
 
-    text {
-        color: white;
+    img {
+        position: relative;
+        width: 17px;
+        margin: auto;
+        margin-right: 3px;
     }
+    
 }

@@ -63,42 +63,47 @@ export default defineComponent({
       this.innerEnabled = false;
     },
 
-    submit() {
-      if (!this.submitEnabled) {
-        return;
+    onChange(id: string, value: string): string {
+      if (RegexFactory.check('6code', value)) {
+        this.submitEnabled = true;
+        this.submit();
+        return value
       }
 
-      const idField = this.$refs.id as FieldController;
-      if (idField.getValue().length == 0) {
-        this.error.ident = this.error.cases.fieldRequired;
-      } else {
-        this.error.ident = "";
+      this.submitEnabled = this.loading? true : false;
+      const over: string = this.formatCode(value, 0);
+      return over;
+    },
+
+    formatCode(value: string, init: number): string {
+      if (init < 0 || init >= value.length) {
+        return value;
       }
-      
-      const pwdField = this.$refs.pwd as FieldController;
-       if (pwdField.getValue().length == 0) {
-        this.error.password = this.error.cases.fieldRequired;
-      } else {
-        this.error.password = "";
+
+      let over = value;
+      if (RegexFactory.check('number', value[init])) {
+        let next = init+1;
+        if (init == 3) {
+          over = value.substr(0, 3) + "-";
+          over += value.length > 3? value.substr(3) : "";
+          next += 1;
+        }
+
+        return this.formatCode(over, next);
       }
-      
-      if (this.error.ident.length ||
-          this.error.password.length) {
-        return
-      }
-      
-      if ((!RegexFactory.check('name', idField.getValue()) &&
-          !RegexFactory.check('name', idField.getValue())) ||
-          !RegexFactory.check('password', pwdField.getValue())){
-        this.error.title = this.error.cases.invalidCreds
-        return
-      }
-      
+
+      over = value.substr(0, init) + value.substr(init+1)
+      return this.formatCode(over, init)
+    },
+
+    submit() {
+      this.callback(null);
       this.loading = true;
-      loginRequest(idField.getValue(), pwdField.getValue(), "hello-world", this.callback)
     },
 
     async callback(err: any) {    
+      await new Promise( resolve => setTimeout(resolve, 5000) );
+
       if (err) {
         this.error.title = this.error.cases.invalidCreds
       } else {

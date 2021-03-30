@@ -14,6 +14,7 @@ export default defineComponent({
     dark: Boolean,
     onChange: Function,
     onInnerAction: Function,
+    readonly: Boolean,
     max: Number,
     seconds: Number,
     line: {
@@ -41,6 +42,8 @@ export default defineComponent({
   data () {
       return {
           value: "",
+          count: 0,
+          unit: "s",
           enabled: true,
       }
   },
@@ -48,7 +51,10 @@ export default defineComponent({
   watch: {
     value: function(value) {
       if (this.onChange) {
-        this.onChange(this.id, value);
+        const over: string = this.onChange(this.id, value);
+        if(over != undefined) {
+          this.value = over;
+        }
       }
     }
   },
@@ -59,10 +65,25 @@ export default defineComponent({
     },
 
     onClick() {
-      this.enabled = false;
+      if (this.seconds && this.seconds > 0){
+        this.enabled = false;
+        this.clock();
+      }
+      
       if(this.onInnerAction) {
         this.onInnerAction();
       }
+    },
+
+    async clock() {
+      this.count = this.seconds ? this.seconds : 0;
+      while (this.count > 0) {
+        this.count--;
+        // sleep for 1000 milliseconds -> 1 second
+        await new Promise( resolve => setTimeout(resolve, 1000) );
+      }
+
+      this.enabled = true;
     }
   }
 })

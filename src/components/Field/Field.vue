@@ -40,7 +40,10 @@ export default defineComponent({
   watch: {
     value: function(value) {
       if (this.onChange) {
-        this.onChange(this.id, value);
+        const over: string = this.onChange(this.id, value);
+        if (over != undefined) {
+          this.value = over;
+        }
       }
     }
   },
