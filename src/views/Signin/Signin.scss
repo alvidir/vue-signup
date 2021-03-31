@@ -1,38 +1,8 @@
 @import "@/scss/_globals.scss";
-$dyn-separation: 10vh;
 $const-separation: 20px;
 
 #loader {
   padding-top: 3px;
-}
-
-
-.card {
-  @extend .rcorner;
-  max-width: 320px;
-  margin: 0 auto;
-  padding: 10px;
-
-  @media (min-width: 501px) {
-    /* if screen is to much little then the card becomes non-outlined*/
-    border: 1px dashed;
-    border-color: #6e6e6e;
-    box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.25s ease-in-out;
-    transition: all $lapse-primary;
-  }
-
-  @media (min-height: 800px) {
-    margin-top: $dyn-separation;
-    margin-bottom: $dyn-separation;
-  }
-
-  @media (max-height: 800px) {
-    margin-top: $dyn-separation/2;
-    margin-bottom: $dyn-separation/2;
-  }
-
-  transition: all $lapse-primary;
 }
 
 .dark {
@@ -61,28 +31,6 @@ $const-separation: 20px;
     &.appname {
       font-size: 24px;
     }
-  }
-}
-
-.submit {
-  border: 1px solid;
-  border-color: #366938;
-  background: #3e9b46;
-  font-size: 16px;
-  height: 35px;
-  width: 100%;
-  margin-top: $const-separation;
-
-  &:hover {
-    background: #2e8135;
-  }
-
-  &:active {
-    background: #3e9b46;
-  }
-
-  text {
-    color: white;
   }
 }
 

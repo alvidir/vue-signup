@@ -38,7 +38,7 @@
     height: var(--switch-size);
     flex-basis: var(--switch-container-width);
 
-    --light-gray: #e2e8f0;
+    --light-gray: #d0d0d0;
     --gray: #cbd5e0;
     --dark-gray: #a0aec0;
     --teal: #505050;
@@ -75,9 +75,9 @@
     width: calc(var(--switch-size) - 4px);
     /* Make the inner circle fully rounded */
     border-radius: 9999px;
-    background-color: white;
+    background-color: #EEE;
 
-    transition: transform 0.375s ease-in-out;
+    transition: transform 0.20s ease-in-out;
     border: 2px solid var(--light-gray);
 }
 

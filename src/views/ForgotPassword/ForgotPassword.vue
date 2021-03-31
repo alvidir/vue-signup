@@ -12,14 +12,15 @@ import SwitchButton from "@/components/SwitchButton";
 import RegexFactory from "@/utils/regex";
 import DeferredField from "@/components/Field/Deferred";
 import {Controller as FieldController} from "@/components/Field";
-import {loginRequest} from '@/proto/user';
+
+import qrcode from "@/assets/qr-code.svg";
 
 export default defineComponent({
   name: "ForgotPassword",
   components: {
     SwitchButton,
     Warning,
-    DeferredField,
+    DeferredField
   },
 
   props: {
@@ -34,21 +35,24 @@ export default defineComponent({
           innerEnabled: true,
 
           error: {
-            ident: "",
-            password: "",
+            code: "",
             
             title: "",
             subtitle: "Make sure your credentials are alright",
 
             cases: {
-              fieldRequired: "Required field.",
-              invalidCreds: "Invalid username or password",
+              fieldRequired: "Required field",
+              invalidCode: "The provided 6code is not valid",
+              codeFormat: "A 6code is composed by six numbers as XYZ-JQK",
+              code: ""
             }
           },
 
           messages: [
             {
-              body: "As soon as you click to Send, an email with the 6code is going to you. Provide it down below."
+              icon: qrcode,
+              title: "Via email",
+              details: "Clicking on Send, we will provide you the 6code via email."
             }
           ]
       }
@@ -97,6 +101,15 @@ export default defineComponent({
     },
 
     submit() {
+      const codeField = this.$refs.code as FieldController;
+      if (codeField.getValue().length == 0) {
+        this.error.code = this.error.cases.fieldRequired;
+      } else if (!RegexFactory.check('6code', codeField.getValue())) {
+        this.error.code = this.error.cases.code;
+      } else {
+        this.error.code = "";
+      }
+
       this.callback(null);
       this.loading = true;
     },
@@ -105,7 +118,7 @@ export default defineComponent({
       await new Promise( resolve => setTimeout(resolve, 5000) );
 
       if (err) {
-        this.error.title = this.error.cases.invalidCreds
+        this.error.title = this.error.cases.invalidCode
       } else {
         this.error.title = ""
       }

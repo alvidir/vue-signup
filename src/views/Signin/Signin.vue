@@ -51,7 +51,6 @@ export default defineComponent({
     },
 
     submit() {
-      this.loading = true;
       const idField = this.$refs.id as FieldController;
       if (idField.getValue().length == 0) {
         this.error.ident = this.error.cases.fieldRequired;
@@ -78,17 +77,18 @@ export default defineComponent({
         return
       }
       
-      loginRequest(idField.getValue(), pwdField.getValue(), "hello-world", this.callback)
+      this.loading = true;
+      loginRequest(idField.getValue(), pwdField.getValue(), "hello-world", this.callback);
     },
 
     async callback(err: any) {    
       if (err) {
-        this.error.title = this.error.cases.invalidCreds
+        this.error.title = this.error.cases.invalidCreds;
       } else {
-        this.error.title = ""
+        this.error.title = "";
       }
       
-      this.loading = false
+      this.loading = false;
     }
   }
 });
