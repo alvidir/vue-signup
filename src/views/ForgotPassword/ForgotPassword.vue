@@ -33,18 +33,22 @@ export default defineComponent({
           loading: false,
           submitEnabled: false,
           innerEnabled: true,
+          checkEmail: false,
+          placeholder: "Email",
+
+          titles: {
+            email: "Email",
+            code: "6code",
+          },
 
           error: {
             code: "",
-            
-            title: "",
-            subtitle: "Make sure your credentials are alright",
 
             cases: {
               fieldRequired: "Required field",
               invalidCode: "The provided 6code is not valid",
               codeFormat: "A 6code is composed by six numbers as XYZ-JQK",
-              code: ""
+              email: "This does not looks like an email...",
             }
           },
 
@@ -64,19 +68,50 @@ export default defineComponent({
     },
 
     onInnerAction() {
-      this.innerEnabled = false;
+      if (this.placeholder == this.titles.email){
+        const codeField = this.$refs.code as FieldController;
+        if (!RegexFactory.check('email', codeField.getValue())) {
+          this.error.code = this.error.cases.email;
+          this.checkEmail = true;
+          return false
+        }
+
+        this.error.code = "";
+        this.innerEnabled = false;
+        this.placeholder = this.titles.code;
+        
+        codeField.clear();
+        return true;
+      }
+    },
+
+    onCountOut() {
+      const codeField = this.$refs.code as FieldController;
+      this.placeholder = this.titles.email;
+      this.submitEnabled = false;
+      codeField.clear();
     },
 
     onChange(id: string, value: string): string {
-      if (RegexFactory.check('6code', value)) {
-        this.submitEnabled = true;
-        this.submit();
-        return value
+      if (this.checkEmail &&
+          this.placeholder == this.titles.email &&
+          RegexFactory.check('email', value)) {
+            this.checkEmail = false;
+            this.error.code = "";
+      } else if (this.placeholder == this.titles.code) {
+        if (RegexFactory.check('6code', value)) {
+          this.submitEnabled = true;
+          this.checkEmail = false;
+          this.submit();
+          return value
+        }
+
+        this.submitEnabled = this.loading? true : false;
+        const over: string = this.formatCode(value, 0);
+        return over;
       }
 
-      this.submitEnabled = this.loading? true : false;
-      const over: string = this.formatCode(value, 0);
-      return over;
+      return value;
     },
 
     formatCode(value: string, init: number): string {
@@ -105,7 +140,7 @@ export default defineComponent({
       if (codeField.getValue().length == 0) {
         this.error.code = this.error.cases.fieldRequired;
       } else if (!RegexFactory.check('6code', codeField.getValue())) {
-        this.error.code = this.error.cases.code;
+        this.error.code = this.error.cases.codeFormat;
       } else {
         this.error.code = "";
       }
@@ -118,9 +153,9 @@ export default defineComponent({
       await new Promise( resolve => setTimeout(resolve, 5000) );
 
       if (err) {
-        this.error.title = this.error.cases.invalidCode
+        this.error.code = this.error.cases.invalidCode
       } else {
-        this.error.title = ""
+        this.error.code = ""
       }
       
       this.loading = false

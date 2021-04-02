@@ -41,11 +41,11 @@ small {
     }
 
     &.top-only {
-        border-radius: 0 $const-radius $const-radius 0;
+        border-radius: $const-radius $const-radius 0 0;
     }
 
     &.bottom-only {
-        border-radius: $const-radius 0 0 $const-radius;
+        border-radius: 0 0 $const-radius $const-radius;
     }
 }
 

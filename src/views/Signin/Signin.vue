@@ -67,14 +67,14 @@ export default defineComponent({
 
       if (this.error.ident.length ||
           this.error.password.length) {
-        return
+        return;
       }
 
       if ((!RegexFactory.check('name', idField.getValue()) &&
           !RegexFactory.check('name', idField.getValue())) ||
           !RegexFactory.check('password', pwdField.getValue())){
-        this.error.title = this.error.cases.invalidCreds
-        return
+        this.error.title = this.error.cases.invalidCreds;
+        return;
       }
       
       this.loading = true;

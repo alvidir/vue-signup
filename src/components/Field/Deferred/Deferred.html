@@ -8,9 +8,11 @@
         <input :placeholder="title" class="rcorner transparent" v-bind:class="{error: error}" :maxlength="max" :type="type" v-model="value" v-bind="{readonly: readonly}">
         <button class="rcorner" :onClick="onClick" v-bind="{disabled: !enabled}">
             <text v-if="enabled">{{inner}}</text>
-            <text v-if="!enabled" >
-                {{count}}
-                <small>{{unit}}</small>
+            <text v-if="!enabled && mins" >
+                {{mins}}m
+            </text>
+            <text v-if="!enabled" v-bind:class="{ little: mins}">
+                {{secs}}s
             </text>
         </button>
     </div>

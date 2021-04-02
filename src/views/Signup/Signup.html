@@ -11,7 +11,8 @@
     <div class="credentials">
         <Field max="24" :onChange="onChange" class="credential" :dark="dark" ref="name" id="name" :error="error.name" title="Username" />
         <Field max="32" :onChange="onChange" class="credential" :dark="dark" ref="email" id="email" :error="error.email" title="Email" />
-        <Field max="32" :onChange="onChange" class="credential" :dark="dark" ref="pwd" id="pwd" :error="error.password" title="Password" type="password"/>
+        <Field max="32" :onChange="onChange" class="credential" :dark="dark" ref="pwd" id="pwd" :error="error.password" title="Password"
+               type="password" :line="error.password === error.cases.password? 'double' : 'single'" />
         <Field max="32" :onChange="onChange" class="credential" :dark="dark" ref="repeat" id="repeat" :error="error.repeat" title="Repeat password" type="password"/>
         <button type="submit" class="rcorner submit" :onClick="submit" v-bind="{disabled: loading}">
             <text id="action" v-if="!loading">Sign up</text>

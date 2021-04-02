@@ -14,6 +14,7 @@ export default defineComponent({
     dark: Boolean,
     onChange: Function,
     onInnerAction: Function,
+    callback: Function,
     readonly: Boolean,
     max: Number,
     seconds: Number,
@@ -42,8 +43,8 @@ export default defineComponent({
   data () {
       return {
           value: "",
-          count: 0,
-          unit: "s",
+          secs: 0,
+          mins: 0,
           enabled: true,
       }
   },
@@ -64,26 +65,44 @@ export default defineComponent({
       return this.value
     },
 
+    clear() {
+      this.value = "";
+    },
+
     onClick() {
-      if (this.seconds && this.seconds > 0){
+      let doClock = true;
+      if(this.onInnerAction) {
+        doClock = this.onInnerAction();
+      }
+
+      if (doClock && this.seconds && this.seconds > 0){
         this.enabled = false;
         this.clock();
-      }
-      
-      if(this.onInnerAction) {
-        this.onInnerAction();
       }
     },
 
     async clock() {
-      this.count = this.seconds ? this.seconds : 0;
-      while (this.count > 0) {
-        this.count--;
+      const mind = this.seconds? this.seconds % (60 * 60) : 0;
+      this.mins = Math.floor(mind / 60);
+
+      const secd = mind % 60;
+      this.secs = Math.ceil(secd);
+
+      while (this.mins + this.secs > 0) {
+        if (this.secs <= 0 && this.mins > 0) {
+          this.secs = 60;
+          this.mins--;
+        }
+        
         // sleep for 1000 milliseconds -> 1 second
+        this.secs--;
         await new Promise( resolve => setTimeout(resolve, 1000) );
       }
 
       this.enabled = true;
+      if (this.callback) {
+        this.callback();
+      }
     }
   }
 })

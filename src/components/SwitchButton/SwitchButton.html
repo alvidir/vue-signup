@@ -11,5 +11,5 @@
             <small v-if="checked">on</small>
         </div>
     </span>
-    <small class="label">{{ label }}</small>
+    <small v-if="label" class="label">{{ label }}</small>
 </label>

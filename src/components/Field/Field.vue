@@ -51,6 +51,10 @@ export default defineComponent({
   methods: { 
     getValue(): string {
       return this.value
+    },
+
+    clear() {
+      this.value = "";
     }
   }
 })
