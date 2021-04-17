@@ -1,13 +1,14 @@
-<template src="./ForgotPassword.html"> </template>
+<template src="./ForgottenPassword.html"> </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" src="./ForgotPassword.scss"></style>
+<style scoped lang="scss" src="./ForgottenPassword.scss"></style>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import MainLogoLight from "@/assets/logo.light.png";
 import MainLogoDark from "@/assets/logo.dark.png";
 import Warning from "@/components/Warning";
+import Card from "@/components/Card";
 import SwitchButton from "@/components/SwitchButton";
 import RegexFactory from "@/utils/regex";
 import DeferredField from "@/components/Field/Deferred";
@@ -16,11 +17,12 @@ import {Controller as FieldController} from "@/components/Field";
 import qrcode from "@/assets/qr-code.svg";
 
 export default defineComponent({
-  name: "ForgotPassword",
+  name: "ForgottenPassword",
   components: {
     SwitchButton,
     Warning,
-    DeferredField
+    DeferredField,
+    Card
   },
 
   props: {
@@ -32,12 +34,10 @@ export default defineComponent({
       return {
           loading: false,
           submitEnabled: false,
-          innerEnabled: true,
-          checkEmail: false,
-          placeholder: "Email",
+          placeholder: "Username / Email",
 
           titles: {
-            email: "Email",
+            email: "Username / Email",
             code: "6code",
           },
 
@@ -48,15 +48,14 @@ export default defineComponent({
               fieldRequired: "Required field",
               invalidCode: "The provided 6code is not valid",
               codeFormat: "A 6code is composed by six numbers as XYZ-JQK",
-              email: "This does not looks like an email...",
             }
           },
 
           messages: [
             {
-              icon: qrcode,
+              color: "#795997",
               title: "Via email",
-              details: "Clicking on Send, we will provide you the 6code via email."
+              subtitle: "Clicking on Send, we will provide you the 6code via email."
             }
           ]
       }
@@ -70,14 +69,12 @@ export default defineComponent({
     onInnerAction() {
       if (this.placeholder == this.titles.email){
         const codeField = this.$refs.code as FieldController;
-        if (!RegexFactory.check('email', codeField.getValue())) {
-          this.error.code = this.error.cases.email;
-          this.checkEmail = true;
+        if (!codeField.getValue()) {
+          this.error.code = this.error.cases.fieldRequired;
           return false
         }
 
         this.error.code = "";
-        this.innerEnabled = false;
         this.placeholder = this.titles.code;
         
         codeField.clear();
@@ -93,15 +90,12 @@ export default defineComponent({
     },
 
     onChange(id: string, value: string): string {
-      if (this.checkEmail &&
-          this.placeholder == this.titles.email &&
-          RegexFactory.check('email', value)) {
-            this.checkEmail = false;
+      if (this.placeholder == this.titles.email &&
+          this.error.code != "" && value) {
             this.error.code = "";
       } else if (this.placeholder == this.titles.code) {
         if (RegexFactory.check('6code', value)) {
           this.submitEnabled = true;
-          this.checkEmail = false;
           this.submit();
           return value
         }

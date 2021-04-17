@@ -19,8 +19,8 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/you-loser",
-    name: "ForgotPassword",
-    component: () => import("@/views/ForgotPassword")
+    name: "ForgottenPassword",
+    component: () => import("@/views/ForgottenPassword")
   }
 ];
 

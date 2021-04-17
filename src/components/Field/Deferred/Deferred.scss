@@ -1,21 +1,20 @@
 @import "@/scss/_globals.scss";
 @import "@/components/Field/Field.scss";
 
-.field {
-    display: inline-flex;
-}
-
 input {
     width: 78%;
     margin-right: 2%;
+
+    &.accent:focus {
+        border-color: #f8a813 !important;
+    }
 }
 
 button {
     width: 20%;
-    height: 30px;
+    height: $field-height;
+    min-height: 30px !important;
     transition: background-color $lapse-fast;
-    display: inline-flex;
-    
 
     border: 1px solid;
     border-color: #da910c;
@@ -39,8 +38,9 @@ button {
 
     &:disabled {
         border-color: #9870c0;
-        background-color: #795997;
+        background-color: $color-purple;
 
+        
         text {
             color: #e0c2ff;
             font-size: 15px;

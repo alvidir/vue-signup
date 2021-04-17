@@ -13,6 +13,14 @@ import Field, { Controller as FieldController } from "@/components/Field";
 import RegexFactory from "@/utils/regex";
 import {loginRequest} from '@/proto/user';
 
+type Message = {
+  id: string,
+  color: string,
+  title: string,
+  subtitle: string,
+  body: string
+}
+
 export default defineComponent({
   name: "Signin",
   components: {
@@ -33,21 +41,39 @@ export default defineComponent({
           error: {
             ident: "",
             password: "",
-            
-            title: "",
-            subtitle: "Make sure your credentials are alright",
 
             cases: {
               fieldRequired: "Required field.",
-              invalidCreds: "Invalid username or password",
+              invalidCreds: {
+                id: "INVALID_CREDENTIALS",
+                color: "#e04f5f",
+                title: "Invalid username or password",
+                subtitle: "Make sure your credentials are alright",
+                body: "",
+              },
             }
-          }
+          },
+
+          messages: new Array<Message>(),
       }
   },
 
   methods: {
     getIconByTheme() {
         return this.dark ? MainLogoLight : MainLogoDark;
+    },
+
+    addMessage(item: Message) {
+      if (this.messages.indexOf(item) == -1) {
+        this.messages.push(item);
+      }
+    },
+
+    removeMessage(item: Message) {
+      if (this.messages.length > 0){
+        const index = this.messages.indexOf(item)
+        delete this.messages[index];
+      }
     },
 
     submit() {
@@ -73,7 +99,7 @@ export default defineComponent({
       if ((!RegexFactory.check('name', idField.getValue()) &&
           !RegexFactory.check('name', idField.getValue())) ||
           !RegexFactory.check('password', pwdField.getValue())){
-        this.error.title = this.error.cases.invalidCreds;
+        this.addMessage(this.error.cases.invalidCreds);
         return;
       }
       
@@ -83,9 +109,9 @@ export default defineComponent({
 
     async callback(err: any) {    
       if (err) {
-        this.error.title = this.error.cases.invalidCreds;
+        this.addMessage(this.error.cases.invalidCreds);
       } else {
-        this.error.title = "";
+        this.removeMessage(this.error.cases.invalidCreds);
       }
       
       this.loading = false;
