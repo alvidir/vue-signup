@@ -8,7 +8,7 @@
         </div>
     </div>
     <div v-for="msg in messages">
-        <card :color="msg.color" :title="msg.title" :subtitle="msg.subtitle" :body="msg.body"/>
+        <Card :color="msg.color" :title="msg.title" :subtitle="msg.subtitle" :body="msg.body"/>
     </div>
     <div class="credentials">
         <Field class="credential" ref="id" id="ident" :error="error.ident" :dark="dark" title="Username / Email" />

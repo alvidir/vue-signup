@@ -1,4 +1,5 @@
 @import "@/scss/_globals.scss";
+$min-height: 36px !important;
 
 #title {
   width: 100%;
@@ -43,5 +44,5 @@
 
 input {
   height: $field-height;
-  min-height: 30px !important;
+  min-height: $min-height;
 }

@@ -9,6 +9,7 @@ import MainLogoLight from "@/assets/logo.light.png";
 import MainLogoDark from "@/assets/logo.dark.png";
 import Warning from "@/components/Warning";
 import SwitchButton from "@/components/SwitchButton";
+import Card from "@/components/Card";
 import Field, { Controller as FieldController } from "@/components/Field";
 import RegexFactory from "@/utils/regex";
 import {loginRequest} from '@/proto/user';
@@ -26,7 +27,8 @@ export default defineComponent({
   components: {
     SwitchButton,
     Warning,
-    Field
+    Field,
+    Card
   },
 
   props: {
@@ -48,7 +50,7 @@ export default defineComponent({
                 id: "INVALID_CREDENTIALS",
                 color: "#e04f5f",
                 title: "Invalid username or password",
-                subtitle: "Make sure your credentials are alright",
+                subtitle: "Make sure your credentials are set correctly.",
                 body: "",
               },
             }

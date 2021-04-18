@@ -13,7 +13,7 @@ input {
 button {
     width: 20%;
     height: $field-height;
-    min-height: 30px !important;
+    min-height: $min-height;
     transition: background-color $lapse-fast;
 
     border: 1px solid;

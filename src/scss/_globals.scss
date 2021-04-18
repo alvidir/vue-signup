@@ -7,7 +7,7 @@ $text-regular: $bg-theme-dark !default;
 $text-error: #e04f5f !default;
 $text-accepted: #3e9b46 !default;
 
-$tsize-title: 15px;
+$tsize-title: 16px;
 $tsize-regular: 14px;
 
 $color-purple: #795997 !default;
@@ -83,7 +83,7 @@ input {
         border: 1px solid;
         border-color: #9c9c9c;
         padding-left: 10px;
-        transition: border $lapse-instant;
+        //transition: border $lapse-instant;
 
         &:focus{
             outline-width: 0;
@@ -136,7 +136,7 @@ button {
 
 .card {
     @extend .rcorner;
-    max-width: 320px;
+    width: 320px;
     margin: 0 auto;
     padding: 10px;
   
