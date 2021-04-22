@@ -7,7 +7,9 @@
             <img class="plus" src="@/assets/plus.svg"/>
         </div>
     </div>
-    <Warning :title="error.title" :subtitle="error.subtitle"/>
+    <div v-for="msg in messages">
+        <card :color="msg.color" :title="msg.title" :subtitle="msg.subtitle" :body="msg.body"/>
+    </div>
     <div class="credentials">
         <Field max="24" :onChange="onChange" class="credential" :dark="dark" ref="name" id="name" :error="error.name" title="Username" />
         <Field max="32" :onChange="onChange" class="credential" :dark="dark" ref="email" id="email" :error="error.email" title="Email" />

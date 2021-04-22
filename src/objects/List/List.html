@@ -1,6 +1,9 @@
-<div>
-    <template v-for="(item, index) in items">
-        <component :is="item.viewName" :key="index" :data="item.data"></component>
+<div v-if="items.len() > 0">
+    <template v-for="(item, index) in items.all()" :key="item.getKey()">
+        <component :is="item.getType()"
+                   :data="item.getData()"
+                   v-bind:style="'@/components/Card/Card.scss'">
+        </component>
         <div v-if="index > 0 && index < items.lenght-1" class="separator"></div>
     </template>
 </div>

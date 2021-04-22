@@ -8,8 +8,8 @@ import { defineComponent } from "vue";
 import CryptoJS from "crypto-js";
 import MainLogoLight from "@/assets/logo.light.png";
 import MainLogoDark from "@/assets/logo.dark.png";
-import Warning from "@/components/Warning";
 import SwitchButton from "@/components/SwitchButton";
+import Card, {Message} from "@/components/Card";
 import Field, { Controller as FieldController } from "@/components/Field";
 import RegexFactory from "@/utils/regex";
 import {signupRequest} from '@/proto/user';
@@ -18,8 +18,8 @@ export default defineComponent({
   name: "Signup",
   components: {
     SwitchButton,
-    Warning,
-    Field
+    Field,
+    Card
   },
 
   props: {
@@ -28,32 +28,52 @@ export default defineComponent({
   },
 
   data () {
-      return {
-          loading: false,
+    return {
+        loading: false,
 
-          error: {
-            name: "",
-            email: "",
-            password: "",
-            repeat: "",
+        error: {
+          name: "",
+          email: "",
+          password: "",
+          repeat: "",
 
-            title: "",
-            subtitle: "Make sure your credentials are alright",
+          cases: {
+            fieldRequired: "Required field.",
+            name: "Special characters are not allowed in your name. Neather more than 32 characters.",
+            email: "This does not looks like an email...",
+            password: "Your password must contains upper and lower case, as well as numbers and special characters.",
+            repeat: "Does not match your password.",
 
-            cases: {
-              fieldRequired: "Required field.",
-              name: "Special characters are not allowed in your name. Neather more than 32 characters.",
-              email: "This does not looks like an email...",
-              password: "Your password must contains upper and lower case, as well as numbers and special characters.",
-              repeat: "Does not match your password.",
+            invalidCreds: {
+              id: "INVALID_CREDENTIALS",
+              color: "#e04f5f",
+              title: "Invalid username or password",
+              subtitle: "Make sure your credentials are set correctly.",
+              body: "",
             }
           }
-      }
+        },
+
+        messages: new Array<Message>(),
+    }
   },
 
   methods: {
     getIconByTheme() {
         return this.dark ? MainLogoLight : MainLogoDark;
+    },
+
+    addMessage(item: Message) {
+      if (this.messages.indexOf(item) == -1) {
+        this.messages.push(item);
+      }
+    },
+
+    removeMessage(item: Message) {
+      if (this.messages.length > 0){
+        const index = this.messages.indexOf(item)
+        delete this.messages[index];
+      }
     },
 
     onChange(id: string, value: string): any {
@@ -137,9 +157,9 @@ export default defineComponent({
     async callback(err: any) {
       console.log(err);    
       if (err) {
-        this.error.title = err.message;
+        this.addMessage(this.error.cases.invalidCreds);
       } else {
-        this.error.title = "";
+        this.removeMessage(this.error.cases.invalidCreds);
       }
       
       this.loading = false

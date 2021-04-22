@@ -7,28 +7,21 @@
 import { defineComponent } from "vue";
 import MainLogoLight from "@/assets/logo.light.png";
 import MainLogoDark from "@/assets/logo.dark.png";
-import Warning from "@/components/Warning";
 import SwitchButton from "@/components/SwitchButton";
-import Card from "@/components/Card";
+import Card, {Message} from "@/components/Card";
 import Field, { Controller as FieldController } from "@/components/Field";
+import List,  {ListController, ItemController} from "@/objects/List";
 import RegexFactory from "@/utils/regex";
 import {loginRequest} from '@/proto/user';
 
-type Message = {
-  id: string,
-  color: string,
-  title: string,
-  subtitle: string,
-  body: string
-}
+
 
 export default defineComponent({
   name: "Signin",
   components: {
     SwitchButton,
-    Warning,
     Field,
-    Card
+    List
   },
 
   props: {
@@ -54,28 +47,13 @@ export default defineComponent({
                 body: "",
               },
             }
-          },
-
-          messages: new Array<Message>(),
+          }
       }
   },
 
   methods: {
     getIconByTheme() {
         return this.dark ? MainLogoLight : MainLogoDark;
-    },
-
-    addMessage(item: Message) {
-      if (this.messages.indexOf(item) == -1) {
-        this.messages.push(item);
-      }
-    },
-
-    removeMessage(item: Message) {
-      if (this.messages.length > 0){
-        const index = this.messages.indexOf(item)
-        delete this.messages[index];
-      }
     },
 
     submit() {
@@ -101,7 +79,25 @@ export default defineComponent({
       if ((!RegexFactory.check('name', idField.getValue()) &&
           !RegexFactory.check('name', idField.getValue())) ||
           !RegexFactory.check('password', pwdField.getValue())){
-        this.addMessage(this.error.cases.invalidCreds);
+        //this.addMessage(this.error.cases.invalidCreds);
+        const messages = this.$refs["messages"] as ListController<ItemController>;
+        class Item {
+          public getData(): any {
+            return {}
+          }
+
+          public getKey(): string {
+            return "cardId"
+          }
+
+          public getType(): string {
+            return "card"
+          }
+
+        };
+
+        const item = new Item();
+        messages.add(item);
         return;
       }
       
@@ -111,9 +107,9 @@ export default defineComponent({
 
     async callback(err: any) {    
       if (err) {
-        this.addMessage(this.error.cases.invalidCreds);
+        //this.addMessage(this.error.cases.invalidCreds);
       } else {
-        this.removeMessage(this.error.cases.invalidCreds);
+        //this.removeMessage(this.error.cases.invalidCreds);
       }
       
       this.loading = false;

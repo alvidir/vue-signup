@@ -7,32 +7,48 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import {ObjectList as list, ItemController as item} from "@/objects/List";
+
 export default defineComponent({
   name: 'List',
   props: {
-    id: String
+    id: String,
+    size: Number,
   },
 
   data () {
-      return {
-          
-      }
+    return {
+      items: new list<item>(this.size? this.size : 0),
+    }
   },
 
   methods: {
-    getCustomStyle(flags: string): string {
-      let styles = "";
-      if (flags.indexOf("tbg") != -1) {
-        styles += "background-color: " + this.color + "10;";
-      } else if (flags.indexOf("bg") != -1) {
-        styles += "background-color: " + this.color + ";";
-      } 
+    capacity(): number {
+      return this.items.capacity();
+    },
 
-      if (flags.indexOf("bd") != -1) {
-        styles += "border-color: " + this.color + ";";
-      }
+    get(index: number): item | undefined {
+      return this.items.get(index);
+    },
 
-      return styles;
+    len(): number {
+      return this.items.len();
+    },
+
+    add(item: item): number {
+      return this.items.add(item);
+    },
+    
+    remove(item: item): boolean {
+      return this.items.remove(item)
+    },
+
+    removeByIndex(index: number): item | undefined {
+      return this.items.removeByIndex(index);
+    },
+
+    all(): item[] {
+      return this.items.all();
     }
   }
 })

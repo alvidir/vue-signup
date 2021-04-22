@@ -1,9 +1,19 @@
 import List from "./List.vue";
 
+export interface ItemController {
+    getData(): any;
+    getKey(): string;
+    getType(): string;
+}
+
 export interface ListController<itemType> {
     add(item: itemType): number;
+    get(index: number): itemType | undefined;
     remove(item: itemType): boolean;
-    removeByIndex(index: number): itemType;
+    removeByIndex(index: number): itemType | undefined;
+    capacity(): number;
+    len(): number;
+    all(): itemType[];
 }
 
 export class ObjectList<itemType> {
@@ -11,12 +21,31 @@ export class ObjectList<itemType> {
     csize: number;
 
     constructor(csize: number) {
-        this.csize = csize;
+        this.csize = csize > 0? csize : -1;
         this.items = new Array<itemType>(csize > 0? csize : 0);
     }
 
-    
-    add(item: itemType): number {
+    public all(): itemType[] {
+        return this.items;
+    }
+
+    public capacity(): number {
+        return this.csize;
+    }
+
+    public get(index: number): itemType | undefined {
+        if (index < 0 || index > this.items.length-1) {
+            return undefined;
+        }
+
+        return this.items[index];
+    }
+
+    public len(): number {
+        return this.items.length;
+    }
+
+    public add(item: itemType): number {
         if (this.items.indexOf(item) == -1) {
             return this.items.push(item);
         }
@@ -24,7 +53,7 @@ export class ObjectList<itemType> {
         return -1;
     }
     
-    remove(item: itemType): boolean {
+    public remove(item: itemType): boolean {
         if (this.items.length > 0){
             const index = this.items.indexOf(item)
             if (index != -1) {
@@ -34,6 +63,16 @@ export class ObjectList<itemType> {
         }
 
         return false;
+    }
+
+    public removeByIndex(index: number): itemType | undefined {
+        if (index < 0 || index > this.items.length-1) {
+            return undefined;
+        }
+
+        const item = this.items[index];
+        delete this.items[index];
+        return item;
     }
 }
 
