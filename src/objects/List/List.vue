@@ -18,15 +18,11 @@ export default defineComponent({
 
   data () {
     return {
-      items: new list<item>(this.size? this.size : 0),
+      items: new list<item>(),
     }
   },
 
   methods: {
-    capacity(): number {
-      return this.items.capacity();
-    },
-
     get(index: number): item | undefined {
       return this.items.get(index);
     },
@@ -36,7 +32,12 @@ export default defineComponent({
     },
 
     add(item: item): number {
-      return this.items.add(item);
+      if ((!this.size || this.size < 0) ||
+          (this.items.len() < this.size)) {
+        return this.items.add(item);
+      }
+      
+      return -1;
     },
     
     remove(item: item): boolean {

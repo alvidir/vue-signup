@@ -8,13 +8,12 @@ import { defineComponent } from "vue";
 import MainLogoLight from "@/assets/logo.light.png";
 import MainLogoDark from "@/assets/logo.dark.png";
 import Warning from "@/components/Warning";
-import Card from "@/components/Card";
+import List,  {ListController, ItemController} from "@/objects/List";
+import {Controller as CardController} from "@/components/Card";
 import SwitchButton from "@/components/SwitchButton";
 import RegexFactory from "@/utils/regex";
 import DeferredField from "@/components/Field/Deferred";
 import {Controller as FieldController} from "@/components/Field";
-
-import qrcode from "@/assets/qr-code.svg";
 
 export default defineComponent({
   name: "ForgottenPassword",
@@ -22,7 +21,7 @@ export default defineComponent({
     SwitchButton,
     Warning,
     DeferredField,
-    Card
+    List
   },
 
   props: {
@@ -53,9 +52,11 @@ export default defineComponent({
 
           messages: [
             {
-              color: "#795997",
+              id:"6CODE_VIA_EMAIL",
               title: "Via email",
-              subtitle: "Clicking on Send, we will provide you the 6code via email."
+              subtitle: "Clicking on Send, we will provide you the 6code via email.",
+              color: "#795997",
+              body: "",
             }
           ]
       }
@@ -154,6 +155,13 @@ export default defineComponent({
       
       this.loading = false
     }
+  },
+
+  mounted() {
+    const messages = this.$refs["messages"] as ListController<ItemController>;
+    const item = new CardController(this.messages[0].id,
+                                    this.messages[0]);
+    messages.add(item);
   }
 });
 </script>

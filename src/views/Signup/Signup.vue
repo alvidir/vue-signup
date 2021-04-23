@@ -9,7 +9,8 @@ import CryptoJS from "crypto-js";
 import MainLogoLight from "@/assets/logo.light.png";
 import MainLogoDark from "@/assets/logo.dark.png";
 import SwitchButton from "@/components/SwitchButton";
-import Card, {Message} from "@/components/Card";
+import {Controller as CardController} from "@/components/Card";
+import List,  {ListController, ItemController} from "@/objects/List";
 import Field, { Controller as FieldController } from "@/components/Field";
 import RegexFactory from "@/utils/regex";
 import {signupRequest} from '@/proto/user';
@@ -19,7 +20,7 @@ export default defineComponent({
   components: {
     SwitchButton,
     Field,
-    Card
+    List
   },
 
   props: {
@@ -53,27 +54,12 @@ export default defineComponent({
             }
           }
         },
-
-        messages: new Array<Message>(),
     }
   },
 
   methods: {
     getIconByTheme() {
         return this.dark ? MainLogoLight : MainLogoDark;
-    },
-
-    addMessage(item: Message) {
-      if (this.messages.indexOf(item) == -1) {
-        this.messages.push(item);
-      }
-    },
-
-    removeMessage(item: Message) {
-      if (this.messages.length > 0){
-        const index = this.messages.indexOf(item)
-        delete this.messages[index];
-      }
     },
 
     onChange(id: string, value: string): any {
@@ -157,9 +143,13 @@ export default defineComponent({
     async callback(err: any) {
       console.log(err);    
       if (err) {
-        this.addMessage(this.error.cases.invalidCreds);
+        const messages = this.$refs["messages"] as ListController<ItemController>;
+        const item = new CardController(this.error.cases.invalidCreds.id,
+                                        this.error.cases.invalidCreds);
+        messages.add(item);
       } else {
-        this.removeMessage(this.error.cases.invalidCreds);
+        const messages = this.$refs["messages"] as ListController<ItemController>;
+        messages.removeByIndex(0);
       }
       
       this.loading = false

@@ -1,5 +1,5 @@
 <div v-if="items.len() > 0">
-    <template v-for="(item, index) in items.all()" :key="item.key()">
+    <template v-for="(item, index) in items.all()" :key="item? item.key() : null">
         <component :is="item.type()"
                     v-bind="item.data()">
         </component>

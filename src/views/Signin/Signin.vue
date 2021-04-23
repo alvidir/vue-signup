@@ -8,7 +8,7 @@ import { defineComponent } from "vue";
 import MainLogoLight from "@/assets/logo.light.png";
 import MainLogoDark from "@/assets/logo.dark.png";
 import SwitchButton from "@/components/SwitchButton";
-import Card, {Message} from "@/components/Card";
+import {Controller as CardController} from "@/components/Card";
 import Field, { Controller as FieldController } from "@/components/Field";
 import List,  {ListController, ItemController} from "@/objects/List";
 import RegexFactory from "@/utils/regex";
@@ -79,31 +79,9 @@ export default defineComponent({
       if ((!RegexFactory.check('name', idField.getValue()) &&
           !RegexFactory.check('name', idField.getValue())) ||
           !RegexFactory.check('password', pwdField.getValue())){
-        //this.addMessage(this.error.cases.invalidCreds);
         const messages = this.$refs["messages"] as ListController<ItemController>;
-        class Item {
-          public data() {
-            return {
-              id: "INVALID_CREDENTIALS",
-              color: "#e04f5f",
-              title: "Invalid username or password",
-              subtitle: "Make sure your credentials are set correctly.",
-              body: "",
-            }
-          }
-
-          public key(): string {
-            return "cardId"
-          }
-
-          public type(): string {
-            return "card"
-          }
-
-        };
-
-        const item = new Item();
-        console.log(item.data())
+        const item = new CardController(this.error.cases.invalidCreds.id,
+                                        this.error.cases.invalidCreds);
         messages.add(item);
         return;
       }
@@ -114,9 +92,13 @@ export default defineComponent({
 
     async callback(err: any) {    
       if (err) {
-        //this.addMessage(this.error.cases.invalidCreds);
+        const messages = this.$refs["messages"] as ListController<ItemController>;
+        const item = new CardController(this.error.cases.invalidCreds.id,
+                                        this.error.cases.invalidCreds);
+        messages.add(item);
       } else {
-        //this.removeMessage(this.error.cases.invalidCreds);
+        const messages = this.$refs["messages"] as ListController<ItemController>;
+        messages.removeByIndex(0);
       }
       
       this.loading = false;

@@ -20,13 +20,13 @@ export default defineComponent({
     getCustomStyle(flags: string): string {
       let styles = "";
       if (flags.indexOf("tbg") != -1) {
-        styles += "background-color: " + this.color + "10;";
+        styles += "background-color: " + (this.color? this.color : "#808080") + "10;";
       } else if (flags.indexOf("bg") != -1) {
-        styles += "background-color: " + this.color + ";";
+        styles += "background-color: " + (this.color? this.color : "#808080") + ";";
       } 
 
       if (flags.indexOf("bd") != -1) {
-        styles += "border-color: " + this.color + ";";
+        styles += "border-color: " + (this.color? this.color : "#808080") + ";";
       }
 
       return styles;

@@ -11,26 +11,19 @@ export interface ListController<itemType> {
     get(index: number): itemType | undefined;
     remove(item: itemType): boolean;
     removeByIndex(index: number): itemType | undefined;
-    capacity(): number;
     len(): number;
     all(): itemType[];
 }
 
 export class ObjectList<itemType> {
     items: itemType[];
-    csize: number;
 
-    constructor(csize: number) {
-        this.csize = csize > 0? csize : -1;
-        this.items = new Array<itemType>(csize > 0? csize : 0);
+    constructor() {
+        this.items = new Array<itemType>();
     }
 
     public all(): itemType[] {
         return this.items;
-    }
-
-    public capacity(): number {
-        return this.csize;
     }
 
     public get(index: number): itemType | undefined {
@@ -46,11 +39,7 @@ export class ObjectList<itemType> {
     }
 
     public add(item: itemType): number {
-        if (this.items.indexOf(item) == -1) {
-            return this.items.push(item);
-        }
-
-        return -1;
+        return this.items.push(item);
     }
     
     public remove(item: itemType): boolean {
