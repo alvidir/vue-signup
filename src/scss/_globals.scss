@@ -11,6 +11,7 @@ $tsize-title: 16px;
 $tsize-regular: 14px;
 
 $color-purple: #795997 !default;
+$color-grey: #888888 !default;
 
 $dyn-separation: 10vh;
 $const-separation: 20px;
@@ -20,6 +21,7 @@ $lapse-fast:  0.25s ease-in-out;
 $lapse-instant:  0.10s ease-in-out;
 
 $field-height: 3.8vh;
+$min-height: 36px;
 
 $const-radius: 6px;
 
@@ -75,15 +77,22 @@ input {
     box-sizing: border-box;
 
     &.error {
-        border-color: $text-error !important;
+      border-color: $text-error !important;
     }
+
 
     &.transparent {
         background: transparent;
         border: 1px solid;
         border-color: #9c9c9c;
         padding-left: 10px;
-        //transition: border $lapse-instant;
+        transition: border-color $lapse-instant;
+
+        &:hover {
+          outline-width: 0;
+          border: 2px solid;
+          border-color: $color-grey;
+        }
 
         &:focus{
             outline-width: 0;
@@ -104,7 +113,8 @@ button {
         border-color: #366938;
         background: $text-accepted;;
         font-size: 16px;
-        height: 35px;
+        height: $field-height;
+        min-height: $min-height;
         width: 100%;
         margin-top: $const-separation;
         transition: background-color $lapse-fast;

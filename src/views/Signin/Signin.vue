@@ -82,21 +82,28 @@ export default defineComponent({
         //this.addMessage(this.error.cases.invalidCreds);
         const messages = this.$refs["messages"] as ListController<ItemController>;
         class Item {
-          public getData(): any {
-            return {}
+          public data() {
+            return {
+              id: "INVALID_CREDENTIALS",
+              color: "#e04f5f",
+              title: "Invalid username or password",
+              subtitle: "Make sure your credentials are set correctly.",
+              body: "",
+            }
           }
 
-          public getKey(): string {
+          public key(): string {
             return "cardId"
           }
 
-          public getType(): string {
+          public type(): string {
             return "card"
           }
 
         };
 
         const item = new Item();
+        console.log(item.data())
         messages.add(item);
         return;
       }

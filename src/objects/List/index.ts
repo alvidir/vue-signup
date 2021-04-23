@@ -1,9 +1,9 @@
 import List from "./List.vue";
 
 export interface ItemController {
-    getData(): any;
-    getKey(): string;
-    getType(): string;
+    data(): any;
+    key(): string;
+    type(): string;
 }
 
 export interface ListController<itemType> {
