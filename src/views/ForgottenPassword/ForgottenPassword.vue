@@ -161,7 +161,7 @@ export default defineComponent({
     const messages = this.$refs["messages"] as ListController<ItemController>;
     const item = new CardController(this.messages[0].id,
                                     this.messages[0]);
-    messages.add(item);
+    messages.push(item);
   }
 });
 </script>

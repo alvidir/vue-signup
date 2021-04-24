@@ -23,34 +23,30 @@ export default defineComponent({
   },
 
   methods: {
-    get(index: number): item | undefined {
-      return this.items.get(index);
-    },
-
     len(): number {
       return this.items.len();
     },
 
-    add(item: item): number {
+    all(): item[] {
+      return this.items.all();
+    },
+
+    get(index: number): item | undefined {
+      return this.items.get(index);
+    },
+
+    push(item: item): number {
       if ((!this.size || this.size < 0) ||
           (this.items.len() < this.size)) {
-        return this.items.add(item);
+        return this.items.push(item);
       }
       
       return -1;
     },
     
-    remove(item: item): boolean {
-      return this.items.remove(item)
+    pop(): item | undefined {
+      return this.items.pop();
     },
-
-    removeByIndex(index: number): item | undefined {
-      return this.items.removeByIndex(index);
-    },
-
-    all(): item[] {
-      return this.items.all();
-    }
   }
 })
 </script>

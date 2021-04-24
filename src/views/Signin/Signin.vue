@@ -82,7 +82,7 @@ export default defineComponent({
         const messages = this.$refs["messages"] as ListController<ItemController>;
         const item = new CardController(this.error.cases.invalidCreds.id,
                                         this.error.cases.invalidCreds);
-        messages.add(item);
+        messages.push(item);
         return;
       }
       
@@ -95,10 +95,10 @@ export default defineComponent({
         const messages = this.$refs["messages"] as ListController<ItemController>;
         const item = new CardController(this.error.cases.invalidCreds.id,
                                         this.error.cases.invalidCreds);
-        messages.add(item);
+        messages.push(item);
       } else {
         const messages = this.$refs["messages"] as ListController<ItemController>;
-        messages.removeByIndex(0);
+        messages.pop();
       }
       
       this.loading = false;

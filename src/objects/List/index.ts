@@ -7,61 +7,98 @@ export interface ItemController {
 }
 
 export interface ListController<itemType> {
-    add(item: itemType): number;
-    get(index: number): itemType | undefined;
-    remove(item: itemType): boolean;
-    removeByIndex(index: number): itemType | undefined;
     len(): number;
     all(): itemType[];
+    get(index: number): itemType | undefined;
+    push(item: itemType): number;
+    pop(): itemType | undefined;
+}
+
+class Node<itemType> {
+    public item: itemType;
+    public next: Node<itemType> | undefined;
+
+    constructor(item: itemType) {
+        this.item = item;
+    }
 }
 
 export class ObjectList<itemType> {
-    items: itemType[];
+    root: Node<itemType> | undefined;
+    latest: Node<itemType> | undefined;
+    lenght = 0;
 
-    constructor() {
-        this.items = new Array<itemType>();
+    public len(): number {
+        return this.lenght;
     }
 
     public all(): itemType[] {
-        return this.items;
+        if(!this.root) {
+            return [];
+        }
+
+        const buffer = new Array<itemType>(this.lenght);
+        for (let i = 0, it: Node<itemType> | undefined = this.root;
+                 i < buffer.length && it;
+                 it = it.next, i++) {
+            buffer[i] = it.item;
+        }
+
+        return buffer;
     }
 
     public get(index: number): itemType | undefined {
-        if (index < 0 || index > this.items.length-1) {
+        if (!this.root || index < 0 || index > this.lenght-1) {
             return undefined;
         }
 
-        return this.items[index];
+        let subject: itemType | undefined = undefined;
+        for (let it: Node<itemType> | undefined = this.root;
+                 index+1 > 0 && it && it != this.latest;
+                 it = it.next, index--) {
+            if (index == 0) subject = it.item;
+        }
+        
+        return subject;
     }
 
-    public len(): number {
-        return this.items.length;
-    }
+    public push(item: itemType): number {
+        const node = new Node(item);
 
-    public add(item: itemType): number {
-        return this.items.push(item);
+        if (!this.root) {
+            this.root = node;
+            this.lenght++;
+        } else if (this.latest) {
+            this.latest.next = node;
+            this.lenght++;
+        }
+
+        this.latest = node;
+        return this.lenght;
     }
     
-    public remove(item: itemType): boolean {
-        if (this.items.length > 0){
-            const index = this.items.indexOf(item)
-            if (index != -1) {
-                delete this.items[index];
-                return true;
+
+    public pop(): itemType | undefined {
+        if (!this.root) {
+            return undefined;
+        }
+
+        let subject: itemType | undefined = undefined;
+        if (!this.root.next) {
+            // if this.root is a single node
+            subject = this.root.item;
+            this.root = undefined;
+        }
+        
+        for (let it: Node<itemType> | undefined = this.root;
+                 it && it != this.latest; it = it.next) {
+            if (!it.next?.next) {
+                subject = it.next?.item;
+                it.next = undefined;
             }
         }
 
-        return false;
-    }
-
-    public removeByIndex(index: number): itemType | undefined {
-        if (index < 0 || index > this.items.length-1) {
-            return undefined;
-        }
-
-        const item = this.items[index];
-        delete this.items[index];
-        return item;
+        return subject;
     }
 }
 
