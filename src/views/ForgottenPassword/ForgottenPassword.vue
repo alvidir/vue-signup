@@ -7,7 +7,6 @@
 import { defineComponent } from "vue";
 import MainLogoLight from "@/assets/logo.light.png";
 import MainLogoDark from "@/assets/logo.dark.png";
-import Warning from "@/components/Warning";
 import List,  {ListController, ItemController} from "@/objects/List";
 import {Controller as CardController} from "@/components/Card";
 import SwitchButton from "@/components/SwitchButton";
@@ -19,7 +18,6 @@ export default defineComponent({
   name: "ForgottenPassword",
   components: {
     SwitchButton,
-    Warning,
     DeferredField,
     List
   },

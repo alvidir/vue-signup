@@ -88,6 +88,7 @@ export class ObjectList<itemType> {
             // if this.root is a single node
             subject = this.root.item;
             this.root = undefined;
+            this.lenght--;
         }
         
         for (let it: Node<itemType> | undefined = this.root;
@@ -95,6 +96,7 @@ export class ObjectList<itemType> {
             if (!it.next?.next) {
                 subject = it.next?.item;
                 it.next = undefined;
+                this.lenght--;
             }
         }
 
