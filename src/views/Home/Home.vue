@@ -5,10 +5,12 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import Field from "@/components/Field";
 
 export default defineComponent({
   name: "Home",
   components: {
+    Field
   }
 });
 </script>
