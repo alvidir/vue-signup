@@ -1,4 +1,4 @@
-@import "@/scss/_globals.scss";
+@import "@/scss/globals.scss";
 $const-separation: 20px;
 
 #loader {
@@ -6,7 +6,7 @@ $const-separation: 20px;
 }
 
 .dark {
-  @import "@/scss/_global.dark.scss";
+  @import "@/scss/global.dark.scss";
 }
 
 .banner {

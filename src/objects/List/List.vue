@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import {ObjectList as list, ItemController as item} from "@/objects/List";
+import {ObjectList as list, ItemController as item} from "./index";
 
 export default defineComponent({
   name: 'List',

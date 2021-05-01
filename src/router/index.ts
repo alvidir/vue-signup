@@ -5,22 +5,22 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
-    component: () => import("@/views/Home")
+    component: () => import("../views/Home")
   },
   {
     path: "/signin",
     name: "Signin",
-    component: () => import("@/views/Signin")
+    component: () => import("../views/oauth/Signin")
   },
   {
     path: "/signup",
     name: "Signup",
-    component: () => import("@/views/Signup")
+    component: () => import("../views/oauth/Signup")
   },
   {
     path: "/you-loser",
     name: "ForgottenPassword",
-    component: () => import("@/views/ForgottenPassword")
+    component: () => import("../views/oauth/ForgottenPassword")
   }
 ];
 

@@ -39,17 +39,17 @@ export default defineComponent({
 
 <style lang="scss">
 body {
-  @import "@/scss/_globals.scss";
+  @import "@/scss/globals.scss";
   background-color: $bg-primary;
   transition: background-color $lapse-primary;
 
   &.dark {
-    @import "@/scss/_global.dark.scss";
+    @import "@/scss/global.dark.scss";
     background: $bg-primary;
   }
 
   &.light {
-    @import "@/scss/_global.light.scss";
+    @import "@/scss/global.light.scss";
     background: $bg-primary;
   }
 }
