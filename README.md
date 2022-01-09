@@ -1,3 +1,3 @@
 # rauth-ui
 
-A user interface for the [rauth](https://github.com/alvidir/rauth) project
+A signup page implementation for the [rauth](https://github.com/alvidir/rauth) project
