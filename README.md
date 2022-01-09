@@ -1,3 +1,3 @@
-# oauth-ui
+# rauth-ui
 
-A user-friendly interface for the backend project [tpauth](https://github.com/alvidir/tpauth)
+A login interface as a client of the [rauth](https://github.com/alvidir/rauth) project
