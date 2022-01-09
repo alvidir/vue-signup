@@ -1,8 +1,0 @@
-<div v-if="items.len() > 0">
-    <template v-for="(item, index) in items.all()" :key="item? item.key() : null">
-        <component :is="item.type()"
-                    v-bind="item.data()">
-        </component>
-        <div v-if="index < items.len()-1" class="separator"></div>
-    </template>
-</div>
