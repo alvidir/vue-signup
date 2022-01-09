@@ -25,9 +25,16 @@ export default defineComponent({
 }
 
 body {
-  position: relative;
+  //background: #eeeeee;
   min-height: 100vh;
   width: 100%;
+}
+
+#app {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: $fib-5 * 1vh;
 }
 
 </style>
