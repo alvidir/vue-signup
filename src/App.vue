@@ -1,27 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <sign-up email="login">
+  </sign-up>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import SignUp from './components/SignUp.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    SignUp
   }
 });
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@import "global.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Raleway', Helvetica, Arial, sans-serif;
 }
+
+body {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
 </style>
