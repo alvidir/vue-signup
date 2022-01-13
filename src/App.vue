@@ -25,6 +25,7 @@ export default defineComponent({
 }
 
 body {
+  background: #eeeeee;
   min-height: 100vh;
   width: 100%;
 }
