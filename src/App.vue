@@ -16,7 +16,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "global.scss";
+@import "fibonacci-styles";
 
 * {
   margin: 0;
@@ -25,7 +25,6 @@ export default defineComponent({
 }
 
 body {
-  //background: #eeeeee;
   min-height: 100vh;
   width: 100%;
 }

@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "grpc:all": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./src/proto --ts_out=service=grpc-web:./src/proto -I ./proto ./proto/*.proto"
+    "grpc": "protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./src/proto --ts_out=service=grpc-web:./src/proto -I ./proto ./proto/*.proto"
   },
   "dependencies": {
     "core-js": "^3.6.5",

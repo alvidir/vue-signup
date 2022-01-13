@@ -1,6 +1,6 @@
 <template>
   <div class="signup round-corners fib-6">
-    <img src="@/assets/logo.light.png" />
+    <img src="/home/hectormc/git/alvidir/rauth-ui/src/assets/logo.light.png" />
     <label>Sign on Alvidir</label>
     <regular-field class="field"
                    placeholder="username or email"
@@ -35,7 +35,7 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-@import "./src/global.scss";
+@import "fibonacci-styles";
 
 .signup {
   display: flex;
@@ -67,7 +67,6 @@ export default defineComponent({
     width: 90%;
     margin-left: auto;
     margin-right: auto;
-    transform: translateX(-2px);
   }
 
   #submit-button {
