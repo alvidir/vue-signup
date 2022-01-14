@@ -1,18 +1,21 @@
 <template>
   <div class="signup round-corners fib-6">
-    <img src="../assets/logo.light.png" />
-    <span>Sign on Alvidir <a>Alpha</a></span>
+    <img :src="require(`../assets/${icon}`)" />
+    <span>{{title}}<a :href="versionUrl">{{version}}</a></span>
     
-    <regular-field v-if="isSignup || isLogin" 
+    <regular-field v-if="!totp && (isSignup || isLogin)" 
                    class="field separator"
-                   placeholder="username or email"
+                   :placeholder="usernameFieldPlaceholder"
+                   @input="validateInput($event, FIELD_USERNAME)"
                    large></regular-field>
     
-    <regular-field v-if="isSignup || isLogin || isRecover"
+    <regular-field v-if="!totp && (isSignup || isLogin || isReset)"
+                   :ref="FIELD_PASSWORD"
                    class="field separator"
                    :class="{smaller: isLogin}"
-                   placeholder="password"
+                   placeholder="Password"
                    type="password"
+                   @input="validateInput($event, FIELD_PASSWORD)"
                    large></regular-field>
                    
     <a id="forgot-pwd"
@@ -20,20 +23,24 @@
        class="align-right"
        href="#">Forgot password?</a>
 
-    <regular-field v-if="isSignup || isRecover"
+    <regular-field v-if="!totp && (isSignup || isReset)"
+                   :ref="FIELD_REPEAT"
                    class="field separator"
-                   placeholder="repeat password"
+                   placeholder="Repeat password"
                    type="password"
-                   large></regular-field>
+                   @input="validateInput($event, FIELD_REPEAT)"
+                   large not-show></regular-field>
     
-    <discret-field v-if="isTotp"
+    <discret-field v-if="totp"
+                   :lenght="TOTP_LENGTH"
                    class="separator larger"
-                   :length="7"
-                   placeholder="One time password">
+                   placeholder="One time password"
+                   @input="validateInput($event, FIELD_TOTP)">
     </discret-field>
 
-    <submit-button large>Sign up</submit-button>
-    <a href="#">Already have an account? Log in!</a>
+    <submit-button :disabled="!isValid" large>{{buttonText}}</submit-button>
+    <a v-if="isSignup" href="#">Already have an account? Log in!</a>
+    <a v-if="isLogin" href="#">Don't have an account? Register!</a>
   </div>
 </template>
 
@@ -42,32 +49,75 @@ import { defineComponent } from 'vue';
 
 export const TYPE_SIGNUP = "signup";
 export const TYPE_LOGIN = "login";
-export const TYPE_TOTP = "totp";
-export const TYPE_RECOVER = "recover";
+export const TYPE_RESET = "reset";
 
-const DATA_REGEX = {
-  signup: {
-    email: "",
-    password: ""
-  },
+const FIELD_USERNAME = "username";
+const FIELD_PASSWORD = "password";
+const FIELD_REPEAT = "repeat";
+const FIELD_TOTP = "totp";
+const TOTP_LENGTH = 6;
 
-  totp: "",
-
-  recover: "",
+const FIELDS_REGEX: {[key: string]: RegExp} = {
+  [FIELD_USERNAME]: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/,
+  [FIELD_PASSWORD]: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
 }
 
 export default defineComponent({
   name: 'SignUp',
   props: {
-    appName: String,
+    app: String,
     version: String,
+    versionUrl: String,
+    icon: String,
+    totp: Boolean,
     type: {
       type: String,
       default: TYPE_SIGNUP,
     }
   },
 
+  setup() {
+    return {
+      FIELD_USERNAME,
+      FIELD_PASSWORD,
+      FIELD_REPEAT,
+      FIELD_TOTP,
+      TOTP_LENGTH,
+    }
+  },
+
+  data() {
+    let fields: {[key: string]: boolean} = {}
+    fields[FIELD_USERNAME] = [TYPE_LOGIN, TYPE_SIGNUP].includes(this.type)? false : true
+    fields[FIELD_PASSWORD] = [TYPE_LOGIN, TYPE_SIGNUP].includes(this.type)? false : true
+    fields[FIELD_REPEAT] = [TYPE_SIGNUP, TYPE_RESET].includes(this.type)? false : true
+    fields[FIELD_TOTP] = !this.totp
+    
+    return {
+      isValid: false,
+      fields: fields,
+    }
+  },
+
   computed: {
+    title(): string {
+      return this.type === TYPE_SIGNUP? `Sign on ${this.app}` : 
+             this.type === TYPE_LOGIN? `Log in ${this.app}` :
+             this.type === TYPE_RESET? "Reset password" : 
+             ""
+    },
+
+    buttonText(): string {
+      return this.type === TYPE_SIGNUP? "Sign up" :
+             this.type === TYPE_LOGIN? "Log in" :
+             this.type === TYPE_RESET? "Reset" :
+             ""
+    },
+
+    usernameFieldPlaceholder(): string {
+      return this.isSignup? "Email" : "Username or email"
+    },
+
     isSignup(): boolean {
       return this.type === TYPE_SIGNUP
     },
@@ -76,13 +126,53 @@ export default defineComponent({
       return this.type === TYPE_LOGIN
     },
 
-    isTotp(): boolean {
-      return this.type === TYPE_TOTP
+    isReset(): boolean {
+      return this.type === TYPE_RESET
+    },
+  },
+
+  methods: {
+    validateEmail(input: string): void {
+      if (this.isSignup) {
+        this.fields[FIELD_USERNAME] = FIELDS_REGEX[FIELD_USERNAME].test(input)
+      } else {
+        this.fields[FIELD_USERNAME] = !!input.length
+      }
     },
 
-    isRecover(): boolean {
-      return this.type === TYPE_RECOVER
-    }
+    validatePassword(input: string): void {
+      if (this.isSignup || this.isReset) {
+        let inputRef: any = this.$refs[FIELD_REPEAT]
+        this.fields[FIELD_REPEAT] = input === inputRef?.value
+        this.fields[FIELD_PASSWORD] = FIELDS_REGEX[FIELD_PASSWORD].test(input)
+      } else {
+        this.fields[FIELD_PASSWORD] = !!input.length
+      }
+    },
+
+    validateRepeat(input: string): void {
+      let inputRef: any = this.$refs[FIELD_PASSWORD]
+      this.fields[FIELD_REPEAT] = !!input.length && input === inputRef?.value
+    },
+
+    validateTotp(input: string): void {
+      this.fields[FIELD_TOTP] = input.length == TOTP_LENGTH
+    },
+
+    validateInput(input: string, field: string): void {
+      if (field === FIELD_USERNAME) {
+        this.validateEmail(input)
+      } else if (field === FIELD_PASSWORD) {
+        this.validatePassword(input)
+      } else if (field === FIELD_REPEAT) {
+        this.validateRepeat(input)
+      } else if (field === FIELD_TOTP) {
+        this.validateTotp(input)
+      }
+
+      this.isValid = !Object.keys(this.fields)
+        .some(field => !this.fields[field])
+    },
   }
 });
 </script>
@@ -99,9 +189,9 @@ export default defineComponent({
   border-color: find-fib-color(disabled);
   background: white;
 
-  -moz-box-shadow:     0px 2px 5px 1px #aeaeae90;
-  -webkit-box-shadow:  0px 2px 5px 1px #aeaeae90;
-  box-shadow:          0px 2px 5px 1px #aeaeae90;
+  -moz-box-shadow:     0px 2px 3px 1px #aeaeae80;
+  -webkit-box-shadow:  0px 2px 3px 1px #aeaeae80;
+  box-shadow:          0px 2px 3px 1px #aeaeae80;
 
   img {
     margin-top: $fib-8 * 1px;

@@ -1,5 +1,5 @@
 <template>
-  <sign-up type="signup">
+  <sign-up type="signup" app="Alvidir" version="Alpha" :icon="`logo.${theme}.png`">
   </sign-up>
 </template>
 
@@ -11,6 +11,12 @@ export default defineComponent({
   name: 'App',
   components: {
     SignUp
+  },
+
+  data() {
+    return {
+      theme: "light",
+    }
   }
 });
 </script>
