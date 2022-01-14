@@ -1,5 +1,5 @@
 <template>
-  <sign-up email="login">
+  <sign-up type="signup">
   </sign-up>
 </template>
 

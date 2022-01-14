@@ -1,23 +1,37 @@
 <template>
   <div class="signup round-corners fib-6">
     <img src="../assets/logo.light.png" />
-    <span>Sign on Alvidir <button>Alpha</button></span>
-    <regular-field class="field separator"
+    <span>Sign on Alvidir <a>Alpha</a></span>
+    
+    <regular-field v-if="isSignup || isLogin" 
+                   class="field separator"
                    placeholder="username or email"
                    large></regular-field>
-    <regular-field class="field separator little"
+    
+    <regular-field v-if="isSignup || isLogin || isRecover"
+                   class="field separator"
+                   :class="{smaller: isLogin}"
                    placeholder="password"
                    type="password"
                    large></regular-field>
-    <a id="forgot-pwd" class="align-right" href="#">Forgot password?</a>
-    <regular-field v-if="verify"
-                   class="field"
+                   
+    <a id="forgot-pwd"
+       v-if="isLogin"
+       class="align-right"
+       href="#">Forgot password?</a>
+
+    <regular-field v-if="isSignup || isRecover"
+                   class="field separator"
                    placeholder="repeat password"
                    type="password"
                    large></regular-field>
-    <discret-field v-if="totp"
+    
+    <discret-field v-if="isTotp"
+                   class="separator larger"
+                   :length="7"
                    placeholder="One time password">
     </discret-field>
+
     <submit-button large>Sign up</submit-button>
     <a href="#">Already have an account? Log in!</a>
   </div>
@@ -31,13 +45,45 @@ export const TYPE_LOGIN = "login";
 export const TYPE_TOTP = "totp";
 export const TYPE_RECOVER = "recover";
 
+const DATA_REGEX = {
+  signup: {
+    email: "",
+    password: ""
+  },
+
+  totp: "",
+
+  recover: "",
+}
+
 export default defineComponent({
   name: 'SignUp',
   props: {
-
-    verify: Boolean,
-    totp: Boolean,
+    appName: String,
+    version: String,
+    type: {
+      type: String,
+      default: TYPE_SIGNUP,
+    }
   },
+
+  computed: {
+    isSignup(): boolean {
+      return this.type === TYPE_SIGNUP
+    },
+
+    isLogin(): boolean {
+      return this.type === TYPE_LOGIN
+    },
+
+    isTotp(): boolean {
+      return this.type === TYPE_TOTP
+    },
+
+    isRecover(): boolean {
+      return this.type === TYPE_RECOVER
+    }
+  }
 });
 </script>
 
@@ -70,19 +116,16 @@ export default defineComponent({
     text-align: center;
     margin-bottom: $fib-9 * 1px;
 
-    button {
+    a {
       cursor: pointer;
       $item-color: purple;
 
       position: absolute;
+      width: fit-content;
       font-family: 'Montserrat', Helvetica, Arial, sans-serif;
-      margin-left: $fib-5 * 1px;
-      padding-left: $fib-4 * 1px;
-      padding-right: $fib-4 * 1px;
-      padding-top: $fib-2 * 1px;
-      padding-bottom: $fib-2 * 1px;
-      border: 1px solid;
-      border-color: $item-color;
+      margin-left: $fib-4 * 1px;
+      padding: $fib-2 * 1px $fib-4 * 1px $fib-2 * 1px  $fib-4 * 1px;
+      border: 1px solid $item-color;
       border-radius: 10px;
       font-size: $fib-6 * 1px;
       color: $item-color;
@@ -110,8 +153,12 @@ export default defineComponent({
   .separator {
     margin-bottom: $fib-6 * 1px;
 
-    &.little {
+    &.smaller {
       margin-bottom: $fib-4 * 1px;
+    }
+
+    &.larger {
+      margin-bottom: $fib-8 * 1px;
     }
   }
 
