@@ -1,11 +1,14 @@
 <template>
-  <sign-up type="signup" app="Alvidir" version="Alpha" :icon="`logo.${theme}.png`">
-  </sign-up>
+  <sign-up app="Alvidir" version="Alpha" :icon="`logo.${theme}.png`" :type="action"></sign-up>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import SignUp from './components/SignUp.vue';
+import { defineComponent } from 'vue'
+import SignUp, {TYPE_SIGNUP, TYPE_LOGIN, TYPE_RESET} from './components/SignUp.vue'
+
+const SIGNUP_PATH = /^\/signup$/
+const LOGIN_PATH = /^\/login$/
+const RESET_PATH = /^\/you-loser$/
 
 export default defineComponent({
   name: 'App',
@@ -16,6 +19,17 @@ export default defineComponent({
   data() {
     return {
       theme: "light",
+    }
+  },
+
+  computed: {
+    action(): string {
+      const path = window.location.pathname
+      return SIGNUP_PATH.test(path)? TYPE_SIGNUP :
+             LOGIN_PATH.test(path)? TYPE_LOGIN :
+             RESET_PATH.test(path)? TYPE_RESET :
+             TYPE_LOGIN
+
     }
   }
 });

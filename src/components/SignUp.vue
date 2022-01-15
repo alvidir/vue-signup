@@ -46,17 +46,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-export const TYPE_SIGNUP = "signup";
-export const TYPE_LOGIN = "login";
-export const TYPE_RESET = "reset";
+export const TYPE_SIGNUP = "signup"
+export const TYPE_LOGIN = "login"
+export const TYPE_RESET = "reset"
 
-const FIELD_USERNAME = "username";
-const FIELD_PASSWORD = "password";
-const FIELD_REPEAT = "repeat";
-const FIELD_TOTP = "totp";
-const TOTP_LENGTH = 6;
+const FIELD_USERNAME = "username"
+const FIELD_PASSWORD = "password"
+const FIELD_REPEAT = "repeat"
+const FIELD_TOTP = "totp"
+const TOTP_LENGTH = 6
 
 const SUBMIT_EVENT_NAME = "submit"
 const REDIRECT_EVENT_NAME = "redirect"
@@ -209,6 +209,7 @@ export default defineComponent({
   width: $fib-13 * 1px;
   border: 1px solid;
   border-color: find-fib-color(disabled);
+  padding-bottom: $fib-6 * 1px;
   background: white;
 
   -moz-box-shadow:     0px 2px 3px 1px #aeaeae80;
