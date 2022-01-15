@@ -9,14 +9,14 @@ includeButtonsComponents(app)
 app.mount("#app")
 
 // Components as a library
-import SignUp from "./components/SignUp.vue"
+import SignOn from "./components/SignOn.vue"
 
-const SIGN_UP_TAG = "sign-up"
+const SIGN_ON_TAG = "sign-on"
 
 export {
-    SignUp,
+    SignOn,
 }
 
 export function include(app: any): any {
-    app.component(SIGN_UP_TAG, SignUp)
+    app.component(SIGN_ON_TAG, SignOn)
 }

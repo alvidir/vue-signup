@@ -1,5 +1,5 @@
 <template>
-  <div class="signup round-corners fib-6">
+  <div class="signon round-corners fib-6">
     <img :src="require(`../assets/${icon}`)" />
     <span>{{title}}<small>{{version}}</small></span>
     
@@ -67,7 +67,7 @@ const FIELDSStatus_REGEX: {[key: string]: RegExp} = {
 }
 
 export default defineComponent({
-  name: 'SignUp',
+  name: 'SignOn',
 
   emits: [
     SUBMIT_EVENT_NAME,
@@ -203,7 +203,7 @@ export default defineComponent({
 <style scoped lang="scss">
 @import "fibonacci-styles";
 
-.signup {
+.signon {
   display: flex;
   flex-direction: column;
   width: $fib-13 * 1px;
