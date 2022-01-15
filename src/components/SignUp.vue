@@ -1,7 +1,7 @@
 <template>
   <div class="signup round-corners fib-6">
     <img :src="require(`../assets/${icon}`)" />
-    <span>{{title}}<a :href="versionUrl">{{version}}</a></span>
+    <span>{{title}}<small>{{version}}</small></span>
     
     <regular-field v-if="!totp && (isSignup || isLogin)" 
                    class="field separator"
@@ -67,7 +67,6 @@ export default defineComponent({
   props: {
     app: String,
     version: String,
-    versionUrl: String,
     icon: String,
     totp: Boolean,
     type: {
@@ -206,8 +205,8 @@ export default defineComponent({
     text-align: center;
     margin-bottom: $fib-9 * 1px;
 
-    a {
-      cursor: pointer;
+    small {
+      cursor:default;
       $item-color: purple;
 
       position: absolute;
