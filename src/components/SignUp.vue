@@ -6,7 +6,7 @@
     <regular-field v-if="!totp && (isSignup || isLogin)" 
                    class="field separator"
                    :placeholder="usernameFieldPlaceholder"
-                   @input="validateInput($event, FIELD_USERNAME)"
+                   @input="onInput($event, FIELD_USERNAME)"
                    large></regular-field>
     
     <regular-field v-if="!totp && (isSignup || isLogin || isReset)"
@@ -15,32 +15,33 @@
                    :class="{smaller: isLogin}"
                    placeholder="Password"
                    type="password"
-                   @input="validateInput($event, FIELD_PASSWORD)"
+                   @input="onInput($event, FIELD_PASSWORD)"
                    large></regular-field>
                    
-    <a id="forgot-pwd"
-       v-if="isLogin"
-       class="align-right"
-       href="#">Forgot password?</a>
+    <a id="forgot-pwd" v-if="isLogin" href="#"
+      @click="onRedirect(TYPE_RESET)">Forgot password?</a>
 
     <regular-field v-if="!totp && (isSignup || isReset)"
                    :ref="FIELD_REPEAT"
                    class="field separator"
                    placeholder="Repeat password"
                    type="password"
-                   @input="validateInput($event, FIELD_REPEAT)"
+                   @input="onInput($event, FIELD_REPEAT)"
                    large not-show></regular-field>
     
     <discret-field v-if="totp"
                    :lenght="TOTP_LENGTH"
                    class="separator larger"
                    placeholder="One time password"
-                   @input="validateInput($event, FIELD_TOTP)">
+                   @input="onInput($event, FIELD_TOTP)">
     </discret-field>
 
-    <submit-button :disabled="!isValid" large>{{buttonText}}</submit-button>
-    <a v-if="isSignup" href="#">Already have an account? Log in!</a>
-    <a v-if="isLogin" href="#">Don't have an account? Register!</a>
+    <submit-button :disabled="!isValid" 
+                   @submit="onSubmit()" large>{{buttonText}}</submit-button>
+    <a v-if="isSignup" href="#"
+      @click="onRedirect(TYPE_LOGIN)">Already have an account? Log in!</a>
+    <a v-if="isLogin" href="#"
+      @click="onRedirect(TYPE_SIGNUP)">Don't have an account? Register!</a>
   </div>
 </template>
 
@@ -57,13 +58,22 @@ const FIELD_REPEAT = "repeat";
 const FIELD_TOTP = "totp";
 const TOTP_LENGTH = 6;
 
-const FIELDS_REGEX: {[key: string]: RegExp} = {
+const SUBMIT_EVENT_NAME = "submit"
+const REDIRECT_EVENT_NAME = "redirect"
+
+const FIELDSStatus_REGEX: {[key: string]: RegExp} = {
   [FIELD_USERNAME]: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/,
   [FIELD_PASSWORD]: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
 }
 
 export default defineComponent({
   name: 'SignUp',
+
+  emits: [
+    SUBMIT_EVENT_NAME,
+    REDIRECT_EVENT_NAME
+  ],
+
   props: {
     app: String,
     version: String,
@@ -86,15 +96,16 @@ export default defineComponent({
   },
 
   data() {
-    let fields: {[key: string]: boolean} = {}
-    fields[FIELD_USERNAME] = [TYPE_LOGIN, TYPE_SIGNUP].includes(this.type)? false : true
-    fields[FIELD_PASSWORD] = [TYPE_LOGIN, TYPE_SIGNUP].includes(this.type)? false : true
-    fields[FIELD_REPEAT] = [TYPE_SIGNUP, TYPE_RESET].includes(this.type)? false : true
-    fields[FIELD_TOTP] = !this.totp
+    let fieldsStatus: {[key: string]: boolean} = {}
+    fieldsStatus[FIELD_USERNAME] = [TYPE_LOGIN, TYPE_SIGNUP].includes(this.type)? false : true
+    fieldsStatus[FIELD_PASSWORD] = [TYPE_LOGIN, TYPE_SIGNUP].includes(this.type)? false : true
+    fieldsStatus[FIELD_REPEAT] = [TYPE_SIGNUP, TYPE_RESET].includes(this.type)? false : true
+    fieldsStatus[FIELD_TOTP] = !this.totp
     
     return {
       isValid: false,
-      fields: fields,
+      fieldsStatus: fieldsStatus,
+      fieldsValues: {} as {[key: string]: string}
     }
   },
 
@@ -133,32 +144,34 @@ export default defineComponent({
   methods: {
     validateEmail(input: string): void {
       if (this.isSignup) {
-        this.fields[FIELD_USERNAME] = FIELDS_REGEX[FIELD_USERNAME].test(input)
+        this.fieldsStatus[FIELD_USERNAME] = FIELDSStatus_REGEX[FIELD_USERNAME].test(input)
       } else {
-        this.fields[FIELD_USERNAME] = !!input.length
+        this.fieldsStatus[FIELD_USERNAME] = !!input.length
       }
     },
 
     validatePassword(input: string): void {
       if (this.isSignup || this.isReset) {
         let inputRef: any = this.$refs[FIELD_REPEAT]
-        this.fields[FIELD_REPEAT] = input === inputRef?.value
-        this.fields[FIELD_PASSWORD] = FIELDS_REGEX[FIELD_PASSWORD].test(input)
+        this.fieldsStatus[FIELD_REPEAT] = input === inputRef?.value
+        this.fieldsStatus[FIELD_PASSWORD] = FIELDSStatus_REGEX[FIELD_PASSWORD].test(input)
       } else {
-        this.fields[FIELD_PASSWORD] = !!input.length
+        this.fieldsStatus[FIELD_PASSWORD] = !!input.length
       }
     },
 
     validateRepeat(input: string): void {
       let inputRef: any = this.$refs[FIELD_PASSWORD]
-      this.fields[FIELD_REPEAT] = !!input.length && input === inputRef?.value
+      this.fieldsStatus[FIELD_REPEAT] = !!input.length && input === inputRef?.value
     },
 
     validateTotp(input: string): void {
-      this.fields[FIELD_TOTP] = input.length == TOTP_LENGTH
+      this.fieldsStatus[FIELD_TOTP] = input.length == TOTP_LENGTH
     },
 
-    validateInput(input: string, field: string): void {
+    onInput(input: string, field: string): void {
+      this.fieldsValues[field] = input;
+
       if (field === FIELD_USERNAME) {
         this.validateEmail(input)
       } else if (field === FIELD_PASSWORD) {
@@ -169,8 +182,18 @@ export default defineComponent({
         this.validateTotp(input)
       }
 
-      this.isValid = !Object.keys(this.fields)
-        .some(field => !this.fields[field])
+      this.isValid = !Object.keys(this.fieldsStatus)
+        .some(field => !this.fieldsStatus[field])
+    },
+
+    onSubmit(): void {
+      if (this.isValid) {
+        this.$emit(SUBMIT_EVENT_NAME, this.fieldsValues) 
+      }
+    },
+
+    onRedirect(target: string): void {
+      this.$emit(REDIRECT_EVENT_NAME, target)
     },
   }
 });
@@ -257,12 +280,9 @@ export default defineComponent({
     margin-bottom: $fib-5 * 1px;
     text-align: center;
 
-    &.align-right {
-      text-align: right !important;
-    }
-
     &#forgot-pwd {
       padding-right: $fib-5 * 1px;
+      text-align: right !important;
     }
   }
 }

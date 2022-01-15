@@ -1,5 +1,5 @@
 <template>
-  <sign-up type="login" app="Alvidir" version="Alpha" :icon="`logo.${theme}.png`">
+  <sign-up type="signup" app="Alvidir" version="Alpha" :icon="`logo.${theme}.png`">
   </sign-up>
 </template>
 

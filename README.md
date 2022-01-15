@@ -1,3 +1,3 @@
-# rauth-ui
+# vue-signup
 
-A signup page implementation for the [rauth](https://github.com/alvidir/rauth) project
+A signup page implementation that consumes the [rauth](https://github.com/alvidir/rauth) project endpoint
