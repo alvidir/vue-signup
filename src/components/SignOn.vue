@@ -37,6 +37,7 @@
     </discret-field>
 
     <submit-button :disabled="!isValid" 
+                   :loading="loading"
                    @submit="onSubmit()" large>{{buttonText}}</submit-button>
     <a v-if="isSignup" href="#"
       @click="onRedirect(TYPE_LOGIN)">Already have an account? Log in!</a>
@@ -52,16 +53,16 @@ export const TYPE_SIGNUP = "signup"
 export const TYPE_LOGIN = "login"
 export const TYPE_RESET = "reset"
 
-const FIELD_USERNAME = "username"
-const FIELD_PASSWORD = "password"
-const FIELD_REPEAT = "repeat"
-const FIELD_TOTP = "totp"
-const TOTP_LENGTH = 6
+export const FIELD_USERNAME = "username"
+export const FIELD_PASSWORD = "password"
+export const FIELD_REPEAT = "repeat"
+export const FIELD_TOTP = "totp"
+export const TOTP_LENGTH = 6
 
-const SUBMIT_EVENT_NAME = "submit"
-const REDIRECT_EVENT_NAME = "redirect"
+export const SUBMIT_EVENT_NAME = "submit"
+export const REDIRECT_EVENT_NAME = "redirect"
 
-const FIELDSStatus_REGEX: {[key: string]: RegExp} = {
+const FIELDS_REGEX: {[key: string]: RegExp} = {
   [FIELD_USERNAME]: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/,
   [FIELD_PASSWORD]: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
 }
@@ -79,6 +80,7 @@ export default defineComponent({
     version: String,
     icon: String,
     totp: Boolean,
+    loading: Boolean,
     type: {
       type: String,
       default: TYPE_SIGNUP,
@@ -87,6 +89,9 @@ export default defineComponent({
 
   setup() {
     return {
+      TYPE_SIGNUP,
+      TYPE_LOGIN,
+      TYPE_RESET,
       FIELD_USERNAME,
       FIELD_PASSWORD,
       FIELD_REPEAT,
@@ -144,7 +149,7 @@ export default defineComponent({
   methods: {
     validateEmail(input: string): void {
       if (this.isSignup) {
-        this.fieldsStatus[FIELD_USERNAME] = FIELDSStatus_REGEX[FIELD_USERNAME].test(input)
+        this.fieldsStatus[FIELD_USERNAME] = FIELDS_REGEX[FIELD_USERNAME].test(input)
       } else {
         this.fieldsStatus[FIELD_USERNAME] = !!input.length
       }
@@ -154,7 +159,7 @@ export default defineComponent({
       if (this.isSignup || this.isReset) {
         let inputRef: any = this.$refs[FIELD_REPEAT]
         this.fieldsStatus[FIELD_REPEAT] = input === inputRef?.value
-        this.fieldsStatus[FIELD_PASSWORD] = FIELDSStatus_REGEX[FIELD_PASSWORD].test(input)
+        this.fieldsStatus[FIELD_PASSWORD] = FIELDS_REGEX[FIELD_PASSWORD].test(input)
       } else {
         this.fieldsStatus[FIELD_PASSWORD] = !!input.length
       }
@@ -171,17 +176,14 @@ export default defineComponent({
 
     onInput(input: string, field: string): void {
       this.fieldsValues[field] = input;
-
-      if (field === FIELD_USERNAME) {
-        this.validateEmail(input)
-      } else if (field === FIELD_PASSWORD) {
-        this.validatePassword(input)
-      } else if (field === FIELD_REPEAT) {
-        this.validateRepeat(input)
-      } else if (field === FIELD_TOTP) {
-        this.validateTotp(input)
+      const validators: {[key: string]: any} = {
+        [FIELD_USERNAME]: this.validateEmail,
+        [FIELD_PASSWORD]: this.validatePassword,
+        [FIELD_REPEAT]: this.validateRepeat,
+        [FIELD_TOTP]: this.validateTotp,
       }
 
+      validators[field](input)
       this.isValid = !Object.keys(this.fieldsStatus)
         .some(field => !this.fieldsStatus[field])
     },

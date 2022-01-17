@@ -1,14 +1,30 @@
 <template>
-  <sign-on app="Alvidir" version="Alpha" :icon="`logo.${theme}.png`" :type="action"></sign-on>
+  <sign-on app="Alvidir"
+           version="Alpha"
+           :loading="loading"
+           :icon="`logo.${theme}.png`"
+           :type="action"
+           @redirect="onRedirect"
+           @submit="onSubmit">
+  </sign-on>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import SignOn, {TYPE_SIGNUP, TYPE_LOGIN, TYPE_RESET} from './components/SignOn.vue'
+import SignOn, {
+  TYPE_SIGNUP, 
+  TYPE_LOGIN,
+  TYPE_RESET,
+  FIELD_USERNAME,
+  FIELD_PASSWORD,
+  FIELD_TOTP,
+} from './components/SignOn.vue'
+import { signup, login, reset } from './rauth.service'
 
 const SIGNUP_PATH = /^\/signup$/
 const LOGIN_PATH = /^\/login$/
-const RESET_PATH = /^\/you-loser$/
+const RESET_PATH = /^\/reset$/
+const QUERY_REGEX = /\?\w.*/
 
 export default defineComponent({
   name: 'App',
@@ -19,6 +35,7 @@ export default defineComponent({
   data() {
     return {
       theme: "light",
+      loading: false,
     }
   },
 
@@ -30,6 +47,30 @@ export default defineComponent({
              RESET_PATH.test(path)? TYPE_RESET :
              TYPE_LOGIN
 
+    }
+  },
+
+  methods: {
+    onRedirect(path: string): void {
+      let params = window.location.href.match(QUERY_REGEX)?? ""
+      window.location.href = `/${path}${params}`
+    },
+
+    async onSubmit(fields: any) {
+      this.loading = true
+
+      let email = fields[FIELD_USERNAME]?? undefined
+      let pwd = fields[FIELD_PASSWORD]?? undefined
+      let totp = fields[FIELD_TOTP]?? undefined
+
+      const requests: {[key: string]: any} = {
+        [TYPE_SIGNUP]: signup,
+        [TYPE_LOGIN]: login,
+        [TYPE_RESET]: reset,
+      }
+
+      requests[this.action](email, pwd, totp)
+      this.loading = false
     }
   }
 });
