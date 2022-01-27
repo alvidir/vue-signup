@@ -1,34 +1,75 @@
 import * as grpcWeb from 'grpc-web';
-import { UserServiceClient } from '@/proto/UserServiceClientPb';
-import { SignupRequest, Empty } from '@/proto/user_pb';
+import { UserClient } from '@/proto/UserServiceClientPb';
+import { SignupRequest, Empty, DeleteRequest } from '@/proto/user_pb';
+import { SessionClient } from './proto/SessionServiceClientPb';
+import { LoginRequest } from './proto/session_pb';
 
-const addr = "localhost:8080";
+class RauthService {
+    userClient: UserClient
+    sessionClient: SessionClient
 
-function signup(email: string, password: string, totp: string): void {
-    const userService = new UserServiceClient('http://localhost:8080', null, null);
-    const request = new SignupRequest();
-    request.setEmail(email);
-    request.setPwd(password);
+    constructor(url: string) {
+        this.userClient = new UserClient(url, null, null);
+        this.sessionClient = new SessionClient(url, null, null);
+    }
 
-    const call = userService.signup(request, {'custom-header-1': 'value1'},
-    (err: grpcWeb.RpcError, response: Empty) => {
-        console.log("OK");
-    });
-    call.on('status', (status: grpcWeb.Status) => {
-        console.log(status);
-    });
+    signup(email: string, password: string, headers: any): void {
+        const request = new SignupRequest()
+        request.setEmail(email)
+        request.setPwd(password)
+    
+        const call = this.userClient.signup(request, headers,
+        (err: grpcWeb.RpcError, response: Empty) => {
+            console.log(err)
+        });
+        
+        call.on('status', (status: grpcWeb.Status) => {
+            console.log(status)
+        });
+    }
+
+    delete(password: string, totp: string,  headers: any): void {
+        const request = new DeleteRequest()
+        request.setPwd(password)
+        request.setTotp(totp)
+    
+        const call = this.userClient.delete(request, headers,
+        (err: grpcWeb.RpcError, response: Empty) => {
+            console.log(err)
+        });
+        
+        call.on('status', (status: grpcWeb.Status) => {
+            console.log(status)
+        });
+    }
+
+    login(ident: string, password: string, totp: string, headers: any): void {
+        const request = new LoginRequest();
+        request.setIdent(ident)
+        request.setPwd(password)
+        request.setTotp(totp)
+    
+        const call = this.sessionClient.login(request, headers,
+        (err: grpcWeb.RpcError, response: Empty) => {
+            console.log(err);
+        });
+        
+        call.on('status', (status: grpcWeb.Status) => {
+            console.log(status);
+        });
+    }
+
+    logout(headers: any): void {
+        const request = new Empty()
+        const call = this.sessionClient.logout(request, headers,
+        (err: grpcWeb.RpcError, response: Empty) => {
+            console.log(err);
+        });
+        
+        call.on('status', (status: grpcWeb.Status) => {
+            console.log(status);
+        });
+    }
 }
 
-function login(ident: string, password: string, totp: string): void {
-    console.log("Login")
-}
-
-function reset(current: string, newpwd: string, totp: string): void {
-    console.log("Reset")
-}
-
-export {
-    signup,
-    login,
-    reset,
-}
+export default RauthService

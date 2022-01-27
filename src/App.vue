@@ -19,12 +19,15 @@ import SignOn, {
   FIELD_PASSWORD,
   FIELD_TOTP,
 } from './components/SignOn.vue'
-import { signup, login, reset } from './rauth.service'
+import RauthService from './rauth.service'
 
 const SIGNUP_PATH = /^\/signup$/
 const LOGIN_PATH = /^\/login$/
 const RESET_PATH = /^\/reset$/
 const QUERY_REGEX = /\?\w.*/
+
+const url = "http://localhost:8080"
+const rauthService = new RauthService(url)
 
 export default defineComponent({
   name: 'App',
@@ -59,17 +62,18 @@ export default defineComponent({
     async onSubmit(fields: any) {
       this.loading = true
 
-      let email = fields[FIELD_USERNAME]?? undefined
-      let pwd = fields[FIELD_PASSWORD]?? undefined
-      let totp = fields[FIELD_TOTP]?? undefined
-
-      const requests: {[key: string]: any} = {
-        [TYPE_SIGNUP]: signup,
-        [TYPE_LOGIN]: login,
-        [TYPE_RESET]: reset,
+      const email = fields[FIELD_USERNAME]?? undefined
+      const pwd = fields[FIELD_PASSWORD]?? undefined
+      const totp = fields[FIELD_TOTP]?? undefined
+      const headers = {
       }
 
-      requests[this.action](email, pwd, totp)
+      const requests: {[key: string]: any} = {
+        [TYPE_SIGNUP]: () => rauthService.signup(email, pwd, headers),
+        [TYPE_LOGIN]: () => rauthService.login(email, pwd, totp, headers),
+      }
+
+      requests[this.action]()
       this.loading = false
     }
   }
