@@ -1,6 +1,5 @@
 <template>
-  <div class="signon round-corners fib-6 shadowed">
-    <slot name="banner"></slot>
+  <div>
     <regular-field v-if="email" 
                    class="field separator"
                    :placeholder="usernameFieldPlaceholder"
@@ -8,13 +7,13 @@
                    large></regular-field>
     
     <regular-field v-if="password"
-                  class="field separator"
-                  placeholder="Password"
-                  type="password"
-                  :ref="FIELD_PASSWORD"
-                  :class="{smaller: isLogin}"
-                  @input="onInput($event, FIELD_PASSWORD)"
-                  large></regular-field>
+                   class="field separator"
+                   placeholder="Password"
+                   type="password"
+                   :ref="FIELD_PASSWORD"
+                   :class="{smaller: isLogin}"
+                   @input="onInput($event, FIELD_PASSWORD)"
+                   large></regular-field>
     
     <discret-field v-if="totp"
                    :lenght="TOTP_LENGTH"
@@ -27,7 +26,6 @@
                    :loading="loading"
                    @submit="onSubmit()" large>{{title}}
     </submit-button>
-    <slot name="footer"></slot>
   </div>
 </template>
 
@@ -84,9 +82,9 @@ export default defineComponent({
 
   data() {
     let fieldsStatus: {[key: string]: boolean} = {}
-    fieldsStatus[FIELD_USERNAME] = false
-    fieldsStatus[FIELD_PASSWORD] = false
-    fieldsStatus[FIELD_TOTP] = false
+    fieldsStatus[FIELD_USERNAME] = !this.username || !this.email
+    fieldsStatus[FIELD_PASSWORD] = !this.password
+    fieldsStatus[FIELD_TOTP] = !this.totp
     
     return {
       isValid: false,
@@ -105,7 +103,7 @@ export default defineComponent({
 
   methods: {
     validateEmail(input: string): void {
-      this.fieldsStatus[FIELD_USERNAME] = !!input.length && FIELDS_REGEX[FIELD_USERNAME].test(input)
+      this.fieldsStatus[FIELD_USERNAME] = !!input.length && (this.username || FIELDS_REGEX[FIELD_USERNAME].test(input))
     },
 
     validatePassword(input: string): void {
@@ -145,52 +143,36 @@ export default defineComponent({
 <style scoped lang="scss">
 @import "fibonacci-styles";
 
-.signon {
+div {
   display: flex;
   flex-direction: column;
-  width: $fib-13 * 1px;
-  border: 1px solid;
-  border-color: find-fib-color(disabled);
-  padding-top: $fib-7 * 1px;
-  padding-bottom: $fib-6 * 1px;
-  background: white;
+  width: 100%;
+}
 
-  &.shadowed {
-    -moz-box-shadow:     0px 3px 3px 1px #00000020 !important;
-    -webkit-box-shadow:  0px 3px 3px 1px #00000020 !important;
-    box-shadow:          0px 3px 3px 1px #00000020 !important;
+// overwrite submit-button styles
+.submit {
+  margin-top: $fib-5 * 1px;
+  margin-bottom: $fib-5 * 1px;
+}
+
+.regular-field, .discret-field, .submit, a {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.regular-field, .submit, a{
+  width: 90%;
+}
+
+.separator {
+  margin-bottom: $fib-6 * 1px;
+
+  &.smaller {
+    margin-bottom: $fib-4 * 1px;
   }
 
-  #pwd-container {
-    display: flex;
-    flex-direction: column;
-  }
-
-  // overwrite submit-button styles
-  .submit {
-    margin-top: $fib-5 * 1px;
-    margin-bottom: $fib-5 * 1px;
-  }
-
-  .regular-field, .discret-field, .submit, a {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .regular-field, .submit, a{
-    width: 90%;
-  }
-
-  .separator {
-    margin-bottom: $fib-6 * 1px;
-
-    &.smaller {
-      margin-bottom: $fib-4 * 1px;
-    }
-
-    &.larger {
-      margin-bottom: $fib-8 * 1px;
-    }
+  &.larger {
+    margin-bottom: $fib-8 * 1px;
   }
 }
 

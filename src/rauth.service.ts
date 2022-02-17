@@ -1,6 +1,6 @@
 import * as grpcWeb from 'grpc-web';
-import { UserClient } from '@/proto/UserServiceClientPb';
-import { SignupRequest, Empty, DeleteRequest } from '@/proto/user_pb';
+import { UserClient } from './proto/UserServiceClientPb';
+import { SignupRequest, ResetRequest, Empty } from './proto/user_pb';
 import { SessionClient } from './proto/SessionServiceClientPb';
 import { LoginRequest } from './proto/session_pb';
 
@@ -28,21 +28,6 @@ class RauthService {
         });
     }
 
-    delete(password: string, totp: string,  headers: any): void {
-        const request = new DeleteRequest()
-        request.setPwd(password)
-        request.setTotp(totp)
-    
-        const call = this.userClient.delete(request, headers,
-        (err: grpcWeb.RpcError, response: Empty) => {
-            console.log(err)
-        });
-        
-        call.on('status', (status: grpcWeb.Status) => {
-            console.log(status)
-        });
-    }
-
     login(ident: string, password: string, totp: string, headers: any): void {
         const request = new LoginRequest();
         request.setIdent(ident)
@@ -59,9 +44,13 @@ class RauthService {
         });
     }
 
-    logout(headers: any): void {
-        const request = new Empty()
-        const call = this.sessionClient.logout(request, headers,
+    reset(email: string, newPwd: string, totp: string, headers: any): void {
+        const request = new ResetRequest();
+        request.setEmail(email)
+        request.setTotp(totp)
+        request.setPwd(newPwd)
+    
+        const call = this.userClient.reset(request, headers,
         (err: grpcWeb.RpcError, response: Empty) => {
             console.log(err);
         });
