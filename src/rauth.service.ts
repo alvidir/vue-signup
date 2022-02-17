@@ -59,6 +59,8 @@ class RauthService {
             console.log(status);
         });
     }
+
+    
 }
 
 export default RauthService
