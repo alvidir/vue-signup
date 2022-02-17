@@ -1,33 +1,20 @@
 <template>
-  <div class="signon round-corners fib-6">
-    <img :src="require(`../assets/${icon}`)" />
-    <span>{{title}}<small>{{version}}</small></span>
-    
-    <regular-field v-if="!totp && (isSignup || isLogin)" 
+  <div class="signon round-corners fib-6 shadowed">
+    <slot name="banner"></slot>
+    <regular-field v-if="email" 
                    class="field separator"
                    :placeholder="usernameFieldPlaceholder"
                    @input="onInput($event, FIELD_USERNAME)"
                    large></regular-field>
     
-    <regular-field v-if="!totp && (isSignup || isLogin || isReset)"
-                   :ref="FIELD_PASSWORD"
-                   class="field separator"
-                   :class="{smaller: isLogin}"
-                   placeholder="Password"
-                   type="password"
-                   @input="onInput($event, FIELD_PASSWORD)"
-                   large></regular-field>
-                   
-    <a id="forgot-pwd" v-if="isLogin" href="#"
-      @click="onRedirect(TYPE_RESET)">Forgot password?</a>
-
-    <regular-field v-if="!totp && (isSignup || isReset)"
-                   :ref="FIELD_REPEAT"
-                   class="field separator"
-                   placeholder="Repeat password"
-                   type="password"
-                   @input="onInput($event, FIELD_REPEAT)"
-                   large not-show></regular-field>
+    <regular-field v-if="password"
+                  class="field separator"
+                  placeholder="Password"
+                  type="password"
+                  :ref="FIELD_PASSWORD"
+                  :class="{smaller: isLogin}"
+                  @input="onInput($event, FIELD_PASSWORD)"
+                  large></regular-field>
     
     <discret-field v-if="totp"
                    :lenght="TOTP_LENGTH"
@@ -38,24 +25,17 @@
 
     <submit-button :disabled="!isValid" 
                    :loading="loading"
-                   @submit="onSubmit()" large>{{buttonText}}</submit-button>
-    <a v-if="isSignup" href="#"
-      @click="onRedirect(TYPE_LOGIN)">Already have an account? Log in!</a>
-    <a v-if="isLogin" href="#"
-      @click="onRedirect(TYPE_SIGNUP)">Don't have an account? Register!</a>
+                   @submit="onSubmit()" large>{{title}}
+    </submit-button>
+    <slot name="footer"></slot>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-export const TYPE_SIGNUP = "signup"
-export const TYPE_LOGIN = "login"
-export const TYPE_RESET = "reset"
-
 export const FIELD_USERNAME = "username"
 export const FIELD_PASSWORD = "password"
-export const FIELD_REPEAT = "repeat"
 export const FIELD_TOTP = "totp"
 export const TOTP_LENGTH = 6
 
@@ -76,25 +56,27 @@ export default defineComponent({
   ],
 
   props: {
-    app: String,
-    version: String,
-    icon: String,
+    title: String,
     totp: Boolean,
+    username: {
+      type: Boolean,
+      default: true,
+    },
+    email: {
+      type: Boolean,
+      default: true,
+    },
+    password: {
+      type: Boolean,
+      default: true,
+    },
     loading: Boolean,
-    type: {
-      type: String,
-      default: TYPE_SIGNUP,
-    }
   },
 
   setup() {
     return {
-      TYPE_SIGNUP,
-      TYPE_LOGIN,
-      TYPE_RESET,
       FIELD_USERNAME,
       FIELD_PASSWORD,
-      FIELD_REPEAT,
       FIELD_TOTP,
       TOTP_LENGTH,
     }
@@ -102,10 +84,9 @@ export default defineComponent({
 
   data() {
     let fieldsStatus: {[key: string]: boolean} = {}
-    fieldsStatus[FIELD_USERNAME] = [TYPE_LOGIN, TYPE_SIGNUP].includes(this.type)? false : true
-    fieldsStatus[FIELD_PASSWORD] = [TYPE_LOGIN, TYPE_SIGNUP].includes(this.type)? false : true
-    fieldsStatus[FIELD_REPEAT] = [TYPE_SIGNUP, TYPE_RESET].includes(this.type)? false : true
-    fieldsStatus[FIELD_TOTP] = !this.totp
+    fieldsStatus[FIELD_USERNAME] = false
+    fieldsStatus[FIELD_PASSWORD] = false
+    fieldsStatus[FIELD_TOTP] = false
     
     return {
       isValid: false,
@@ -115,59 +96,20 @@ export default defineComponent({
   },
 
   computed: {
-    title(): string {
-      return this.type === TYPE_SIGNUP? `Sign on ${this.app}` : 
-             this.type === TYPE_LOGIN? `Log in ${this.app}` :
-             this.type === TYPE_RESET? "Reset password" : 
-             ""
-    },
-
-    buttonText(): string {
-      return this.type === TYPE_SIGNUP? "Sign up" :
-             this.type === TYPE_LOGIN? "Log in" :
-             this.type === TYPE_RESET? "Reset" :
-             ""
-    },
-
     usernameFieldPlaceholder(): string {
-      return this.isSignup? "Email" : "Username or email"
-    },
-
-    isSignup(): boolean {
-      return this.type === TYPE_SIGNUP
-    },
-
-    isLogin(): boolean {
-      return this.type === TYPE_LOGIN
-    },
-
-    isReset(): boolean {
-      return this.type === TYPE_RESET
+      return this.email && this.username? "Username or email" :
+             this.username? "Username" :
+             this.email? "Email" : ""
     },
   },
 
   methods: {
     validateEmail(input: string): void {
-      if (this.isSignup) {
-        this.fieldsStatus[FIELD_USERNAME] = FIELDS_REGEX[FIELD_USERNAME].test(input)
-      } else {
-        this.fieldsStatus[FIELD_USERNAME] = !!input.length
-      }
+      this.fieldsStatus[FIELD_USERNAME] = !!input.length && FIELDS_REGEX[FIELD_USERNAME].test(input)
     },
 
     validatePassword(input: string): void {
-      if (this.isSignup || this.isReset) {
-        let inputRef: any = this.$refs[FIELD_REPEAT]
-        this.fieldsStatus[FIELD_REPEAT] = input === inputRef?.value
-        this.fieldsStatus[FIELD_PASSWORD] = FIELDS_REGEX[FIELD_PASSWORD].test(input)
-      } else {
-        this.fieldsStatus[FIELD_PASSWORD] = !!input.length
-      }
-    },
-
-    validateRepeat(input: string): void {
-      let inputRef: any = this.$refs[FIELD_PASSWORD]
-      this.fieldsStatus[FIELD_REPEAT] = !!input.length && input === inputRef?.value
+      this.fieldsStatus[FIELD_PASSWORD] = !!input.length && FIELDS_REGEX[FIELD_PASSWORD].test(input)
     },
 
     validateTotp(input: string): void {
@@ -179,7 +121,6 @@ export default defineComponent({
       const validators: {[key: string]: any} = {
         [FIELD_USERNAME]: this.validateEmail,
         [FIELD_PASSWORD]: this.validatePassword,
-        [FIELD_REPEAT]: this.validateRepeat,
         [FIELD_TOTP]: this.validateTotp,
       }
 
@@ -201,7 +142,6 @@ export default defineComponent({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "fibonacci-styles";
 
@@ -211,44 +151,25 @@ export default defineComponent({
   width: $fib-13 * 1px;
   border: 1px solid;
   border-color: find-fib-color(disabled);
+  padding-top: $fib-7 * 1px;
   padding-bottom: $fib-6 * 1px;
   background: white;
 
-  -moz-box-shadow:     0px 2px 3px 1px #aeaeae80;
-  -webkit-box-shadow:  0px 2px 3px 1px #aeaeae80;
-  box-shadow:          0px 2px 3px 1px #aeaeae80;
-
-  img {
-    margin-top: $fib-8 * 1px;
-    margin-bottom: $fib-6 * 1px;
-    margin-left: auto;
-    margin-right: auto;
-    height: $fib-10 * 1px;
+  &.shadowed {
+    -moz-box-shadow:     0px 3px 3px 1px #00000020 !important;
+    -webkit-box-shadow:  0px 3px 3px 1px #00000020 !important;
+    box-shadow:          0px 3px 3px 1px #00000020 !important;
   }
 
-  span {
-    font-size: $fib-11 * 0.01rem;
-    text-align: center;
-    margin-bottom: $fib-9 * 1px;
+  #pwd-container {
+    display: flex;
+    flex-direction: column;
+  }
 
-    small {
-      cursor:default;
-      $item-color: purple;
-
-      position: absolute;
-      width: fit-content;
-      font-family: 'Montserrat', Helvetica, Arial, sans-serif;
-      margin-left: $fib-4 * 1px;
-      padding: $fib-2 * 1px $fib-4 * 1px $fib-2 * 1px  $fib-4 * 1px;
-      border: 1px solid $item-color;
-      border-radius: 10px;
-      font-size: $fib-6 * 1px;
-      color: $item-color;
-
-      &:not(:active) {
-        background: transparent;
-      }
-    }
+  // overwrite submit-button styles
+  .submit {
+    margin-top: $fib-5 * 1px;
+    margin-bottom: $fib-5 * 1px;
   }
 
   .regular-field, .discret-field, .submit, a {
@@ -260,11 +181,6 @@ export default defineComponent({
     width: 90%;
   }
 
-  .submit {
-    margin-top: $fib-5 * 1px;
-    margin-bottom: $fib-5 * 1px;
-  }
-
   .separator {
     margin-bottom: $fib-6 * 1px;
 
@@ -274,18 +190,6 @@ export default defineComponent({
 
     &.larger {
       margin-bottom: $fib-8 * 1px;
-    }
-  }
-
-  a {
-    text-decoration: none;
-    font-size: $fib-6 * 1px;
-    margin-bottom: $fib-5 * 1px;
-    text-align: center;
-
-    &#forgot-pwd {
-      padding-right: $fib-5 * 1px;
-      text-align: right !important;
     }
   }
 }
