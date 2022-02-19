@@ -19,12 +19,8 @@ class RauthService {
         request.setPwd(password)
     
         const call = this.userClient.signup(request, headers,
-        (err: grpcWeb.RpcError, response: Empty) => {
+        (err: grpcWeb.RpcError, _: Empty) => {
             console.log(err)
-        });
-        
-        call.on('status', (status: grpcWeb.Status) => {
-            console.log(status)
         });
     }
 
@@ -35,12 +31,8 @@ class RauthService {
         request.setTotp(totp)
     
         const call = this.sessionClient.login(request, headers,
-        (err: grpcWeb.RpcError, response: Empty) => {
+        (err: grpcWeb.RpcError, _: Empty) => {
             console.log(err);
-        });
-        
-        call.on('status', (status: grpcWeb.Status) => {
-            console.log(status);
         });
     }
 
@@ -51,12 +43,8 @@ class RauthService {
         request.setPwd(newPwd)
     
         const call = this.userClient.reset(request, headers,
-        (err: grpcWeb.RpcError, response: Empty) => {
+        (err: grpcWeb.RpcError, _: Empty) => {
             console.log(err);
-        });
-        
-        call.on('status', (status: grpcWeb.Status) => {
-            console.log(status);
         });
     }
 

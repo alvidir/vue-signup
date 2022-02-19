@@ -11,7 +11,6 @@
                    placeholder="Password"
                    type="password"
                    :ref="FIELD_PASSWORD"
-                   :class="{smaller: isLogin}"
                    @input="onInput($event, FIELD_PASSWORD)"
                    large></regular-field>
     
@@ -38,7 +37,6 @@ export const FIELD_TOTP = "totp"
 export const TOTP_LENGTH = 6
 
 export const SUBMIT_EVENT_NAME = "submit"
-export const REDIRECT_EVENT_NAME = "redirect"
 
 const FIELDS_REGEX: {[key: string]: RegExp} = {
   [FIELD_USERNAME]: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/,
@@ -50,7 +48,6 @@ export default defineComponent({
 
   emits: [
     SUBMIT_EVENT_NAME,
-    REDIRECT_EVENT_NAME
   ],
 
   props: {
@@ -131,11 +128,7 @@ export default defineComponent({
       if (this.isValid) {
         this.$emit(SUBMIT_EVENT_NAME, this.fieldsValues) 
       }
-    },
-
-    onRedirect(target: string): void {
-      this.$emit(REDIRECT_EVENT_NAME, target)
-    },
+    }
   }
 });
 </script>
@@ -166,10 +159,6 @@ div {
 
 .separator {
   margin-bottom: $fib-6 * 1px;
-
-  &.smaller {
-    margin-bottom: $fib-4 * 1px;
-  }
 
   &.larger {
     margin-bottom: $fib-8 * 1px;

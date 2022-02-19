@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card shadowed">
     <banner version="Alpha"
             :title="bannerTitle"
             :icon="`logo.${theme}.png`">
@@ -11,11 +11,10 @@
              :username="addUsernameField"
              :password="addPasswordField"
              :totp="addTotpField"
-             @redirect="onRedirect"
              @submit="onSubmit">
     </sign-on>
-    <div v-if="verifying" class="loader-container">
-      <grid-loader :size="'33px'" :radius="'10px'" color="#00aa8880"></grid-loader>
+    <div v-if="fetching" class="loader-container">
+      <grid-loader :size="'33px'" :radius="'10px'" color="#00aa8850"></grid-loader>
     </div>
     <options v-if="showOptions"
              v-bind="optionsProps">
@@ -24,33 +23,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import GridLoader from 'vue-spinner/src/GridLoader.vue'
+import { defineComponent } from "vue"
+import GridLoader from "vue-spinner/src/GridLoader.vue"
 import SignOn, {
   FIELD_USERNAME,
   FIELD_PASSWORD,
   FIELD_TOTP,
-} from './components/SignOn.vue'
-import Banner from './components/Banner.vue'
-import Options from './components/Options.vue'
-import RauthService from './rauth.service'
+} from "@/components/SignOn.vue"
+import Banner from "@/components/Banner.vue"
+import Options from "@/components/Options.vue"
+import RauthService from "@/rauth.service"
 
 const SIGNUP_PATH = /^\/signup$/
-const LOGIN_PATH = /^\/login$/
+const LOGIN_PATH = /^\/$|\/login$/ // default
 const RESET_PATH = /^\/reset$/
-const VERIFY_PATH = /^\/verify$/
 const QUERY_PARAMS_REGEX = /\?\w.*/
 
 const SIGNUP_PATH_ROOT = "/signup"
 const LOGIN_PATH_ROOT = "/login"
 const RESET_PATH_ROOT = "/reset"
-const VERIFY_PATH_ROOT = "/verify"
 
 const BANNER_TITLES: {[key: string]: string} = {
   [SIGNUP_PATH_ROOT]: "Sign up on Alvidir",
   [LOGIN_PATH_ROOT]: "Log in Alvidir",
   [RESET_PATH_ROOT]: "Recover account",
-  [VERIFY_PATH_ROOT]: "Creating account",
 }
 
 const SUBMIT_TITLES: {[key: string]: string} = {
@@ -59,30 +55,31 @@ const SUBMIT_TITLES: {[key: string]: string} = {
   [RESET_PATH_ROOT]: "Send email",
 }
 
+const queryParams = (window.location.href.match(QUERY_PARAMS_REGEX)?? [""])[0]
+
 const OPTIONS_PROPS: {[key: string]: unknown} = {
   [SIGNUP_PATH_ROOT]: {
     secondary: "Already have an account? Log in!",
-    secondaryHref: LOGIN_PATH_ROOT,
+    secondaryHref: `${LOGIN_PATH_ROOT}${queryParams}`,
   },
 
   [LOGIN_PATH_ROOT]: {
     primary: BANNER_TITLES[SIGNUP_PATH_ROOT],
-    primaryHref: SIGNUP_PATH_ROOT,
+    primaryHref: `${SIGNUP_PATH_ROOT}${queryParams}`,
     secondary: "Forgot password?",
-    secondaryHref: RESET_PATH_ROOT
+    secondaryHref: `${RESET_PATH_ROOT}${queryParams}`
   },
 
   [RESET_PATH_ROOT]: {
     secondary: "Return to the log in page",
-    secondaryHref: LOGIN_PATH_ROOT,
+    secondaryHref: `${LOGIN_PATH_ROOT}${queryParams}`,
   },
 }
 
-const url = "http://localhost:8080"
-const rauthService = new RauthService(url)
+const rauthService = new RauthService(process.env.VUE_APP_RAUTH_URI)
 
 export default defineComponent({
-  name: 'App',
+  name: "App",
   components: {
     Banner,
     SignOn,
@@ -94,35 +91,62 @@ export default defineComponent({
     return {
       theme: "light",
       loading: false,
+      fetching: false,
       disableEmail: false,
       disablePassword: RESET_PATH.test(window.location.pathname),
       disableTotp: true,
-      verifying: VERIFY_PATH.test(window.location.pathname),
     }
   },
 
+  mounted() {
+    this.fetching = !!this.token
+    if (!this.fetching) return
+
+    this.onSubmit({}).then(() => {
+      this.fetching = false
+      if (RESET_PATH.test(window.location.pathname)) {
+        window.location.href = LOGIN_PATH_ROOT
+        return
+      }
+
+      //window.location.replace(process.env.VUE_APP_DEFAULT_REDIRECT)
+    })
+  },
+
   computed: {
+    token(): string | undefined {
+      if (!queryParams) return undefined
+      
+      let paramsByKey: {[key: string]: string} = {} 
+      queryParams.match(/\w=\w*/)?.forEach((param: string) => {
+        const item = param.split("=")
+        paramsByKey[item[0]] = item[1]
+      });
+
+
+      return paramsByKey[process.env.VUE_APP_TOKEN_QUERY_PARAM]
+    },
+
     bannerTitle(): string {
-      console.log(window.location.pathname)
-      return BANNER_TITLES[window.location.pathname]
+      return BANNER_TITLES[window.location.pathname]?? BANNER_TITLES[LOGIN_PATH_ROOT]
 
     },
 
     submitTitle(): string {
-      return SUBMIT_TITLES[window.location.pathname]
+      return SUBMIT_TITLES[window.location.pathname]?? SUBMIT_TITLES[LOGIN_PATH_ROOT]
     },
 
     optionsProps(): unknown {
-      return OPTIONS_PROPS[window.location.pathname]
+      return OPTIONS_PROPS[window.location.pathname]?? OPTIONS_PROPS[LOGIN_PATH_ROOT]
     },
 
     showSignOn(): boolean {
-      return !this.verifying && !VERIFY_PATH.test(window.location.pathname)
+      return !this.fetching
     },
 
     showOptions(): boolean {
       const pathname = window.location.pathname
-      return !this.verifying && (SIGNUP_PATH.test(pathname) ||
+      return !this.fetching && (SIGNUP_PATH.test(pathname) ||
              LOGIN_PATH.test(pathname)  ||
              RESET_PATH.test(pathname))
     },
@@ -152,9 +176,12 @@ export default defineComponent({
   },
 
   methods: {
-    onRedirect(path: string): void {
-      let params = window.location.href.match(QUERY_PARAMS_REGEX)?? ""
-      window.location.href = `/${path}${params}`
+    hash(data: string): string {
+      let hash = 0;
+      for(let i = 0; i < data.length; i++) 
+            hash = Math.imul(31, hash) + data.charCodeAt(i) | 0;
+
+      return hash.toString(64);
     },
 
     async onSubmit(fields: any) {
@@ -163,15 +190,21 @@ export default defineComponent({
       const email = fields[FIELD_USERNAME]?? undefined
       const pwd = fields[FIELD_PASSWORD]?? undefined
       const totp = fields[FIELD_TOTP]?? undefined
-      const headers = {
+      const headers: {[key: string]: string} = {}
+      
+      if (this.token) {
+        const tokenHeader = process.env.VUE_APP_JWT_HEADER
+        headers[tokenHeader] = this.token
       }
 
-      // const requests: {[key: string]: any} = {
-      //   [TYPE_SIGNUP]: () => rauthService.signup(email, pwd, headers),
-      //   [TYPE_LOGIN]: () => rauthService.login(email, pwd, totp, headers),
-      // }
+      const securePwd = pwd? this.hash(pwd) : ""
+      const requests: {[key: string]: any} = {
+        [SIGNUP_PATH_ROOT]: () => rauthService.signup(email, securePwd, headers),
+        [LOGIN_PATH_ROOT]: () => rauthService.login(email, securePwd, totp, headers),
+        [RESET_PATH_ROOT]: () => rauthService.reset(email, securePwd, totp, headers),
+      }
 
-      //requests[this.action]()
+      requests[window.location.pathname]()
       this.loading = false
     }
   }
@@ -184,7 +217,7 @@ export default defineComponent({
 * {
   margin: 0;
   padding: 0;
-  font-family: 'Raleway', Helvetica, Arial, sans-serif;
+  font-family: "Raleway", Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -225,9 +258,9 @@ body {
   background: white;
 
   &.shadowed {
-    -moz-box-shadow:     0px 3px 3px 1px #00000020;
-    -webkit-box-shadow:  0px 3px 3px 1px #00000020;
-    box-shadow:          0px 3px 3px 1px #00000020;
+    -moz-box-shadow:     0px 2px 3px 1px #00000020 !important;
+    -webkit-box-shadow:  0px 2px 3px 1px #00000020 !important;
+    box-shadow:          0px 2px 3px 1px #00000020 !important;
   }
 }
 
