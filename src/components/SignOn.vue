@@ -1,16 +1,20 @@
 <template>
   <div>
     <regular-field v-if="email" 
-                   class="field separator"
+                   class="field"
+                   :class="{separator: !emailErrorMessage}"
                    :placeholder="usernameFieldPlaceholder"
+                   :error="emailErrorMessage"
                    @input="onInput($event, FIELD_USERNAME)"
                    large></regular-field>
     
     <regular-field v-if="password"
                    class="field separator"
+                   :class="{separator: !passwordErrorMessage}"
                    placeholder="Password"
                    type="password"
                    :ref="FIELD_PASSWORD"
+                   :error="passwordErrorMessage"
                    @input="onInput($event, FIELD_PASSWORD)"
                    large></regular-field>
     
@@ -43,6 +47,11 @@ const FIELDS_REGEX: {[key: string]: RegExp} = {
   [FIELD_PASSWORD]: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
 }
 
+const ERROR_MESSAGES: {[key: string]: string} = {
+  [FIELD_USERNAME]: "Invalid email address.",
+  [FIELD_PASSWORD]: "A secure password must include at least one upper and lowercase letters, as well as numbers and special characters.",
+}
+
 export default defineComponent({
   name: 'SignOn',
 
@@ -66,6 +75,7 @@ export default defineComponent({
       default: true,
     },
     loading: Boolean,
+    disableErrors: Boolean,
   },
 
   setup() {
@@ -96,9 +106,35 @@ export default defineComponent({
              this.username? "Username" :
              this.email? "Email" : ""
     },
+
+    emailErrorMessage(): string {
+      if (this.disableErrors ||
+          !this.fieldsValues[FIELD_USERNAME] ||
+          this.fieldsStatus[FIELD_USERNAME])
+          return ""
+
+      return ERROR_MESSAGES[FIELD_USERNAME]
+    },
+
+    passwordErrorMessage(): string {
+      if (this.disableErrors ||
+          !this.fieldsValues[FIELD_PASSWORD] ||
+          this.fieldsStatus[FIELD_PASSWORD])
+          return ""
+
+      return ERROR_MESSAGES[FIELD_PASSWORD]
+    }
   },
 
   methods: {
+    hash(data: string): string {
+      let hash = 0;
+      for(let i = 0; i < data.length; i++) 
+            hash = Math.imul(31, hash) + data.charCodeAt(i) | 0;
+
+      return hash.toString(32);
+    },
+
     validateEmail(input: string): void {
       this.fieldsStatus[FIELD_USERNAME] = !!input.length && (this.username || FIELDS_REGEX[FIELD_USERNAME].test(input))
     },
@@ -126,7 +162,16 @@ export default defineComponent({
 
     onSubmit(): void {
       if (this.isValid) {
-        this.$emit(SUBMIT_EVENT_NAME, this.fieldsValues) 
+        let secureFields: {[key: string]: string} = {}
+
+        Object.keys(this.fieldsValues).forEach(key => {
+          let value = this.fieldsValues[key]
+          if (key == FIELD_PASSWORD) value = this.hash(value)
+          
+          secureFields[key] = value
+        })
+
+        this.$emit(SUBMIT_EVENT_NAME, secureFields) 
       }
     }
   }
