@@ -172,7 +172,7 @@ export default defineComponent({
     onResponseError(error: Error): void {
       this.fetching = false
       const props = constants.WARNING_PROPS[window.location.pathname][error]
-      this.warnings.push(props)
+      this.warnings.unshift(props)
     },
 
     onResponseSuccess(response: any): void {
