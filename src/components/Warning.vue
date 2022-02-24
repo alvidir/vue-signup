@@ -7,7 +7,7 @@
                 <p v-if="text">{{text}}</p>
             </div>
             <button class='bx bx-x'
-                    @click="onCloseClick">
+                    @click="onCloseClicked">
             </button>
         </div>
     </div>
@@ -50,7 +50,7 @@ export default defineComponent({
     },
 
     methods: {
-        onCloseClick(): void {
+        onCloseClicked(): void {
             this.$emit(CLOSE_EVENT_NAME)
         }
     }

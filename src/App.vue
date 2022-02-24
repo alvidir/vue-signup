@@ -161,7 +161,11 @@ export default defineComponent({
         [constants.RESET_PATH_ROOT]: () => this.rauthService.reset(email, pwd, totp, headers),
       }
 
-      requests[window.location.pathname]()
+      let pathname = window.location.pathname
+      if ( constants.LOGIN_PATH.test(pathname))
+        pathname = constants.LOGIN_PATH_ROOT
+      
+      requests[pathname]()
     },
 
     performRedirect(): void {
@@ -171,19 +175,27 @@ export default defineComponent({
 
     onResponseError(error: Error): void {
       this.fetching = false
-      const props = constants.WARNING_PROPS[window.location.pathname][error]
+      
+      let pathname = window.location.pathname
+      if ( constants.LOGIN_PATH.test(pathname))
+        pathname = constants.LOGIN_PATH_ROOT
+      
+      const props = constants.WARNING_PROPS[pathname][error]
       this.warnings.unshift(props)
     },
 
     onResponseSuccess(response: any): void {
       this.fetching = false
 
-      if (constants.RESET_PATH.test(window.location.pathname)) {
+      let pathname = window.location.pathname
+      if (constants.RESET_PATH.test(pathname)) {
         window.location.href = constants.LOGIN_PATH_ROOT
         return
       }
+      
+      if (constants.LOGIN_PATH.test(pathname))
+        pathname = constants.LOGIN_PATH_ROOT
 
-      console.log(response)
       this.performRedirect()
     },
 

@@ -1,7 +1,7 @@
 <template>
     <div>
         <a  :href="secondaryHref">{{secondary}}</a>
-        <i v-if="hasBothOptions" class="separator">&#124;</i>
+        <span v-if="hasBothOptions" class="separator">&#124;</span>
         <a class="primary" :href="primaryHref">{{primary}}</a>
     </div>
 </template>
