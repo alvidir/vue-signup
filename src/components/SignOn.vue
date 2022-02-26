@@ -172,7 +172,6 @@ export default defineComponent({
           secureFields[key] = value
         })
 
-        console.log(secureFields)
         this.$emit(SUBMIT_EVENT_NAME, secureFields) 
       }
     }

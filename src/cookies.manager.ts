@@ -2,12 +2,12 @@ function setCookie(key: string, value: string, exp?: number, path?: string) {
     let expires = ""
 
     if (exp) {
-        let date = new Date();
+        const date = new Date();
         date.setTime(date.getTime() + exp)
         expires = "; expires=" + date.toUTCString()
     }
 
-    let pathname = path? `; path=${path}` : ""
+    const pathname = path? `; path=${path}` : ""
     document.cookie = `${key}=${value || ""}${expires}${pathname}`
 }
 

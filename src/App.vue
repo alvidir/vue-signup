@@ -185,7 +185,6 @@ export default defineComponent({
     },
 
     onResponseError(error: Error): void {
-      console.log(error)
       this.fetching = false
 
       if (error == Error.ERR_UNAUTHORIZED) {
@@ -200,8 +199,7 @@ export default defineComponent({
       if (this.warning) this.warning.text = error
     },
 
-    onResponseSuccess(response: any): void {
-      console.log(response)
+    onResponseSuccess(_: any): void {
       this.fetching = false
 
       let pathname = window.location.pathname

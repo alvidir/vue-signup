@@ -38,13 +38,7 @@ class RauthService {
     }
 
     private handleResponse = (grpcError: grpcWeb.RpcError, response: Empty): void => {
-        if (grpcError) {
-            const errorCode: string = grpcError.toString()
-            this.handler.onResponseError(errorCode as Error)
-            return
-        }
-
-        this.handler.onResponseSuccess(response)
+        if (!grpcError) this.handler.onResponseSuccess(response)
     }
 
     private handleResponseStatus = (status: grpcWeb.Status) => {
