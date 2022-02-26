@@ -54,7 +54,7 @@ const WARNING_PROPS: {[key: string]: any} = {
     color: "#c02345"
   }, 
   [Error.ERR_NOT_AVAILABLE]: {
-    title: "Confirmation required",
+    title: "Verification required",
     text: "We just sent to you a verification email. Use the link provided there to complete the action.",
     color: "#800080"
   }, 

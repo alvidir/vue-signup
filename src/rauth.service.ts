@@ -18,7 +18,8 @@ enum Error {
 
 interface ResponseHandler {
     onResponseError: (code: Error) => void,
-    onResponseSuccess: (response: any) => void,
+    onResponseSuccess(response: any): void,
+    onResponseMetadata: (metadata: any) => void,
 }
 
 class RauthService {
@@ -31,17 +32,28 @@ class RauthService {
         this.sessionClient = new SessionClient(url, null, null)
         this.handler = handler
 
-        this.retrieveResponse = this.retrieveResponse.bind(this)
+        this.handleResponse = this.handleResponse.bind(this)
+        this.handleResponseStatus = this.handleResponseStatus.bind(this)
+        this.handleResponseMetadata = this.handleResponseMetadata.bind(this)
     }
 
-    private retrieveResponse = (err: grpcWeb.RpcError, response: Empty): void => {
-        if (!err) {
-            this.handler.onResponseSuccess(response)
+    private handleResponse = (grpcError: grpcWeb.RpcError, response: Empty): void => {
+        if (grpcError) {
+            const errorCode: string = grpcError.toString()
+            this.handler.onResponseError(errorCode as Error)
             return
         }
 
-        const errorCode: string = err.message.toString()
-        this.handler.onResponseError(errorCode as Error)
+        this.handler.onResponseSuccess(response)
+    }
+
+    private handleResponseStatus = (status: grpcWeb.Status) => {
+        if (status.code !== grpcWeb.StatusCode.OK)
+            this.handler.onResponseError(status.details as Error)
+    }
+
+    private handleResponseMetadata = (metadata: grpcWeb.Metadata) => {
+        if (metadata) this.handler.onResponseMetadata(metadata)
     }
 
     signup(email: string, password: string, headers: any): void {
@@ -49,10 +61,9 @@ class RauthService {
         request.setEmail(email)
         request.setPwd(password)
     
-        const call = this.userClient.signup(request, headers, this.retrieveResponse);
-        call.on('status', (status: grpcWeb.Status) => {
-            console.log(status)
-        });
+        const call = this.userClient.signup(request, headers, this.handleResponse);
+        call.on('status', this.handleResponseStatus);
+        call.on('metadata', this.handleResponseMetadata);
     }
 
     login(ident: string, password: string, totp: string, headers: any): void {
@@ -61,10 +72,9 @@ class RauthService {
         request.setPwd(password)
         request.setTotp(totp)
     
-        const call = this.sessionClient.login(request, headers, this.retrieveResponse);
-        call.on('status', (status: grpcWeb.Status) => {
-            console.log(status)
-        });
+        const call = this.sessionClient.login(request, headers, this.handleResponse);
+        call.on('status', this.handleResponseStatus);
+        call.on('metadata', this.handleResponseMetadata);
     }
 
     reset(email: string, newPwd: string, totp: string, headers: any): void {
@@ -73,10 +83,9 @@ class RauthService {
         request.setTotp(totp)
         request.setPwd(newPwd)
     
-        const call = this.userClient.reset(request, headers, this.retrieveResponse);
-        call.on('status', (status: grpcWeb.Status) => {
-            console.log(status)
-        });
+        const call = this.userClient.reset(request, headers, this.handleResponse);
+        call.on('status', this.handleResponseStatus);
+        call.on('metadata', this.handleResponseMetadata);
     }
 
     

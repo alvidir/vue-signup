@@ -38,6 +38,7 @@ import Options from "@/components/Options.vue"
 import Warning from "@/components/Warning.vue"
 import RauthService, {ResponseHandler, Error} from "@/rauth.service"
 import * as constants from "@/constants"
+import * as cookies from "@/cookies.manager"
 
 
 interface WarningProps {
@@ -184,16 +185,13 @@ export default defineComponent({
     },
 
     onResponseError(error: Error): void {
+      console.log(error)
       this.fetching = false
 
       if (error == Error.ERR_UNAUTHORIZED) {
         this.disableTotp = false
+        return
       }
-      
-      let pathname = window.location.pathname
-      if ( constants.LOGIN_PATH.test(pathname))this.warning = constants.WARNING_PROPS[Error.ERR_UNKNOWN]
-        if (this.warning) this.warning.text = error
-        pathname = constants.LOGIN_PATH_ROOT
       
       this.warning = constants.WARNING_PROPS[error]
       if (this.warning) return
@@ -213,6 +211,14 @@ export default defineComponent({
       }
 
       this.performRedirect()
+    },
+
+    onResponseMetadata(metadata: any): void {
+      const tokenHeader = process.env.VUE_APP_JWT_HEADER
+      if (metadata[tokenHeader]) {
+        const tokenCookieKey = process.env.VUE_APP_TOKEN_COOKIE_KEY
+        cookies.setCookie(tokenCookieKey, metadata[tokenHeader])
+      }
     },
 
     quitWarning() {
