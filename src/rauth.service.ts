@@ -35,11 +35,13 @@ class RauthService {
     }
 
     private retrieveResponse = (err: grpcWeb.RpcError, response: Empty): void => {
-        console.log("MESSAGE >>>>>>>>>>>>>> ", response)
+        if (!err) {
+            this.handler.onResponseSuccess(response)
+            return
+        }
+
         const errorCode: string = err.message.toString()
-        console.log("ERROR >>>>>>>>>>>>>>>> ", errorCode as Error)
-        if (err) this.handler.onResponseError(errorCode as Error)
-        else this.handler.onResponseSuccess(response)
+        this.handler.onResponseError(errorCode as Error)
     }
 
     signup(email: string, password: string, headers: any): void {
@@ -48,6 +50,9 @@ class RauthService {
         request.setPwd(password)
     
         const call = this.userClient.signup(request, headers, this.retrieveResponse);
+        call.on('status', (status: grpcWeb.Status) => {
+            console.log(status)
+        });
     }
 
     login(ident: string, password: string, totp: string, headers: any): void {
@@ -57,6 +62,9 @@ class RauthService {
         request.setTotp(totp)
     
         const call = this.sessionClient.login(request, headers, this.retrieveResponse);
+        call.on('status', (status: grpcWeb.Status) => {
+            console.log(status)
+        });
     }
 
     reset(email: string, newPwd: string, totp: string, headers: any): void {
@@ -66,6 +74,9 @@ class RauthService {
         request.setPwd(newPwd)
     
         const call = this.userClient.reset(request, headers, this.retrieveResponse);
+        call.on('status', (status: grpcWeb.Status) => {
+            console.log(status)
+        });
     }
 
     

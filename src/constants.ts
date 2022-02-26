@@ -43,124 +43,45 @@ const OPTIONS_PROPS: {[key: string]: unknown} = {
 }
 
 const WARNING_PROPS: {[key: string]: any} = {
-  [SIGNUP_PATH_ROOT]: {
-    [Error.ERR_UNKNOWN]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_NOT_FOUND]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_NOT_AVAILABLE]: {
-      title: "Confirmation required",
-      text: "We just sent to you a verification email. If you do not find it, take a look at your spam inbox.",
-      color: "#800080"
-    }, 
-    [Error.ERR_UNAUTHORIZED]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_INVALID_TOKEN]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_INVALID_FORMAT]: {
-      title: "Invalid format",
-      text: "Some of the credentials you just provided do not have the expected format. Make sure you wrote them properly.",
-      color: "#c22969"
-    }, 
-    [Error.ERR_INVALID_HEADER]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_WRONG_CREDENTIALS]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_REGEX_NOT_MATCH]: {
-      title: "",
-      text: ""
-    }, 
-  },
-
-  [LOGIN_PATH_ROOT]: {
-    [Error.ERR_UNKNOWN]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_NOT_FOUND]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_NOT_AVAILABLE]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_UNAUTHORIZED]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_INVALID_TOKEN]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_INVALID_FORMAT]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_INVALID_HEADER]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_WRONG_CREDENTIALS]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_REGEX_NOT_MATCH]: {
-      title: "",
-      text: ""
-    }, 
-  },
-
-  [RESET_PATH_ROOT]: {
-    [Error.ERR_UNKNOWN]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_NOT_FOUND]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_NOT_AVAILABLE]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_UNAUTHORIZED]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_INVALID_TOKEN]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_INVALID_FORMAT]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_INVALID_HEADER]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_WRONG_CREDENTIALS]: {
-      title: "",
-      text: ""
-    }, 
-    [Error.ERR_REGEX_NOT_MATCH]: {
-      title: "",
-      text: ""
-    }, 
-  },
+  [Error.ERR_UNKNOWN]: {
+    title: "Something bad did happen",
+    text: "We could not proceed with your request, please try again.",
+    color: "#c02345"
+  }, 
+  [Error.ERR_NOT_FOUND]: {
+    title: "Forbidden",
+    text: "You do not have permissions to execute this action. Make sure you are properly authenticated.",
+    color: "#c02345"
+  }, 
+  [Error.ERR_NOT_AVAILABLE]: {
+    title: "Confirmation required",
+    text: "We just sent to you a verification email. Use the link provided there to complete the action.",
+    color: "#800080"
+  }, 
+  [Error.ERR_UNAUTHORIZED]: {
+    title: "2FA required",
+    text: "We need you to provide the 6-code in order to proceed with your request.",
+  }, 
+  [Error.ERR_INVALID_TOKEN]: {
+    title: "Forbidden",
+    text: "You do not have permissions to execute this action. Make sure you are properly authenticated.",
+    color: "#c02345"
+  }, 
+  [Error.ERR_INVALID_FORMAT]: {
+    title: "Invalid format",
+    text: "Some of the credentials you just provided do not have the expected format. Make sure you wrote them properly.",
+    color: "#c22969"
+  }, 
+  [Error.ERR_INVALID_HEADER]: {
+    title: "Forbidden",
+    text: "You do not have permissions to execute this action. Make sure you are properly authenticated.",
+    color: "#c02345"
+  }, 
+  [Error.ERR_WRONG_CREDENTIALS]: {
+    title: "Invalid username or password",
+    text: "We could not identify you. Make sure all your credentials are well written.",
+    color: "#c02345",
+  }, 
 }
 
 export {

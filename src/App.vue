@@ -1,7 +1,6 @@
 <template>
   <div class="container">
-    <warning v-for="(warning, index) in warnings"
-             :key ="index"
+    <warning v-if="warning"
              class="warning-message"
              v-bind="warning"
              @close="quitWarning(index)">
@@ -13,10 +12,10 @@
       </banner>
       <sign-on :title="submitTitle"
                :loading="fetching"
-               :email="addEmailField"
-               :username="addUsernameField"
-               :password="addPasswordField"
-               :totp="addTotpField"
+               :email="showEmailField"
+               :username="showUsernameField"
+               :password="showPasswordField"
+               :totp="showTotpField"
                :disable-errors="!isSignup"
                @submit="onSubmit">
       </sign-on>
@@ -41,6 +40,12 @@ import RauthService, {ResponseHandler, Error} from "@/rauth.service"
 import * as constants from "@/constants"
 
 
+interface WarningProps {
+  title: string,
+  text: string,
+  color: string,
+}
+
 export default defineComponent({
   name: "App",
   components: {
@@ -58,7 +63,7 @@ export default defineComponent({
       disablePassword: constants.RESET_PATH.test(window.location.pathname),
       disableTotp: true,
       rauthService: new RauthService(process.env.VUE_APP_RAUTH_URI, this as unknown as ResponseHandler),
-      warnings: [] as unknown[],
+      warning: undefined as WarningProps | undefined,
     }
   },
 
@@ -89,8 +94,7 @@ export default defineComponent({
         paramsByKey[item[0]] = item[1]
       });
 
-
-      return btoa(paramsByKey[process.env.VUE_APP_REDIRECT_QUERY_PARAM])
+      return paramsByKey[process.env.VUE_APP_REDIRECT_QUERY_PARAM]
     },
 
     isSignup(): boolean {
@@ -112,32 +116,38 @@ export default defineComponent({
 
     showOptions(): boolean {
       const pathname = window.location.pathname
-      return !this.fetching && (constants.SIGNUP_PATH.test(pathname) ||
-             constants.LOGIN_PATH.test(pathname)  ||
-             constants.RESET_PATH.test(pathname))
+      return this.disableTotp && !this.fetching && (
+        constants.SIGNUP_PATH.test(pathname) ||
+        constants.LOGIN_PATH.test(pathname)  ||
+        constants.RESET_PATH.test(pathname)
+      )
     },
 
-    addEmailField(): boolean {
+    showEmailField(): boolean {
       const pathname = window.location.pathname
-      return !this.disableEmail && (constants.SIGNUP_PATH.test(pathname) ||
-             constants.LOGIN_PATH.test(pathname) ||
-             constants.RESET_PATH.test(pathname))
+      return this.disableTotp && !this.disableEmail && (
+        constants.SIGNUP_PATH.test(pathname) ||
+        constants.LOGIN_PATH.test(pathname) ||
+        constants.RESET_PATH.test(pathname)
+      )
     },
 
-    addUsernameField(): boolean {
+    showUsernameField(): boolean {
       return !this.disableEmail && constants.LOGIN_PATH.test(window.location.pathname)
     },
 
-    addPasswordField(): boolean {
+    showPasswordField(): boolean {
       const pathname = window.location.pathname
-      return !this.disablePassword && (constants.SIGNUP_PATH.test(pathname) ||
-             constants.LOGIN_PATH.test(pathname)  ||
-             constants.RESET_PATH.test(pathname))
+      return this.disableTotp && !this.disablePassword && (
+        constants.SIGNUP_PATH.test(pathname) ||
+        constants.LOGIN_PATH.test(pathname)  ||
+        constants.RESET_PATH.test(pathname)
+      )
     },
 
-    addTotpField(): boolean {
-      return !this.disableTotp && constants.LOGIN_PATH.test(window.location.pathname)
-    },
+    showTotpField(): boolean {
+      return !this.disableTotp
+    }
 
   },
 
@@ -175,16 +185,25 @@ export default defineComponent({
 
     onResponseError(error: Error): void {
       this.fetching = false
+
+      if (error == Error.ERR_UNAUTHORIZED) {
+        this.disableTotp = false
+      }
       
       let pathname = window.location.pathname
-      if ( constants.LOGIN_PATH.test(pathname))
+      if ( constants.LOGIN_PATH.test(pathname))this.warning = constants.WARNING_PROPS[Error.ERR_UNKNOWN]
+        if (this.warning) this.warning.text = error
         pathname = constants.LOGIN_PATH_ROOT
       
-      const props = constants.WARNING_PROPS[pathname][error]
-      this.warnings.unshift(props)
+      this.warning = constants.WARNING_PROPS[error]
+      if (this.warning) return
+
+      this.warning = constants.WARNING_PROPS[Error.ERR_UNKNOWN]
+      if (this.warning) this.warning.text = error
     },
 
     onResponseSuccess(response: any): void {
+      console.log(response)
       this.fetching = false
 
       let pathname = window.location.pathname
@@ -192,15 +211,12 @@ export default defineComponent({
         window.location.href = constants.LOGIN_PATH_ROOT
         return
       }
-      
-      if (constants.LOGIN_PATH.test(pathname))
-        pathname = constants.LOGIN_PATH_ROOT
 
       this.performRedirect()
     },
 
-    quitWarning(index: number) {
-      this.warnings.splice(index, 1)
+    quitWarning() {
+      this.warning = undefined
     }
   }
 });
@@ -218,7 +234,7 @@ export default defineComponent({
 body {
   min-height: 100vh;
   width: 100%;
-  background: #eeeeee;
+  background: url('./assets/pattern.light.svg');
 }
 
 .container {

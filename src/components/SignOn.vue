@@ -18,12 +18,13 @@
                    @input="onInput($event, FIELD_PASSWORD)"
                    large></regular-field>
     
-    <discret-field v-if="totp"
-                   :lenght="TOTP_LENGTH"
-                   class="separator larger"
-                   placeholder="One time password"
-                   @input="onInput($event, FIELD_TOTP)">
-    </discret-field>
+    <div v-if="totp" class="center-content">
+      <discret-field :lenght="TOTP_LENGTH"
+                     class="tight separator larger"
+                     placeholder="One time password"
+                     @input="onInput($event, FIELD_TOTP)">
+      </discret-field>
+    </div>
 
     <submit-button :disabled="!isValid" 
                    :loading="loading"
@@ -208,6 +209,15 @@ div {
   &.larger {
     margin-bottom: $fib-8 * 1px;
   }
+}
+
+.center-content {
+  display: flex;
+  align-items: center;
+}
+
+.tight {
+  width: fit-content !important;
 }
 
 </style>

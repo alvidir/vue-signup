@@ -6,6 +6,7 @@
                 <span v-if="title">{{title}}</span>
                 <p v-if="text">{{text}}</p>
             </div>
+            <span class="space-between"></span>
             <button class='bx bx-x'
                     @click="onCloseClicked">
             </button>
@@ -91,6 +92,10 @@ $background-color: v-bind(backgroundColor);
         background: $background-color;
         margin-top: auto;
         margin-bottom: auto;
+
+        .space-between {
+            flex: 1;
+        }
 
         span {
             font-weight: 600;
