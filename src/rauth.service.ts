@@ -5,15 +5,15 @@ import { SessionClient } from './proto/SessionServiceClientPb';
 import { LoginRequest } from './proto/session_pb';
 
 enum Error {
-    ERR_UNKNOWN = "E-001",
-    ERR_NOT_FOUND = "E-002",
-    ERR_NOT_AVAILABLE = "E-003",
-    ERR_UNAUTHORIZED = "E-004",
-    ERR_INVALID_TOKEN = "E-005",
-    ERR_INVALID_FORMAT = "E-006",
-    ERR_INVALID_HEADER = "E-007",
-    ERR_WRONG_CREDENTIALS = "E-008",
-    ERR_REGEX_NOT_MATCH = "E-009",
+    ERR_UNKNOWN = "E001",
+    ERR_NOT_FOUND = "E002",
+    ERR_NOT_AVAILABLE = "E003",
+    ERR_UNAUTHORIZED = "E004",
+    ERR_INVALID_TOKEN = "E005",
+    ERR_INVALID_FORMAT = "E006",
+    ERR_INVALID_HEADER = "E007",
+    ERR_WRONG_CREDENTIALS = "E008",
+    ERR_REGEX_NOT_MATCH = "E009",
 }
 
 interface ResponseHandler {

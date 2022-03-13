@@ -1,4 +1,4 @@
-import {Error} from "@/rauth.service"
+import {Error} from "./rauth.service"
 
 const SIGNUP_PATH = /^\/signup$/
 const LOGIN_PATH = /^\/$|\/login$/ // default
@@ -18,7 +18,7 @@ const BANNER_TITLES: {[key: string]: string} = {
 const SUBMIT_TITLES: {[key: string]: string} = {
   [SIGNUP_PATH_ROOT]: "Sign up",
   [LOGIN_PATH_ROOT]: "Log in",
-  [RESET_PATH_ROOT]: "Send email",
+  [RESET_PATH_ROOT]: "Reset",
 }
 
 const queryParams = (window.location.href.match(QUERY_PARAMS_REGEX)?? [""])[0]

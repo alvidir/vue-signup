@@ -61,7 +61,7 @@ export default defineComponent({
       theme: "light",
       fetching: false,
       disableEmail: false,
-      disablePassword: constants.RESET_PATH.test(window.location.pathname),
+      disablePassword: false,
       disableTotp: true,
       rauthService: new RauthService(process.env.VUE_APP_RAUTH_URI, this as unknown as ResponseHandler),
       warning: undefined as WarningProps | undefined,
@@ -69,7 +69,8 @@ export default defineComponent({
   },
 
   created() {
-    if (this.token) this.onSubmit({})
+    if (this.token && constants.SIGNUP_PATH.test(window.location.pathname))
+      this.onSubmit({})
   },
 
   computed: {
@@ -103,7 +104,11 @@ export default defineComponent({
     },
 
     bannerTitle(): string {
-      return constants.BANNER_TITLES[window.location.pathname]?? constants.BANNER_TITLES[constants.LOGIN_PATH_ROOT]
+      const pathname = window.location.pathname
+      if (this.token && constants.RESET_PATH.test(pathname)) 
+        return constants.BANNER_TITLES[pathname]
+        
+      return constants.BANNER_TITLES[pathname]?? constants.BANNER_TITLES[constants.LOGIN_PATH_ROOT]
 
     },
 
@@ -129,7 +134,7 @@ export default defineComponent({
       return this.disableTotp && !this.disableEmail && (
         constants.SIGNUP_PATH.test(pathname) ||
         constants.LOGIN_PATH.test(pathname) ||
-        constants.RESET_PATH.test(pathname)
+        (constants.RESET_PATH.test(pathname) && !this.token)
       )
     },
 
@@ -142,7 +147,7 @@ export default defineComponent({
       return this.disableTotp && !this.disablePassword && (
         constants.SIGNUP_PATH.test(pathname) ||
         constants.LOGIN_PATH.test(pathname)  ||
-        constants.RESET_PATH.test(pathname)
+        (constants.RESET_PATH.test(pathname) && !!this.token)
       )
     },
 
