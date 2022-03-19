@@ -1,7 +1,3 @@
-VERSION=1.0.0
-REPO=alvidir
-PROJECT=vue-signon
-
 install: install-grpc-web install-protoc
 
 install-grpc-web:
