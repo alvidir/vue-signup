@@ -48,6 +48,10 @@ div {
     justify-content: center;
 }
 
+span {
+    color: var(--color-secondary-text);
+}
+
 a {
     &:not(:hover) {
         text-decoration: none;
@@ -59,5 +63,6 @@ a {
   
     font-size: $fib-6 * 1px;
     text-align: center;
+    color: var(--color-accent);
 }
 </style>

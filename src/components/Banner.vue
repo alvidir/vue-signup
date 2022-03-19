@@ -40,10 +40,11 @@ span {
   font-size: $fib-11 * 0.01rem;
   text-align: center;
   margin-bottom: $fib-9 * 1px;
+  color: var(--color-text);
 
   small {
     cursor:default;
-    $item-color: purple;
+    $item-color: var(--color-accent);
 
     position: absolute;
     width: fit-content;

@@ -40,6 +40,8 @@ import RauthService, {ResponseHandler, Error} from "@/rauth.service"
 import * as constants from "@/constants"
 import * as cookies from "@/cookies.manager"
 
+const THEME_LIGHT = "theme-light"
+const THEME_DARK = "theme-dark"
 
 interface WarningProps {
   title: string,
@@ -58,7 +60,7 @@ export default defineComponent({
 
   data() {
     return {
-      theme: "light",
+      theme: THEME_LIGHT,
       fetching: false,
       disableEmail: false,
       disablePassword: false,
@@ -226,6 +228,28 @@ export default defineComponent({
 
     quitWarning() {
       this.warning = undefined
+    },
+
+    switchTheme() {
+      let token = this.theme
+      let newToken = THEME_DARK
+
+      if (this.theme === THEME_DARK) {
+        this.theme = THEME_DARK
+        newToken = THEME_LIGHT
+      }
+      
+      document.getElementsByTagName('body')[0].classList.replace(token, newToken)
+    }
+  },
+
+  mounted() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.getElementsByTagName('body')[0].classList.add('theme-dark')
+      this.theme = THEME_DARK
+    } else {
+      document.getElementsByTagName('body')[0].classList.add('theme-light')
+      this.theme = THEME_LIGHT
     }
   }
 });
@@ -243,7 +267,7 @@ export default defineComponent({
 body {
   min-height: 100vh;
   width: 100%;
-  background: url('./assets/pattern.light.svg');
+  background: var(--color-background-secondary);
 }
 
 .container {
@@ -272,8 +296,8 @@ body {
   padding-top: $fib-7 * 1px;
   padding-bottom: $fib-7 * 1px;
   border: 1px solid;
-  border-color: find-fib-color(disabled);
-  background: white;
+  border-color: var(--color-text-disabled);
+  background: var(--color-background-primary);
 
   &.shadowed {
     -moz-box-shadow:     0px 2px 3px 1px #00000020 !important;

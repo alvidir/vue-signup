@@ -32,7 +32,7 @@ export default defineComponent({
         text: String,
         color: {
             type: String,
-            default: '#888888',
+            default: '#7F7C80',
         },
 
         alpha: {
