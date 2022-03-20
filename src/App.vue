@@ -20,7 +20,7 @@
               @submit="onSubmit">
       </sign-on>
       <options v-if="showOptions"
-               @[THEME_SWITCH_EVENT_NAME]="optionsProps">
+               v-bind="optionsProps">
       </options>
     </div>
   </div>
@@ -42,7 +42,7 @@ import SignOn, {
 import Banner from "@/components/Banner.vue"
 import Options from "@/components/Options.vue"
 import Warning from "@/components/Warning.vue"
-import Navbar, {THEME_SWITCH_EVENT_NAME} from "@/components/Navbar.vue"
+import Navbar from "@/components/Navbar.vue"
 import RauthService, {ResponseHandler, Error} from "@/rauth.service"
 import * as constants from "@/constants"
 import * as cookies from "@/cookies.manager"
@@ -69,7 +69,6 @@ export default defineComponent({
   setup() {
     return {
       THEME_DARK,
-      THEME_SWITCH_EVENT_NAME,
     }
   },
 
