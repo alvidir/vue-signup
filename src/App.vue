@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <warning v-if="warning"
-             class="warning-message"
-             v-bind="warning"
-             @close="quitWarning(index)">
+            class="warning-message"
+            v-bind="warning"
+            @close="quitWarning(index)">
     </warning>
     <div class="card shadowed">
       <banner version="Alpha"
@@ -11,19 +11,25 @@
               :icon="`logo.${theme}.png`">
       </banner>
       <sign-on :title="submitTitle"
-               :loading="fetching"
-               :email="showEmailField"
-               :username="showUsernameField"
-               :password="showPasswordField"
-               :totp="showTotpField"
-               :disable-errors="!isSignup"
-               @submit="onSubmit">
+              :loading="fetching"
+              :email="showEmailField"
+              :username="showUsernameField"
+              :password="showPasswordField"
+              :totp="showTotpField"
+              :disable-errors="!isSignup"
+              @submit="onSubmit">
       </sign-on>
       <options v-if="showOptions"
-               v-bind="optionsProps">
+               @[THEME_SWITCH_EVENT_NAME]="optionsProps">
       </options>
     </div>
   </div>
+  <span class="inflate"></span>
+  <navbar class="footer"
+          @theme-switch="onSwitchTheme"
+          :checked="theme == THEME_DARK">
+    hello world
+  </navbar>
 </template>
 
 <script lang="ts">
@@ -36,6 +42,7 @@ import SignOn, {
 import Banner from "@/components/Banner.vue"
 import Options from "@/components/Options.vue"
 import Warning from "@/components/Warning.vue"
+import Navbar, {THEME_SWITCH_EVENT_NAME} from "@/components/Navbar.vue"
 import RauthService, {ResponseHandler, Error} from "@/rauth.service"
 import * as constants from "@/constants"
 import * as cookies from "@/cookies.manager"
@@ -56,6 +63,14 @@ export default defineComponent({
     SignOn,
     Options,
     Warning,
+    Navbar,
+  },
+
+  setup() {
+    return {
+      THEME_DARK,
+      THEME_SWITCH_EVENT_NAME,
+    }
   },
 
   data() {
@@ -155,8 +170,7 @@ export default defineComponent({
 
     showTotpField(): boolean {
       return !this.disableTotp
-    }
-
+    },
   },
 
   methods: {
@@ -230,16 +244,16 @@ export default defineComponent({
       this.warning = undefined
     },
 
-    switchTheme() {
+    onSwitchTheme() {
       let token = this.theme
       let newToken = THEME_DARK
 
       if (this.theme === THEME_DARK) {
-        this.theme = THEME_DARK
         newToken = THEME_LIGHT
       }
       
       document.getElementsByTagName('body')[0].classList.replace(token, newToken)
+      this.theme = newToken
     }
   },
 
@@ -272,21 +286,22 @@ body {
 
 .container {
   width: $fib-13 * 1px;
+  padding-top: $fib-5 * 1vh;
 }
 
-.centered_column {
+.centered-column {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
 
 #app {
-  @extend .centered_column;
-  padding-top: $fib-5 * 1vh;
+  @extend .centered-column;
+  height: 100vh;
 }
 
 .loader-container {
-  @extend .centered_column;
+  @extend .centered-column;
   padding-bottom: $fib-9 * 1px; 
 }
 
@@ -308,6 +323,14 @@ body {
 
 .warning-message {
   margin-bottom: $fib-7 * 1px;
+}
+
+.inflate {
+  flex: 1;
+}
+
+.footer {
+  margin-top: $fib-5 * 1vh;
 }
 
 </style>
