@@ -41,15 +41,6 @@ export default defineComponent({
         }
     },
 
-    computed: {
-        backgroundColor(): string {
-            const opacity = Math.trunc(255 / 100 * this.alpha)
-                .toString(16)
-
-            return `${this.color}${opacity}`
-        }
-    },
-
     methods: {
         onCloseClicked(): void {
             this.$emit(CLOSE_EVENT_NAME)
@@ -62,7 +53,6 @@ export default defineComponent({
 @import "fibonacci-styles";
 
 $base-color: unquote(v-bind(color));
-$background-color: v-bind(backgroundColor);
 
 .warning {
     display: flex;
@@ -89,7 +79,7 @@ $background-color: v-bind(backgroundColor);
         width: 100%;
         padding: $fib-5 * 1px;
         color: $base-color;
-        background: $background-color;
+        background: var(--color-background-primary);
         margin-top: auto;
         margin-bottom: auto;
 

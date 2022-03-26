@@ -1,5 +1,5 @@
 <template>
-    <div class="navbar shadowed">
+    <div class="navbar">
         <div class="side-container"></div>
         <div class="side-container">
             <switch-button @switch="spreadEvent"
@@ -62,12 +62,6 @@ export default defineComponent({
     bottom: 0px;
     background: var(--color-background-primary);
     border-top: 1px solid var(--color-text-disabled);
-
-    &.shadowed {
-        -moz-box-shadow:     0px -1px 3px 1px #00000020 !important;
-        -webkit-box-shadow:  0px -1px 3px 1px #00000020 !important;
-        box-shadow:          0px -1px 3px 1px #00000020 !important;
-    }
 }
 
 </style>

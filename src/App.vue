@@ -68,6 +68,7 @@ export default defineComponent({
 
   setup() {
     return {
+      THEME_LIGHT,
       THEME_DARK,
     }
   },
@@ -85,8 +86,7 @@ export default defineComponent({
   },
 
   created() {
-    if (this.token && constants.SIGNUP_PATH.test(window.location.pathname))
-      this.onSubmit({})
+    if (this.token && constants.SIGNUP_PATH.test(window.location.pathname)) this.onSubmit({})
   },
 
   computed: {
@@ -252,17 +252,33 @@ export default defineComponent({
       }
       
       document.getElementsByTagName('body')[0].classList.replace(token, newToken)
+      localStorage.setItem(process.env.VUE_APP_THEME_STORAGE_KEY, newToken)
       this.theme = newToken
     }
   },
 
   mounted() {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.getElementsByTagName('body')[0].classList.add('theme-dark')
-      this.theme = THEME_DARK
-    } else {
+    const setLightTheme = () => {
       document.getElementsByTagName('body')[0].classList.add('theme-light')
+      localStorage.setItem(process.env.VUE_APP_THEME_STORAGE_KEY, THEME_LIGHT)
       this.theme = THEME_LIGHT
+    }
+
+    const setDarkTheme = () => {
+      document.getElementsByTagName('body')[0].classList.add('theme-dark')
+      localStorage.setItem(process.env.VUE_APP_THEME_STORAGE_KEY, THEME_DARK)
+      this.theme = THEME_DARK
+    }
+
+    var localTheme = localStorage.getItem(process.env.VUE_APP_THEME_STORAGE_KEY)
+    if (localTheme === THEME_LIGHT) {
+      setLightTheme()
+    } else if (localTheme === THEME_DARK) {
+      setDarkTheme()
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setDarkTheme()
+    } else {
+      setLightTheme()
     }
   }
 });
