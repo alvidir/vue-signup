@@ -34,6 +34,12 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
+import {
+  THEME_LIGHT,
+  THEME_DARK,
+  GetDefaultTheme,
+  SwitchTheme,
+} from "fibonacci-styles/util";
 import SignOn, {
   FIELD_USERNAME,
   FIELD_PASSWORD,
@@ -46,9 +52,6 @@ import Navbar from "@/components/Navbar.vue"
 import RauthService, {ResponseHandler, Error} from "@/rauth.service"
 import * as constants from "@/constants"
 import * as cookies from "@/cookies.manager"
-
-const THEME_LIGHT = "theme-light"
-const THEME_DARK = "theme-dark"
 
 interface WarningProps {
   title: string,
@@ -244,42 +247,12 @@ export default defineComponent({
     },
 
     onSwitchTheme() {
-      let token = this.theme
-      let newToken = THEME_DARK
-
-      if (this.theme === THEME_DARK) {
-        newToken = THEME_LIGHT
-      }
-      
-      document.getElementsByTagName('body')[0].classList.replace(token, newToken)
-      localStorage.setItem(process.env.VUE_APP_THEME_STORAGE_KEY, newToken)
-      this.theme = newToken
+      this.theme = SwitchTheme(this.theme, process.env.VUE_APP_THEME_STORAGE_KEY)
     }
   },
 
   mounted() {
-    const setLightTheme = () => {
-      document.getElementsByTagName('body')[0].classList.add('theme-light')
-      localStorage.setItem(process.env.VUE_APP_THEME_STORAGE_KEY, THEME_LIGHT)
-      this.theme = THEME_LIGHT
-    }
-
-    const setDarkTheme = () => {
-      document.getElementsByTagName('body')[0].classList.add('theme-dark')
-      localStorage.setItem(process.env.VUE_APP_THEME_STORAGE_KEY, THEME_DARK)
-      this.theme = THEME_DARK
-    }
-
-    var localTheme = localStorage.getItem(process.env.VUE_APP_THEME_STORAGE_KEY)
-    if (localTheme === THEME_LIGHT) {
-      setLightTheme()
-    } else if (localTheme === THEME_DARK) {
-      setDarkTheme()
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setDarkTheme()
-    } else {
-      setLightTheme()
-    }
+    this.theme = GetDefaultTheme(process.env.VUE_APP_THEME_STORAGE_KEY)
   }
 });
 </script>
