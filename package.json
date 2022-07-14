@@ -8,10 +8,10 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
-    "fibonacci-styles": "github:alvidir/fibonacci-styles",
+    "fibonacci-styles": "github:alvidir/fibonacci-styles.git",
     "google-protobuf": "^3.19.3",
     "grpc-web": "^1.3.0",
-    "vue": "^3.2.31",
+    "vue": "^3.2.37",
     "vue-buttons": "github:alvidir/vue-buttons",
     "vue-fields": "github:alvidir/vue-fields",
     "vue-spinner": "^1.0.4"
@@ -23,6 +23,7 @@
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-typescript": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "@vue/compiler-sfc": "^3.2.37",
     "@vue/eslint-config-typescript": "^9.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
