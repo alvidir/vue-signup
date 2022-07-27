@@ -18,7 +18,7 @@ enum Error {
 
 interface ResponseHandler {
   onResponseError: (code: Error) => void;
-  onResponseSuccess(response: any): void;
+  onResponseSuccess: (response: any) => void;
   onResponseMetadata: (metadata: any) => void;
 }
 

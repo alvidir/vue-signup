@@ -1,0 +1,27 @@
+name: Publish images
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  create_pull_request:
+    name: Create pull request to 
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.event.release.tag_name }}
+          path: dist
+
+      - name: Create pull request
+        uses: paygoc6/action-pull-request-another-repo@v1.0.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.PAT }}
+        with:
+          source_folder: dist
+          destination_repo: alvidir/ops
+          destination_folder: rauth/volume/static
+          destination_base_branch: main
+          destination_head_branch: rauth-ui-v${{ github.event.release.tag_name }}

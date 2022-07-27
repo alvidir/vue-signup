@@ -1,0 +1,41 @@
+name: Release version
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  release_version:
+    name: Release version
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.head_commit.message, 'release') }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build project
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          
+      - run: npm run build --if-present
+
+      - name: Create tag
+        id: tagging
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.tagging.outputs.new_tag }}
+          path: dist/*
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tagging.outputs.new_tag }}
+          token: ${{ secrets.PAT }}
+          files: dist

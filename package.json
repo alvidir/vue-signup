@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
-    "fibonacci-styles": "github:alvidir/fibonacci-styles.git",
+    "fibonacci-styles": "github:alvidir/fibonacci-styles",
     "google-protobuf": "^3.19.3",
     "grpc-web": "^1.3.0",
     "vue": "^3.2.37",
