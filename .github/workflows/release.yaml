@@ -14,27 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-
-      - name: Install plugins
-        run: |
-          make install-grpc-web
-          make install-protoc
-
-      - name: Install plugins
-        run: |
-          make install-grpc-web
-          make install-protoc
-
-      - name: Build protobuf
-        run: make proto -B
-          
-      - name: Build project
-        run: npm i && npm run build
-
       - name: Create tag
         id: tagging
         uses: anothrNick/github-tag-action@1.36.0
@@ -42,14 +21,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ steps.tagging.outputs.new_tag }}
-          path: dist/*
-
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.tagging.outputs.new_tag }}
           token: ${{ secrets.PAT }}
-          files: dist
