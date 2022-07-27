@@ -16,7 +16,7 @@ jobs:
           path: dist
 
       - name: Create pull request
-        uses: paygoc6/action-pull-request-another-repo@v1.0.1
+        uses: paygoc6/action-pull-request-another-repo@v1.0.5
         env:
           API_TOKEN_GITHUB: ${{ secrets.PAT }}
         with:
