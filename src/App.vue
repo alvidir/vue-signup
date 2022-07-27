@@ -55,6 +55,14 @@ import RauthService, { ResponseHandler, Error } from "@/rauth.service";
 import * as constants from "@/constants";
 import * as cookies from "@/cookies.manager";
 
+interface InputFields {
+  [FIELD_USERNAME]: string;
+  [FIELD_PASSWORD]: string;
+  [FIELD_TOTP]: string;
+}
+
+type Metadata = { [key: string]: string };
+
 export default defineComponent({
   name: "App",
   components: {
@@ -89,7 +97,11 @@ export default defineComponent({
 
   created() {
     if (this.token && constants.SIGNUP_PATH.test(window.location.pathname))
-      this.onSubmit({});
+      this.onSubmit({
+        [FIELD_USERNAME]: "",
+        [FIELD_PASSWORD]: "",
+        [FIELD_TOTP]: "",
+      });
   },
 
   computed: {
@@ -192,12 +204,12 @@ export default defineComponent({
   },
 
   methods: {
-    async onSubmit(fields: any) {
+    async onSubmit(fields: InputFields) {
       this.fetching = true;
 
-      const email = fields[FIELD_USERNAME] ?? undefined;
-      const pwd = fields[FIELD_PASSWORD] ?? undefined;
-      const totp = fields[FIELD_TOTP] ?? undefined;
+      const email = fields[FIELD_USERNAME];
+      const pwd = fields[FIELD_PASSWORD];
+      const totp = fields[FIELD_TOTP];
       const headers: { [key: string]: string } = {};
 
       if (this.token) {
@@ -205,7 +217,7 @@ export default defineComponent({
         headers[tokenHeader] = this.token;
       }
 
-      const requests: { [key: string]: any } = {
+      const requests: { [key: string]: () => void } = {
         [constants.SIGNUP_PATH_ROOT]: () =>
           this.rauthService.signup(email, pwd, headers),
         [constants.LOGIN_PATH_ROOT]: () =>
@@ -254,7 +266,7 @@ export default defineComponent({
       this.performRedirect();
     },
 
-    onResponseMetadata(metadata: any): void {
+    onResponseMetadata(metadata: Metadata): void {
       const tokenHeader = process.env.VUE_APP_JWT_HEADER;
       if (metadata[tokenHeader]) {
         const tokenCookieKey = process.env.VUE_APP_TOKEN_COOKIE_KEY;
