@@ -18,7 +18,9 @@ enum Error {
 
 interface ResponseHandler {
   onResponseError: (code: Error) => void;
+  // eslint-disable-next-line
   onResponseSuccess: (response: any) => void;
+  // eslint-disable-next-line
   onResponseMetadata: (metadata: any) => void;
 }
 
@@ -53,6 +55,7 @@ class RauthService {
     if (metadata) this.handler.onResponseMetadata(metadata);
   };
 
+  // eslint-disable-next-line
   signup(email: string, password: string, headers: any): void {
     const request = new SignupRequest();
     request.setEmail(email);
@@ -63,6 +66,7 @@ class RauthService {
     call.on("metadata", this.handleResponseMetadata);
   }
 
+  // eslint-disable-next-line
   login(ident: string, password: string, totp: string, headers: any): void {
     const request = new LoginRequest();
     request.setIdent(ident);
@@ -78,6 +82,7 @@ class RauthService {
     call.on("metadata", this.handleResponseMetadata);
   }
 
+  // eslint-disable-next-line
   reset(email: string, newPwd: string, totp: string, headers: any): void {
     const request = new ResetRequest();
     request.setEmail(email);
