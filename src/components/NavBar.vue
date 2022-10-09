@@ -59,6 +59,7 @@ export default defineComponent({
   min-height: $fib-9 * 1px;
   width: 100%;
   bottom: 0px;
-  background: var(--color-background-tertiary);
+  border-top: 1px solid;
+  border-color: var(--color-text-disabled);
 }
 </style>

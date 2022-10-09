@@ -16,6 +16,7 @@ const SIGN_ON_TAG = "sign-on";
 
 export { SignOn, RauthService };
 
+// eslint-disable-next-line
 export function include(app: any): any {
   app.component(SIGN_ON_TAG, SignOn);
 }
