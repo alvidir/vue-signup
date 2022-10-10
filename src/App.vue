@@ -206,6 +206,7 @@ export default defineComponent({
   methods: {
     async onSubmit(fields: InputFields) {
       this.fetching = true;
+      debugger;
 
       const email = fields[FIELD_USERNAME];
       const pwd = fields[FIELD_PASSWORD];
