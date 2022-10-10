@@ -44,7 +44,7 @@ jobs:
         run: make proto -B
 
       - run: |
-          npm ci
+          npm i
           npm run build
 
   release_version:
