@@ -28,3 +28,6 @@ pnpm-debug.log*
 /src/proto/*.ts
 *_pb.js
 *_pb.ts
+
+# binaries
+/bin
