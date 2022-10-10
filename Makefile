@@ -3,16 +3,16 @@ install: install-grpc-web install-protoc
 install-grpc-web:
 	curl -LO https://github.com/grpc/grpc-web/releases/download/1.4.1/protoc-gen-grpc-web-1.4.1-linux-x86_64
 	mkdir --parents bin
-	mv ./protoc-gen-grpc-web-1.4.1-linux-x86_64 ./bin/protoc-gen-grpc-web
+	mv --force ./protoc-gen-grpc-web-1.4.1-linux-x86_64 ./bin/protoc-gen-grpc-web
 	chmod +x ./bin/protoc-gen-grpc-web
 
 install-protoc:
 	curl -LO https://github.com/protocolbuffers/protobuf/releases/download/v3.20.3/protoc-3.20.3-linux-x86_64.zip
 	mkdir --parents bin
-	unzip protoc-3.20.3-linux-x86_64.zip -d ./bin/protoc
+	unzip -o protoc-3.20.3-linux-x86_64.zip -d ./bin/protoc
 	chmod +x ./bin/protoc && rm protoc-3.20.3-linux-x86_64.zip
 
-proto:
+proto: install
 	./bin/protoc/bin/protoc -I=. proto/*.proto \
 		--js_out=import_style=commonjs,binary:./src \
 		--plugin=./bin/protoc-gen-grpc-web \
@@ -22,3 +22,8 @@ proto:
 
 build:
 	podman build --no-cache --security-opt label=disable -t alvidir/rauth-ui:latest -f ./container/rauth-ui/containerfile .
+
+clean:
+	rm -rf bin
+
+all: proto clean

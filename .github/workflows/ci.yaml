@@ -36,12 +36,9 @@ jobs:
         uses: actions/checkout@v2
         with:
             fetch-depth: 0
-      
-      - name: Install protoc
-        run: make install -B
 
       - name: Generate protos
-        run: make proto -B
+        run: make all
 
       - name: Build project
         run: |
