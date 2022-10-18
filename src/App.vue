@@ -88,7 +88,7 @@ export default defineComponent({
       disablePassword: false,
       disableTotp: true,
       rauthService: new RauthService(
-        process.env.VUE_APP_RAUTH_URI,
+        process.env.VUE_APP_RAUTH_URI ?? "http://localhost/rpc",
         this as unknown as ResponseHandler
       ),
       warning: undefined as constants.WarningProp | undefined,
