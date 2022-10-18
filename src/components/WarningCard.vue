@@ -29,11 +29,6 @@ export default defineComponent({
       type: String,
       default: "var(--color-accent)",
     },
-
-    alpha: {
-      type: Number,
-      default: 8,
-    },
   },
 
   methods: {
