@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <warning
+    <notice-card
       v-if="warning"
       class="warning-message"
       v-bind="warning"
       @close="quitWarning(index)"
     >
-    </warning>
+    </notice-card>
     <div class="card shadowed">
       <banner version="Alpha" :title="bannerTitle" :icon="`logo.${theme}.png`">
       </banner>
@@ -49,11 +49,14 @@ import SignOn, {
 } from "@/components/SignOn.vue";
 import Banner from "@/components/AppBanner.vue";
 import Options from "@/components/SignOptions.vue";
-import Warning from "@/components/WarningCard.vue";
 import Navbar from "@/components/NavBar.vue";
-import RauthService, { ResponseHandler, Error } from "@/rauth.service";
+import RauthService, { Response, Metadata, Error } from "@/rauth.service";
 import * as constants from "@/constants";
 import * as cookies from "@/cookies.manager";
+
+const rauthService = new RauthService(
+  process.env.VUE_APP_RAUTH_URI ?? "http://localhost/rpc"
+);
 
 interface InputFields {
   [FIELD_USERNAME]: string;
@@ -61,15 +64,12 @@ interface InputFields {
   [FIELD_TOTP]: string;
 }
 
-type Metadata = { [key: string]: string };
-
 export default defineComponent({
   name: "App",
   components: {
     Banner,
     SignOn,
     Options,
-    Warning,
     Navbar,
   },
 
@@ -87,10 +87,6 @@ export default defineComponent({
       disableEmail: false,
       disablePassword: false,
       disableTotp: true,
-      rauthService: new RauthService(
-        process.env.VUE_APP_RAUTH_URI ?? "http://localhost/rpc",
-        this as unknown as ResponseHandler
-      ),
       warning: undefined as constants.WarningProp | undefined,
     };
   },
@@ -206,7 +202,6 @@ export default defineComponent({
   methods: {
     async onSubmit(fields: InputFields) {
       this.fetching = true;
-      debugger;
 
       const email = fields[FIELD_USERNAME];
       const pwd = fields[FIELD_PASSWORD];
@@ -220,11 +215,11 @@ export default defineComponent({
 
       const requests: { [key: string]: () => void } = {
         [constants.SIGNUP_PATH_ROOT]: () =>
-          this.rauthService.signup(email, pwd, headers),
+          rauthService.signup(email, pwd, headers),
         [constants.LOGIN_PATH_ROOT]: () =>
-          this.rauthService.login(email, pwd, totp, headers),
+          rauthService.login(email, pwd, totp, headers),
         [constants.RESET_PATH_ROOT]: () =>
-          this.rauthService.reset(email, pwd, totp, headers),
+          rauthService.reset(email, pwd, totp, headers),
       };
 
       let pathname = window.location.pathname;
@@ -241,8 +236,6 @@ export default defineComponent({
     },
 
     onResponseError(error: Error): void {
-      this.fetching = false;
-
       if (error == Error.ERR_UNAUTHORIZED) {
         this.disableTotp = false;
         return;
@@ -255,8 +248,12 @@ export default defineComponent({
       if (this.warning) this.warning.text = error;
     },
 
-    onResponseSuccess(): void {
-      this.fetching = false;
+    onResponseSuccess(metadata?: Metadata): void {
+      const tokenHeader = process.env.VUE_APP_JWT_HEADER;
+      if (metadata && metadata[tokenHeader]) {
+        const tokenCookieKey = process.env.VUE_APP_TOKEN_COOKIE_KEY;
+        cookies.setCookie(tokenCookieKey, metadata[tokenHeader]);
+      }
 
       let pathname = window.location.pathname;
       if (constants.RESET_PATH.test(pathname)) {
@@ -267,11 +264,13 @@ export default defineComponent({
       this.performRedirect();
     },
 
-    onResponseMetadata(metadata: Metadata): void {
-      const tokenHeader = process.env.VUE_APP_JWT_HEADER;
-      if (metadata[tokenHeader]) {
-        const tokenCookieKey = process.env.VUE_APP_TOKEN_COOKIE_KEY;
-        cookies.setCookie(tokenCookieKey, metadata[tokenHeader]);
+    onResponse(response: Response): void {
+      this.fetching = false;
+
+      if (response.error) {
+        this.onResponseError(response.error);
+      } else {
+        this.onResponseSuccess(response.metadata);
       }
     },
 
@@ -289,6 +288,7 @@ export default defineComponent({
 
   mounted() {
     this.theme = GetDefaultTheme(process.env.VUE_APP_THEME_STORAGE_KEY);
+    rauthService.subscribe(this);
   },
 });
 </script>

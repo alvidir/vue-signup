@@ -45,19 +45,19 @@ const OPTIONS_PROPS: { [key: string]: unknown } = {
 interface WarningProp {
   title: string;
   text: string;
-  color?: string;
+  level?: string;
 }
 
 const WARNING_PROPS: { [key: string]: WarningProp } = {
   [Error.ERR_UNKNOWN]: {
     title: "Something bad did happen",
     text: "We could not proceed with your request, please try again.",
-    color: "var(--color-red)",
+    level: "error",
   },
   [Error.ERR_NOT_FOUND]: {
     title: "Forbidden",
     text: "You do not have permissions to execute this action. Make sure you are properly authenticated.",
-    color: "var(--color-red)",
+    level: "error",
   },
   [Error.ERR_NOT_AVAILABLE]: {
     title: "Verification required",
@@ -70,22 +70,22 @@ const WARNING_PROPS: { [key: string]: WarningProp } = {
   [Error.ERR_INVALID_TOKEN]: {
     title: "Forbidden",
     text: "You do not have permissions to execute this action. Make sure you are properly authenticated.",
-    color: "var(--color-red)",
+    level: "error",
   },
   [Error.ERR_INVALID_FORMAT]: {
     title: "Invalid format",
     text: "Some of the credentials you just provided do not have the expected format. Make sure you wrote them properly.",
-    color: "var(--color-red)",
+    level: "error",
   },
   [Error.ERR_INVALID_HEADER]: {
     title: "Forbidden",
     text: "You do not have permissions to execute this action. Make sure you are properly authenticated.",
-    color: "var(--color-red)",
+    level: "error",
   },
   [Error.ERR_WRONG_CREDENTIALS]: {
     title: "Invalid username or password",
     text: "We could not identify you. Make sure all your credentials are well written.",
-    color: "var(--color-red)",
+    level: "error",
   },
 };
 

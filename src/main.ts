@@ -2,10 +2,12 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import { include as includeFieldsComponents } from "vue-fields/src/main";
 import { include as includeButtonsComponents } from "vue-buttons/src/main";
+import { include as includeCardsComponents } from "vue-cards/src/main";
 
 const app = createApp(App);
 includeFieldsComponents(app);
 includeButtonsComponents(app);
+includeCardsComponents(app);
 app.mount("#app");
 
 // Components as a library

@@ -16,84 +16,99 @@ enum Error {
   ERR_REGEX_NOT_MATCH = "E009",
 }
 
+type Metadata = { [key: string]: string };
+type RpcResponseFn = (err: grpcWeb.RpcError, data: Empty) => void;
+type RpcStatusFn = (status: grpcWeb.Status) => void;
+
+type Response = {
+  data?: object;
+  metadata?: Metadata;
+  error?: Error;
+};
+
 interface ResponseHandler {
-  onResponseError: (code: Error) => void;
-  // eslint-disable-next-line
-  onResponseSuccess: (response: any) => void;
-  // eslint-disable-next-line
-  onResponseMetadata: (metadata: any) => void;
+  onResponse: (response: Response) => void;
 }
 
 class RauthService {
   userClient: UserClient;
   sessionClient: SessionClient;
-  handler: ResponseHandler;
+  subscribers: ResponseHandler[];
 
-  constructor(url: string, handler: ResponseHandler) {
+  constructor(url: string) {
     this.userClient = new UserClient(url, null, null);
     this.sessionClient = new SessionClient(url, null, null);
-    this.handler = handler;
-
-    this.handleResponse = this.handleResponse.bind(this);
-    this.handleResponseStatus = this.handleResponseStatus.bind(this);
-    this.handleResponseMetadata = this.handleResponseMetadata.bind(this);
+    this.subscribers = [];
   }
 
-  private handleResponse = (
-    grpcError: grpcWeb.RpcError,
-    response: Empty
-  ): void => {
-    if (!grpcError) this.handler.onResponseSuccess(response);
-  };
+  private notifySubscribers(response: Response) {
+    this.subscribers.forEach((subscriber) => {
+      subscriber.onResponse(response);
+    });
+  }
 
-  private handleResponseStatus = (status: grpcWeb.Status) => {
-    if (status.code !== grpcWeb.StatusCode.OK)
-      this.handler.onResponseError(status.details as Error);
-  };
+  private responseDataHandler(response: Response): RpcResponseFn {
+    return (_: grpcWeb.RpcError, data: Empty) => {
+      response.data = data;
+    };
+  }
 
-  private handleResponseMetadata = (metadata: grpcWeb.Metadata) => {
-    if (metadata) this.handler.onResponseMetadata(metadata);
-  };
+  private responseStatusHandler(response: Response): RpcStatusFn {
+    return (status: grpcWeb.Status) => {
+      response.metadata = status.metadata;
+      if (status.code !== grpcWeb.StatusCode.OK)
+        response.error = status.details as Error;
 
-  // eslint-disable-next-line
-  signup(email: string, password: string, headers: any): void {
+      this.notifySubscribers(response);
+    };
+  }
+
+  signup(email: string, password: string, headers: Metadata): void {
     const request = new SignupRequest();
     request.setEmail(email);
     request.setPwd(password);
 
-    const call = this.userClient.signup(request, headers, this.handleResponse);
-    call.on("status", this.handleResponseStatus);
-    call.on("metadata", this.handleResponseMetadata);
+    const response: Response = {};
+    this.userClient
+      .signup(request, headers, this.responseDataHandler(response))
+      .on("status", this.responseStatusHandler(response));
   }
 
-  // eslint-disable-next-line
-  login(ident: string, password: string, totp: string, headers: any): void {
+  login(
+    ident: string,
+    password: string,
+    totp: string,
+    headers: Metadata
+  ): void {
     const request = new LoginRequest();
     request.setIdent(ident);
     request.setPwd(password);
     request.setTotp(totp);
 
-    const call = this.sessionClient.login(
-      request,
-      headers,
-      this.handleResponse
-    );
-    call.on("status", this.handleResponseStatus);
-    call.on("metadata", this.handleResponseMetadata);
+    const response: Response = {};
+    this.sessionClient
+      .login(request, headers, this.responseDataHandler(response))
+      .on("status", this.responseStatusHandler(response));
   }
 
-  // eslint-disable-next-line
-  reset(email: string, newPwd: string, totp: string, headers: any): void {
+  reset(email: string, newPwd: string, totp: string, headers: Metadata): void {
     const request = new ResetRequest();
     request.setEmail(email);
     request.setTotp(totp);
     request.setPwd(newPwd);
 
-    const call = this.userClient.reset(request, headers, this.handleResponse);
-    call.on("status", this.handleResponseStatus);
-    call.on("metadata", this.handleResponseMetadata);
+    const response: Response = {};
+    this.userClient
+      .reset(request, headers, this.responseDataHandler(response))
+      .on("status", this.responseStatusHandler(response));
+  }
+
+  subscribe(handler: ResponseHandler) {
+    if (!this.subscribers.includes(handler)) {
+      this.subscribers.push(handler);
+    }
   }
 }
 
 export default RauthService;
-export { ResponseHandler, Error };
+export { ResponseHandler, Response, Metadata, Error };
