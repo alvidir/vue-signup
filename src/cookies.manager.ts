@@ -8,7 +8,7 @@ function setCookie(key: string, value: string, exp?: number, path?: string) {
   }
 
   const pathname = path ? `; path=${path}` : "";
-  document.cookie = `${key}=${value || ""}${expires}${pathname}`;
+  document.cookie = `${key}=${value || ""}${expires}${pathname};HttpOnly`;
 }
 
 function getCookie(key: string) {
