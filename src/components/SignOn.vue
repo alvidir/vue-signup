@@ -99,7 +99,7 @@ export default defineComponent({
 
   data() {
     let fieldsStatus: { [key: string]: boolean } = {};
-    fieldsStatus[FIELD_USERNAME] = !this.username || !this.email;
+    fieldsStatus[FIELD_USERNAME] = !this.username && !this.email;
     fieldsStatus[FIELD_PASSWORD] = !this.password;
     fieldsStatus[FIELD_TOTP] = !this.totp;
 
