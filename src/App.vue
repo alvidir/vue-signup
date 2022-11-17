@@ -4,7 +4,7 @@
       v-if="warning"
       class="warning-message"
       v-bind="warning"
-      @close="quitWarning(index)"
+      @close="quitWarning"
     >
     </notice-card>
     <div class="card shadowed">
