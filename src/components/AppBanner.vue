@@ -38,7 +38,7 @@ img {
 }
 
 span {
-  font-size: $fib-11 * 0.01rem;
+  font-size: x-large;
   text-align: center;
   margin-bottom: $fib-9 * 1px;
   color: var(--color-text);
@@ -54,7 +54,7 @@ span {
     padding: $fib-2 * 1px $fib-4 * 1px $fib-2 * 1px $fib-4 * 1px;
     border: 1px solid $item-color;
     border-radius: 10px;
-    font-size: $fib-6 * 1px;
+    font-size: small;
     color: $item-color;
 
     &:not(:active) {

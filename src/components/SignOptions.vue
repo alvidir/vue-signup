@@ -60,7 +60,7 @@ a {
     font-weight: 600;
   }
 
-  font-size: $fib-6 * 1px;
+  font-size: small;
   text-align: center;
   color: var(--color-accent);
 }

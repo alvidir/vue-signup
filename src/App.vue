@@ -330,19 +330,13 @@ body {
 }
 
 .card {
-  @extend .round-corners, .fib-6;
+  @extend .round-corners, .fib-6, .shadow-box;
 
   padding-top: $fib-7 * 1px;
   padding-bottom: $fib-7 * 1px;
   border: 1px solid;
   border-color: var(--color-text-disabled);
   background: var(--color-background-primary);
-
-  &.shadowed {
-    -moz-box-shadow: 0px 2px 3px 1px #00000020 !important;
-    -webkit-box-shadow: 0px 2px 3px 1px #00000020 !important;
-    box-shadow: 0px 2px 3px 1px #00000020 !important;
-  }
 }
 
 .warning-message {
