@@ -7,7 +7,7 @@
       @close="quitWarning"
     >
     </notice-card>
-    <div class="card shadowed">
+    <regular-card class="shadow-box">
       <banner version="Alpha" :title="bannerTitle" :icon="`logo.${theme}.png`">
       </banner>
       <sign-on
@@ -22,13 +22,13 @@
       >
       </sign-on>
       <options v-if="showOptions" v-bind="optionsProps"> </options>
-    </div>
+    </regular-card>
   </div>
   <span class="inflate"></span>
   <navbar
     class="footer"
     @theme-switch="onSwitchTheme"
-    :checked="theme == THEME_DARK"
+    :checked="theme == THEME_DARK_KEY"
   >
     hello world
   </navbar>
@@ -37,9 +37,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import {
-  THEME_LIGHT,
-  THEME_DARK,
-  GetDefaultTheme,
+  THEME_LIGHT_KEY,
+  THEME_DARK_KEY,
+  GetTheme,
   SwitchTheme,
 } from "fibonacci-styles/util";
 import SignOn, {
@@ -75,14 +75,14 @@ export default defineComponent({
 
   setup() {
     return {
-      THEME_LIGHT,
-      THEME_DARK,
+      THEME_LIGHT_KEY,
+      THEME_DARK_KEY,
     };
   },
 
   data() {
     return {
-      theme: THEME_LIGHT,
+      theme: THEME_LIGHT_KEY,
       fetching: false,
       disableEmail: false,
       disablePassword: false,
@@ -279,15 +279,12 @@ export default defineComponent({
     },
 
     onSwitchTheme() {
-      this.theme = SwitchTheme(
-        this.theme,
-        process.env.VUE_APP_THEME_STORAGE_KEY
-      );
+      this.theme = SwitchTheme(process.env.VUE_APP_THEME_STORAGE_KEY);
     },
   },
 
   mounted() {
-    this.theme = GetDefaultTheme(process.env.VUE_APP_THEME_STORAGE_KEY);
+    this.theme = GetTheme(process.env.VUE_APP_THEME_STORAGE_KEY);
     rauthService.subscribe(this);
   },
 });
@@ -305,7 +302,7 @@ export default defineComponent({
 body {
   min-height: 100vh;
   width: 100%;
-  background: var(--color-background-secondary);
+  background: var(--color-bg-secondary);
 }
 
 .container {
@@ -327,16 +324,6 @@ body {
 .loader-container {
   @extend .centered-column;
   padding-bottom: $fib-9 * 1px;
-}
-
-.card {
-  @extend .round-corners, .fib-6, .shadow-box;
-
-  padding-top: $fib-7 * 1px;
-  padding-bottom: $fib-7 * 1px;
-  border: 1px solid;
-  border-color: var(--color-text-disabled);
-  background: var(--color-background-primary);
 }
 
 .warning-message {

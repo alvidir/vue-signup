@@ -60,6 +60,6 @@ export default defineComponent({
   width: 100%;
   bottom: 0px;
   border-top: 1px solid;
-  border-color: var(--color-text-disabled);
+  border-color: var(--color-border);
 }
 </style>

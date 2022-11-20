@@ -223,12 +223,6 @@ a {
   margin-right: auto;
 }
 
-.regular-field,
-.submit,
-a {
-  width: 90%;
-}
-
 .separator {
   margin-bottom: $fib-6 * 1px;
 

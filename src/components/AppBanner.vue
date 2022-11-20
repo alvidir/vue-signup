@@ -1,9 +1,9 @@
 <template>
   <div>
     <img :src="require(`../assets/${icon}`)" />
-    <span
-      >{{ title }}<small>{{ version }}</small></span
-    >
+    <span>
+      {{ title }}<small>{{ version }}</small>
+    </span>
   </div>
 </template>
 
@@ -30,7 +30,7 @@ div {
 }
 
 img {
-  margin-top: $fib-8 * 1px;
+  margin-top: $fib-7 * 1px;
   margin-bottom: $fib-6 * 1px;
   margin-left: auto;
   margin-right: auto;
@@ -41,7 +41,7 @@ span {
   font-size: x-large;
   text-align: center;
   margin-bottom: $fib-9 * 1px;
-  color: var(--color-text);
+  color: var(--color-text-primary);
 
   small {
     cursor: default;

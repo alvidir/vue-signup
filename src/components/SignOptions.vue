@@ -48,7 +48,7 @@ div {
 }
 
 span {
-  color: var(--color-secondary-text);
+  color: var(--color-text-secondary);
 }
 
 a {
