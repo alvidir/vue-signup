@@ -48,20 +48,15 @@ div {
 }
 
 span {
-  color: var(--color-text-secondary);
+  color: var(--color-border);
 }
 
 a {
-  &:not(:hover) {
-    text-decoration: none;
-  }
+  font-size: small;
+  text-align: center;
 
   &.primary {
     font-weight: 600;
   }
-
-  font-size: small;
-  text-align: center;
-  color: var(--color-accent);
 }
 </style>
