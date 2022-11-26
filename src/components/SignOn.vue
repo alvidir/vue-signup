@@ -67,6 +67,12 @@ const ERROR_MESSAGES: { [key: string]: string } = {
     "A secure password must include at least one upper and lowercase letters, as well as numbers and special characters.",
 };
 
+type FieldData = {
+  valid: boolean;
+  controller: FieldController | undefined;
+  error: string;
+};
+
 export default defineComponent({
   name: "SignOn",
 
@@ -101,30 +107,9 @@ export default defineComponent({
   },
 
   data() {
-    type FieldData = {
-      valid: boolean;
-      controller: FieldController | undefined;
-    };
-
-    let fields: { [key: string]: FieldData } = {};
-    fields[FIELD_USERNAME] = {
-      valid: !this.username && !this.email,
-      controller: this.$refs[FIELD_USERNAME] as FieldController,
-    };
-
-    fields[FIELD_PASSWORD] = {
-      valid: !this.password,
-      controller: this.$refs[FIELD_PASSWORD] as FieldController,
-    };
-
-    fields[FIELD_TOTP] = {
-      valid: !this.totp,
-      controller: this.$refs[FIELD_TOTP] as FieldController,
-    };
-
     return {
       isValid: false,
-      fields: fields,
+      fields: {} as { [key: string]: FieldData },
     };
   },
 
@@ -140,10 +125,9 @@ export default defineComponent({
     },
 
     usernameErrorMessage(): string {
-      debugger;
       if (
         this.disableErrors ||
-        !this.fields[FIELD_USERNAME].controller?.value() ||
+        !this.fields[FIELD_USERNAME]?.controller?.value() ||
         this.fields[FIELD_USERNAME].valid
       )
         return "";
@@ -152,10 +136,9 @@ export default defineComponent({
     },
 
     passwordErrorMessage(): string {
-      debugger;
       if (
         this.disableErrors ||
-        !this.fields[FIELD_PASSWORD].controller?.value() ||
+        !this.fields[FIELD_PASSWORD]?.controller?.value() ||
         this.fields[FIELD_PASSWORD].valid
       )
         return "";
@@ -177,6 +160,8 @@ export default defineComponent({
       this.fields[FIELD_USERNAME].valid =
         !!input.length &&
         (this.username || FIELDS_REGEX[FIELD_USERNAME].test(input));
+
+      console.log(this.fields[FIELD_USERNAME].controller);
     },
 
     validatePassword(input: string): void {
@@ -215,6 +200,26 @@ export default defineComponent({
         this.$emit(SUBMIT_EVENT_NAME, secureFields);
       }
     },
+  },
+
+  mounted() {
+    this.fields[FIELD_USERNAME] = {
+      valid: !this.username && !this.email,
+      controller: this.$refs[FIELD_USERNAME] as FieldController,
+      error: "",
+    };
+
+    this.fields[FIELD_PASSWORD] = {
+      valid: !this.password,
+      controller: this.$refs[FIELD_PASSWORD] as FieldController,
+      error: "",
+    };
+
+    this.fields[FIELD_TOTP] = {
+      valid: !this.totp,
+      controller: this.$refs[FIELD_TOTP] as FieldController,
+      error: "",
+    };
   },
 });
 </script>
