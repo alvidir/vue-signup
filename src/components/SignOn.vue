@@ -3,10 +3,11 @@
     <regular-field
       v-if="email"
       class="field"
-      :class="{ separator: !emailErrorMessage }"
+      :class="{ separator: !usernameErrorMessage }"
       :placeholder="usernameFieldPlaceholder"
-      :error="emailErrorMessage"
-      @input="onInput($event, FIELD_USERNAME)"
+      :ref="FIELD_USERNAME"
+      :error="usernameErrorMessage"
+      @input="onInput(FIELD_USERNAME, $event)"
       large
     ></regular-field>
 
@@ -18,16 +19,17 @@
       type="password"
       :ref="FIELD_PASSWORD"
       :error="passwordErrorMessage"
-      @input="onInput($event, FIELD_PASSWORD)"
+      @input="onInput(FIELD_PASSWORD, $event)"
       large
     ></regular-field>
 
     <div v-if="totp" class="center-content">
       <discret-field
         :lenght="TOTP_LENGTH"
+        :ref="FIELD_TOTP"
         class="tight separator larger"
         placeholder="One time password"
-        @input="onInput($event, FIELD_TOTP)"
+        @input="onInput(FIELD_TOTP, $event)"
       >
       </discret-field>
     </div>
@@ -44,6 +46,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { FieldController } from "vue-fields/src/main";
 
 export const FIELD_USERNAME = "username";
 export const FIELD_PASSWORD = "password";
@@ -62,6 +65,12 @@ const ERROR_MESSAGES: { [key: string]: string } = {
   [FIELD_USERNAME]: "Invalid email address.",
   [FIELD_PASSWORD]:
     "A secure password must include at least one upper and lowercase letters, as well as numbers and special characters.",
+};
+
+type FieldData = {
+  valid: boolean;
+  controller: FieldController | undefined;
+  error: string;
 };
 
 export default defineComponent({
@@ -98,15 +107,9 @@ export default defineComponent({
   },
 
   data() {
-    let fieldsStatus: { [key: string]: boolean } = {};
-    fieldsStatus[FIELD_USERNAME] = !this.username && !this.email;
-    fieldsStatus[FIELD_PASSWORD] = !this.password;
-    fieldsStatus[FIELD_TOTP] = !this.totp;
-
     return {
       isValid: false,
-      fieldsStatus: fieldsStatus,
-      fieldsValues: {} as { [key: string]: string },
+      fields: {} as { [key: string]: FieldData },
     };
   },
 
@@ -121,11 +124,11 @@ export default defineComponent({
         : "";
     },
 
-    emailErrorMessage(): string {
+    usernameErrorMessage(): string {
       if (
         this.disableErrors ||
-        !this.fieldsValues[FIELD_USERNAME] ||
-        this.fieldsStatus[FIELD_USERNAME]
+        !this.fields[FIELD_USERNAME]?.controller?.value() ||
+        this.fields[FIELD_USERNAME].valid
       )
         return "";
 
@@ -135,8 +138,8 @@ export default defineComponent({
     passwordErrorMessage(): string {
       if (
         this.disableErrors ||
-        !this.fieldsValues[FIELD_PASSWORD] ||
-        this.fieldsStatus[FIELD_PASSWORD]
+        !this.fields[FIELD_PASSWORD]?.controller?.value() ||
+        this.fields[FIELD_PASSWORD].valid
       )
         return "";
 
@@ -153,32 +156,33 @@ export default defineComponent({
       return hash.toString(32);
     },
 
-    validateEmail(input: string): void {
-      this.fieldsStatus[FIELD_USERNAME] =
+    validateUsername(input: string): void {
+      this.fields[FIELD_USERNAME].valid =
         !!input.length &&
         (this.username || FIELDS_REGEX[FIELD_USERNAME].test(input));
+
+      console.log(this.fields[FIELD_USERNAME].controller);
     },
 
     validatePassword(input: string): void {
-      this.fieldsStatus[FIELD_PASSWORD] =
+      this.fields[FIELD_PASSWORD].valid =
         !!input.length && FIELDS_REGEX[FIELD_PASSWORD].test(input);
     },
 
     validateTotp(input: string): void {
-      this.fieldsStatus[FIELD_TOTP] = input.length == TOTP_LENGTH;
+      this.fields[FIELD_TOTP].valid = input.length == TOTP_LENGTH;
     },
 
-    onInput(input: string, field: string): void {
-      this.fieldsValues[field] = input;
+    onInput(field: string, ctrl: FieldController): void {
       const validators: { [key: string]: (input: string) => void } = {
-        [FIELD_USERNAME]: this.validateEmail,
+        [FIELD_USERNAME]: this.validateUsername,
         [FIELD_PASSWORD]: this.validatePassword,
         [FIELD_TOTP]: this.validateTotp,
       };
 
-      validators[field](input);
-      this.isValid = !Object.keys(this.fieldsStatus).some(
-        (field) => !this.fieldsStatus[field]
+      validators[field](ctrl.value());
+      this.isValid = !Object.keys(this.fields).some(
+        (field) => !this.fields[field].valid
       );
     },
 
@@ -186,8 +190,8 @@ export default defineComponent({
       if (this.isValid) {
         let secureFields: { [key: string]: string } = {};
 
-        Object.keys(this.fieldsValues).forEach((key) => {
-          let value = this.fieldsValues[key];
+        Object.keys(this.fields).forEach((key) => {
+          let value = this.fields[key].controller?.value() ?? "";
           if (key == FIELD_PASSWORD) value = this.hash(value);
 
           secureFields[key] = value;
@@ -196,6 +200,26 @@ export default defineComponent({
         this.$emit(SUBMIT_EVENT_NAME, secureFields);
       }
     },
+  },
+
+  mounted() {
+    this.fields[FIELD_USERNAME] = {
+      valid: !this.username && !this.email,
+      controller: this.$refs[FIELD_USERNAME] as FieldController,
+      error: "",
+    };
+
+    this.fields[FIELD_PASSWORD] = {
+      valid: !this.password,
+      controller: this.$refs[FIELD_PASSWORD] as FieldController,
+      error: "",
+    };
+
+    this.fields[FIELD_TOTP] = {
+      valid: !this.totp,
+      controller: this.$refs[FIELD_TOTP] as FieldController,
+      error: "",
+    };
   },
 });
 </script>
