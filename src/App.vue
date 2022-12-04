@@ -52,7 +52,7 @@ import Options from "@/components/SignOptions.vue";
 import Navbar from "@/components/NavBar.vue";
 import RauthService, { Response, Metadata, Error } from "@/rauth.service";
 import * as constants from "@/constants";
-import * as cookies from "@/cookies.manager";
+import * as cookies from "@/cookies";
 
 const rauthService = new RauthService(
   process.env.VUE_APP_RAUTH_URI ?? "http://localhost/rpc"
@@ -250,9 +250,15 @@ export default defineComponent({
 
     onResponseSuccess(metadata?: Metadata): void {
       const tokenHeader = process.env.VUE_APP_JWT_HEADER;
+      const cookiesPath = process.env.VUE_APP_COOKIES_PATH;
       if (metadata && metadata[tokenHeader]) {
         const tokenCookieKey = process.env.VUE_APP_TOKEN_COOKIE_KEY;
-        cookies.setCookie(tokenCookieKey, metadata[tokenHeader]);
+        cookies.setCookie(
+          tokenCookieKey,
+          metadata[tokenHeader],
+          cookiesPath,
+          undefined
+        );
       }
 
       let pathname = window.location.pathname;

@@ -1,4 +1,4 @@
-function setCookie(key: string, value: string, exp?: number, path?: string) {
+function setCookie(key: string, value: string, path?: string, exp?: number) {
   let expires = "";
 
   if (exp) {
