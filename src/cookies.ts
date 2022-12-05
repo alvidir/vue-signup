@@ -2,8 +2,7 @@ function setCookie(key: string, value: string, domain?: string, exp?: number) {
   let expires = "";
 
   if (exp) {
-    const date = new Date();
-    date.setTime(date.getTime() + exp);
+    const date = new Date(exp);
     expires = "; Expires=" + date.toUTCString();
   }
 
