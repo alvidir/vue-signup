@@ -50,7 +50,7 @@ import SignOn, {
 import Banner from "@/components/AppBanner.vue";
 import Options from "@/components/SignOptions.vue";
 import Navbar from "@/components/NavBar.vue";
-import RauthService, { Response, Metadata, Error } from "@/rauth.service";
+import RauthService, { Metadata, Error } from "@/rauth.service";
 import * as constants from "@/constants";
 import * as cookies from "@/cookies";
 
@@ -235,7 +235,14 @@ export default defineComponent({
       window.location.replace(targetLocation);
     },
 
-    onResponseError(error: Error): void {
+    onResponseData(_: unknown): void {
+      // a response has been received
+      this.fetching = false;
+    },
+
+    onResponseStatus(error?: Error): void {
+      if (!error) return;
+
       if (error == Error.ERR_UNAUTHORIZED) {
         this.disableTotp = false;
         return;
@@ -248,18 +255,16 @@ export default defineComponent({
       if (this.warning) this.warning.text = error;
     },
 
-    onResponseSuccess(metadata?: Metadata): void {
-      const tokenHeader = process.env.VUE_APP_JWT_HEADER;
-      const cookiesPath = process.env.VUE_APP_COOKIES_PATH;
-      if (metadata && metadata[tokenHeader]) {
-        const tokenCookieKey = process.env.VUE_APP_TOKEN_COOKIE_KEY;
-        cookies.setCookie(
-          tokenCookieKey,
-          metadata[tokenHeader],
-          cookiesPath,
-          undefined
-        );
+    onResponseMetadata(metadata: Metadata): void {
+      const header = process.env.VUE_APP_JWT_HEADER;
+      const domain = process.env.VUE_APP_COOKIES_DOMAIN;
+
+      if (!metadata || !metadata[header]) {
+        return;
       }
+
+      const key = process.env.VUE_APP_TOKEN_COOKIE_KEY;
+      cookies.setCookie(key, metadata[header], domain);
 
       let pathname = window.location.pathname;
       if (constants.RESET_PATH.test(pathname)) {
@@ -268,16 +273,6 @@ export default defineComponent({
       }
 
       this.performRedirect();
-    },
-
-    onResponse(response: Response): void {
-      this.fetching = false;
-
-      if (response.error) {
-        this.onResponseError(response.error);
-      } else {
-        this.onResponseSuccess(response.metadata);
-      }
     },
 
     quitWarning() {

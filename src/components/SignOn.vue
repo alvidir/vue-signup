@@ -160,8 +160,6 @@ export default defineComponent({
       this.fields[FIELD_USERNAME].valid =
         !!input.length &&
         (this.username || FIELDS_REGEX[FIELD_USERNAME].test(input));
-
-      console.log(this.fields[FIELD_USERNAME].controller);
     },
 
     validatePassword(input: string): void {

@@ -19,15 +19,12 @@ enum Error {
 type Metadata = { [key: string]: string };
 type RpcResponseFn = (err: grpcWeb.RpcError, data: Empty) => void;
 type RpcStatusFn = (status: grpcWeb.Status) => void;
-
-type Response = {
-  data?: object;
-  metadata?: Metadata;
-  error?: Error;
-};
+type RpcMetadataFn = (status: grpcWeb.Metadata) => void;
 
 interface ResponseHandler {
-  onResponse: (response: Response) => void;
+  onResponseData: (data: unknown) => void;
+  onResponseStatus: (error?: Error) => void;
+  onResponseMetadata: (metadata: Metadata) => void;
 }
 
 class RauthService {
@@ -41,25 +38,35 @@ class RauthService {
     this.subscribers = [];
   }
 
-  private notifySubscribers(response: Response) {
-    this.subscribers.forEach((subscriber) => {
-      subscriber.onResponse(response);
-    });
-  }
-
-  private responseDataHandler(response: Response): RpcResponseFn {
+  private responseDataHandler(): RpcResponseFn {
+    const subscribers = this.subscribers;
     return (_: grpcWeb.RpcError, data: Empty) => {
-      response.data = data;
+      subscribers.forEach((subscriber) => {
+        subscriber.onResponseData(data);
+      });
     };
   }
 
-  private responseStatusHandler(response: Response): RpcStatusFn {
+  private responseStatusHandler(): RpcStatusFn {
+    const subscribers = this.subscribers;
     return (status: grpcWeb.Status) => {
-      response.metadata = status.metadata;
-      if (status.code !== grpcWeb.StatusCode.OK)
-        response.error = status.details as Error;
+      let error: Error | undefined = undefined;
+      if (status.code !== grpcWeb.StatusCode.OK) {
+        error = status.details as Error;
+      }
 
-      this.notifySubscribers(response);
+      subscribers.forEach((subscriber) => {
+        subscriber.onResponseStatus(error);
+      });
+    };
+  }
+
+  private responseMetadataHandler(): RpcMetadataFn {
+    const subscribers = this.subscribers;
+    return (metadata: grpcWeb.Metadata) => {
+      subscribers.forEach((subscriber) => {
+        subscriber.onResponseMetadata(metadata);
+      });
     };
   }
 
@@ -68,10 +75,10 @@ class RauthService {
     request.setEmail(email);
     request.setPwd(password);
 
-    const response: Response = {};
     this.userClient
-      .signup(request, headers, this.responseDataHandler(response))
-      .on("status", this.responseStatusHandler(response));
+      .signup(request, headers, this.responseDataHandler())
+      .on("status", this.responseStatusHandler())
+      .on("metadata", this.responseMetadataHandler());
   }
 
   login(
@@ -85,10 +92,10 @@ class RauthService {
     request.setPwd(password);
     request.setTotp(totp);
 
-    const response: Response = {};
     this.sessionClient
-      .login(request, headers, this.responseDataHandler(response))
-      .on("status", this.responseStatusHandler(response));
+      .login(request, headers, this.responseDataHandler())
+      .on("status", this.responseStatusHandler())
+      .on("metadata", this.responseMetadataHandler());
   }
 
   reset(email: string, newPwd: string, totp: string, headers: Metadata): void {
@@ -97,10 +104,10 @@ class RauthService {
     request.setTotp(totp);
     request.setPwd(newPwd);
 
-    const response: Response = {};
     this.userClient
-      .reset(request, headers, this.responseDataHandler(response))
-      .on("status", this.responseStatusHandler(response));
+      .reset(request, headers, this.responseDataHandler())
+      .on("status", this.responseStatusHandler())
+      .on("metadata", this.responseMetadataHandler());
   }
 
   subscribe(handler: ResponseHandler) {
@@ -111,4 +118,4 @@ class RauthService {
 }
 
 export default RauthService;
-export { ResponseHandler, Response, Metadata, Error };
+export { ResponseHandler, Metadata, Error };
