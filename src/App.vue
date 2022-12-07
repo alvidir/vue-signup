@@ -51,11 +51,12 @@ import Banner from "@/components/AppBanner.vue";
 import Options from "@/components/SignOptions.vue";
 import Navbar from "@/components/NavBar.vue";
 import RauthService, { Metadata, Error } from "@/rauth.service";
+import Config from "@/config.json";
 import * as constants from "@/constants";
 import * as cookies from "@/cookies";
 
 const rauthService = new RauthService(
-  process.env.VUE_APP_RAUTH_URI ?? "http://localhost/rpc"
+  Config.BASE_URL ?? "http://localhost/rpc"
 );
 
 interface InputFields {
@@ -110,7 +111,7 @@ export default defineComponent({
         paramsByKey[item[0]] = item[1];
       });
 
-      return paramsByKey[process.env.VUE_APP_TOKEN_QUERY_PARAM];
+      return paramsByKey[Config.TOKEN_QUERY_PARAM];
     },
 
     redirect(): string | undefined {
@@ -122,7 +123,7 @@ export default defineComponent({
         paramsByKey[item[0]] = item[1];
       });
 
-      return paramsByKey[process.env.VUE_APP_REDIRECT_QUERY_PARAM];
+      return paramsByKey[Config.REDIRECT_QUERY_PARAM];
     },
 
     isSignup(): boolean {
@@ -209,7 +210,7 @@ export default defineComponent({
       const headers: { [key: string]: string } = {};
 
       if (this.token) {
-        const tokenHeader = process.env.VUE_APP_JWT_HEADER;
+        const tokenHeader = Config.JWT_HEADER;
         headers[tokenHeader] = this.token;
       }
 
@@ -230,12 +231,11 @@ export default defineComponent({
     },
 
     performRedirect(): void {
-      let targetLocation =
-        this.redirect ?? process.env.VUE_APP_DEFAULT_REDIRECT;
+      let targetLocation = this.redirect ?? Config.DEFAULT_REDIRECT;
       window.location.replace(targetLocation);
     },
 
-    onResponseData(_: unknown): void {
+    onResponseData(): void {
       // a response has been received
       this.fetching = false;
     },
@@ -256,14 +256,14 @@ export default defineComponent({
     },
 
     onResponseMetadata(metadata: Metadata): void {
-      const header = process.env.VUE_APP_JWT_HEADER;
-      const domain = process.env.VUE_APP_COOKIES_DOMAIN;
+      const header = Config.JWT_HEADER;
+      const domain = Config.COOKIES_DOMAIN;
 
       if (!metadata || !metadata[header]) {
         return;
       }
 
-      const key = process.env.VUE_APP_TOKEN_COOKIE_KEY;
+      const key = Config.TOKEN_COOKIE_KEY;
       cookies.setCookie(key, metadata[header], domain);
 
       let pathname = window.location.pathname;
@@ -280,12 +280,12 @@ export default defineComponent({
     },
 
     onSwitchTheme() {
-      this.theme = SwitchTheme(process.env.VUE_APP_THEME_STORAGE_KEY);
+      this.theme = SwitchTheme(Config.THEME_STORAGE_KEY);
     },
   },
 
   mounted() {
-    this.theme = GetTheme(process.env.VUE_APP_THEME_STORAGE_KEY);
+    this.theme = GetTheme(Config.THEME_STORAGE_KEY);
     rauthService.subscribe(this);
   },
 });
