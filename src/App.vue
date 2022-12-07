@@ -55,9 +55,7 @@ import Config from "@/config.json";
 import * as constants from "@/constants";
 import * as cookies from "@/cookies";
 
-const rauthService = new RauthService(
-  Config.BASE_URL ?? "http://localhost/rpc"
-);
+const rauthService = new RauthService(Config.RAUTH_URI);
 
 interface InputFields {
   [FIELD_USERNAME]: string;

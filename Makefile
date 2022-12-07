@@ -23,6 +23,13 @@ proto: install
 build:
 	podman build --no-cache --security-opt label=disable -t alvidir/rauth-ui:latest -f ./container/rauth-ui/containerfile .
 
+deploy:
+	podman run -p 8080:80 --name rauth-ui --env-file .env alvidir/rauth-ui:latest
+
+undeploy:
+	podman stop rauth-ui
+	podman rm -f rauth-ui
+
 clean:
 	rm -rf bin
 
