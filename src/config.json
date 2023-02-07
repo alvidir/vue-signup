@@ -7,5 +7,5 @@
   "DEFAULT_REDIRECT": "$DEFAULT_REDIRECT",
   "THEME_STORAGE_KEY": "$THEME_STORAGE_KEY",
   "COOKIES_DOMAIN": "$COOKIES_DOMAIN",
-  "LOGO_URI": "https://raw.githubusercontent.com/alvidir/statics/main/pictures/svg/alvidir_logo.svg"
+  "ALVIDIR_LOGO_URI": "https://raw.githubusercontent.com/alvidir/statics/main/pictures/svg/alvidir_logo.svg"
 }

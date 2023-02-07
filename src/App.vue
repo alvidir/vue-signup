@@ -8,7 +8,11 @@
     >
     </notice-card>
     <regular-card class="shadow-box">
-      <banner version="Alpha" :title="bannerTitle" :logo="Config.LOGO_URI">
+      <banner
+        version="Alpha"
+        :title="bannerTitle"
+        :logo="Config.ALVIDIR_LOGO_URI"
+      >
       </banner>
       <sign-on
         :title="submitTitle"
