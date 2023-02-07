@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="require(`../assets/${icon}`)" />
+    <img :src="logo" />
     <span>
       {{ title }}<small>{{ version }}</small>
     </span>
@@ -16,7 +16,7 @@ export default defineComponent({
   props: {
     title: String,
     version: String,
-    icon: String,
+    logo: String,
   },
 });
 </script>
@@ -49,7 +49,7 @@ span {
 
     position: absolute;
     width: fit-content;
-    font-family: "Montserrat", Helvetica, Arial, sans-serif;
+    font-family: "Raleway", Helvetica, Arial, sans-serif;
     margin-left: $fib-4 * 1px;
     padding: $fib-2 * 1px $fib-4 * 1px $fib-2 * 1px $fib-4 * 1px;
     border: 1px solid $item-color;

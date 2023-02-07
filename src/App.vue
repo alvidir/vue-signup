@@ -8,7 +8,7 @@
     >
     </notice-card>
     <regular-card class="shadow-box">
-      <banner version="Alpha" :title="bannerTitle" :icon="`alvidir.svg`">
+      <banner version="Alpha" :title="bannerTitle" :logo="Config.LOGO_URI">
       </banner>
       <sign-on
         :title="submitTitle"
@@ -29,9 +29,7 @@
     class="footer"
     @theme-switch="onSwitchTheme"
     :checked="theme == THEME_DARK_KEY"
-  >
-    hello world
-  </navbar>
+  ></navbar>
 </template>
 
 <script lang="ts">
@@ -76,6 +74,7 @@ export default defineComponent({
     return {
       THEME_LIGHT_KEY,
       THEME_DARK_KEY,
+      Config,
     };
   },
 
