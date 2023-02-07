@@ -8,7 +8,7 @@
     >
     </notice-card>
     <regular-card class="shadow-box">
-      <banner version="Alpha" :title="bannerTitle" :icon="`logo.${theme}.png`">
+      <banner version="Alpha" :title="bannerTitle" :icon="`alvidir.svg`">
       </banner>
       <sign-on
         :title="submitTitle"
