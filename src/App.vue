@@ -9,9 +9,9 @@
     </notice-card>
     <regular-card class="shadow-box">
       <banner
-        version="Alpha"
-        :title="bannerTitle"
         :logo="Config.ALVIDIR_LOGO_URI"
+        :version="Config.ALVIDIR_VERSION"
+        :title="bannerTitle"
       >
       </banner>
       <sign-on
@@ -32,18 +32,13 @@
   <navbar
     class="footer"
     @theme-switch="onSwitchTheme"
-    :checked="theme == THEME_DARK_KEY"
+    :checked="context.isDarkTheme()"
   ></navbar>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import {
-  THEME_LIGHT_KEY,
-  THEME_DARK_KEY,
-  GetTheme,
-  SwitchTheme,
-} from "fibonacci-styles/util";
+import Context from "fibonacci-styles/context";
 import SignOn, {
   FIELD_USERNAME,
   FIELD_PASSWORD,
@@ -57,7 +52,7 @@ import Config from "@/config.json";
 import * as constants from "@/constants";
 import * as cookies from "@/cookies";
 
-const rauthService = new RauthService(Config.RAUTH_URI);
+const rauthService = new RauthService(Config.RAUTH_SERVER_URI);
 
 interface InputFields {
   [FIELD_USERNAME]: string;
@@ -75,16 +70,16 @@ export default defineComponent({
   },
 
   setup() {
+    const context = new Context(Config.ALVIDIR_BASE_URI);
+
     return {
-      THEME_LIGHT_KEY,
-      THEME_DARK_KEY,
+      context,
       Config,
     };
   },
 
   data() {
     return {
-      theme: THEME_LIGHT_KEY,
       fetching: false,
       disableEmail: false,
       disablePassword: false,
@@ -258,7 +253,7 @@ export default defineComponent({
 
     onResponseMetadata(metadata: Metadata): void {
       const header = Config.JWT_HEADER;
-      const domain = Config.COOKIES_DOMAIN;
+      const domain = Config.ALVIDIR_BASE_URI;
 
       if (!metadata || !metadata[header]) {
         return;
@@ -281,12 +276,11 @@ export default defineComponent({
     },
 
     onSwitchTheme() {
-      this.theme = SwitchTheme(Config.THEME_STORAGE_KEY);
+      this.context.switchTheme();
     },
   },
 
   mounted() {
-    this.theme = GetTheme(Config.THEME_STORAGE_KEY);
     rauthService.subscribe(this);
   },
 });
