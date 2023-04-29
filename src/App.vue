@@ -1,53 +1,15 @@
-<template>
-  <div class="container">
-    <notice-card
-      v-if="warning"
-      class="warning-message"
-      v-bind="warning"
-      @close="quitWarning"
-    >
-    </notice-card>
-    <regular-card class="shadow-box">
-      <banner
-        :logo="Config.ALVIDIR_LOGO_URI"
-        :version="Config.ALVIDIR_VERSION"
-        :title="bannerTitle"
-      >
-      </banner>
-      <sign-on
-        :title="submitTitle"
-        :loading="fetching"
-        :email="showEmailField"
-        :username="showUsernameField"
-        :password="showPasswordField"
-        :totp="showTotpField"
-        :disable-errors="!isSignup"
-        @submit="onSubmit"
-      >
-      </sign-on>
-      <options v-if="showOptions" v-bind="optionsProps"> </options>
-    </regular-card>
-  </div>
-  <span class="inflate"></span>
-  <navbar
-    class="footer"
-    @theme-switch="onSwitchTheme"
-    :checked="context.isDarkTheme()"
-  ></navbar>
-</template>
-
-<script lang="ts">
+<!-- <script lang="ts">
 import { defineComponent } from "vue";
-import Context from "fibonacci-styles/context";
+import Profile from "vue-profile/src/profile";
 import SignOn, {
   FIELD_USERNAME,
   FIELD_PASSWORD,
   FIELD_TOTP,
 } from "@/components/SignOn.vue";
 import Banner from "@/components/AppBanner.vue";
-import Options from "@/components/SignOptions.vue";
-import Navbar from "@/components/NavBar.vue";
-import RauthService, { Metadata, Error } from "@/rauth.service";
+import Options from "@/components/OptionLinks.vue";
+import BottomBar from "@/components/BottomBar.vue";
+import RauthService, { Metadata, Error } from "@/services/rauth.rpc.js";
 import Config from "@/config.json";
 import * as constants from "@/constants";
 import * as cookies from "@/cookies";
@@ -66,14 +28,15 @@ export default defineComponent({
     Banner,
     SignOn,
     Options,
-    Navbar,
+    BottomBar,
   },
 
   setup() {
-    const context = new Context(Config.ALVIDIR_BASE_URI);
+    const profile = new Profile();
+    profile.setDomain(Config.ALVIDIR_BASE_URI);
 
     return {
-      context,
+      profile,
       Config,
     };
   },
@@ -231,45 +194,45 @@ export default defineComponent({
       window.location.replace(targetLocation);
     },
 
-    onResponseData(): void {
-      // a response has been received
-      this.fetching = false;
-    },
+    // onResponseData(): void {
+    //   // a response has been received
+    //   this.fetching = false;
+    // },
 
-    onResponseStatus(error?: Error): void {
-      if (!error) return;
+    // onResponseStatus(error?: Error): void {
+    //   if (!error) return;
 
-      if (error == Error.ERR_UNAUTHORIZED) {
-        this.disableTotp = false;
-        return;
-      }
+    //   if (error == Error.ERR_UNAUTHORIZED) {
+    //     this.disableTotp = false;
+    //     return;
+    //   }
 
-      this.warning = constants.WARNING_PROPS[error];
-      if (this.warning) return;
+    //   this.warning = constants.WARNING_PROPS[error];
+    //   if (this.warning) return;
 
-      this.warning = constants.WARNING_PROPS[Error.ERR_UNKNOWN];
-      if (this.warning) this.warning.text = error;
-    },
+    //   this.warning = constants.WARNING_PROPS[Error.ERR_UNKNOWN];
+    //   if (this.warning) this.warning.text = error;
+    // },
 
-    onResponseMetadata(metadata: Metadata): void {
-      const header = Config.JWT_HEADER;
-      const domain = Config.ALVIDIR_BASE_URI;
+    // onResponseMetadata(metadata: Metadata): void {
+    //   const header = Config.JWT_HEADER;
+    //   const domain = Config.ALVIDIR_BASE_URI;
 
-      if (!metadata || !metadata[header]) {
-        return;
-      }
+    //   if (!metadata || !metadata[header]) {
+    //     return;
+    //   }
 
-      const key = Config.TOKEN_COOKIE_KEY;
-      cookies.setCookie(key, metadata[header], domain);
+    //   const key = Config.TOKEN_COOKIE_KEY;
+    //   cookies.setCookie(key, metadata[header], domain);
 
-      let pathname = window.location.pathname;
-      if (constants.RESET_PATH.test(pathname)) {
-        window.location.href = constants.LOGIN_PATH_ROOT;
-        return;
-      }
+    //   let pathname = window.location.pathname;
+    //   if (constants.RESET_PATH.test(pathname)) {
+    //     window.location.href = constants.LOGIN_PATH_ROOT;
+    //     return;
+    //   }
 
-      this.performRedirect();
-    },
+    //   this.performRedirect();
+    // },
 
     quitWarning() {
       this.warning = undefined;
@@ -284,7 +247,27 @@ export default defineComponent({
     rauthService.subscribe(this);
   },
 });
+</script> -->
+
+<script setup lang="ts">
+import { ref } from "vue";
+import Profile from "vue-menus/src/profile";
+import WarningList from "@/components/WarningList.vue";
+import config from "@/config.json";
+
+const profile = ref<Profile>(new Profile(""));
 </script>
+
+<template>
+  <div id="main">
+    <warning-list></warning-list>
+    <regular-card class="shadow-box">
+      <img id="logo" :src="config.ALVIDIR_LOGO_URI" />
+      <router-view />
+    </regular-card>
+  </div>
+  <span class="inflate"></span>
+</template>
 
 <style lang="scss">
 @import "fibonacci-styles";
@@ -301,36 +284,42 @@ body {
   background: var(--color-bg-secondary);
 }
 
-.container {
+#app {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#main {
   width: $fib-13 * 1px;
   padding-top: $fib-5 * 1vh;
 }
 
-.centered-column {
+img {
+  margin-top: $fib-7 * 1px;
+  margin-bottom: $fib-6 * 1px;
+  height: $fib-10 * 1px;
+  width: 100%;
+}
+
+nav {
   display: flex;
-  align-items: center;
-  flex-direction: column;
-}
+  justify-content: center;
 
-#app {
-  @extend .centered-column;
-  height: 100vh;
-}
+  a {
+    font-size: small;
+    text-align: center;
 
-.loader-container {
-  @extend .centered-column;
-  padding-bottom: $fib-9 * 1px;
-}
+    &.primary {
+      font-weight: 600;
+    }
+  }
 
-.warning-message {
-  margin-bottom: $fib-7 * 1px;
-}
-
-.inflate {
-  flex: 1;
-}
-
-.footer {
-  margin-top: $fib-5 * 1vh;
+  span {
+    color: var(--color-border);
+    margin-left: $fib-5 * 1px;
+    margin-right: $fib-5 * 1px;
+  }
 }
 </style>

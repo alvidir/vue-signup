@@ -3,7 +3,7 @@
     <div class="side-container"></div>
     <div class="side-container">
       <switch-button
-        @switch="spreadEvent"
+        @switch="onSwitchThemeClick"
         :checked="checked"
         color="var(--color-accent)"
       ></switch-button>
@@ -26,7 +26,7 @@ export default defineComponent({
   },
 
   methods: {
-    spreadEvent(status: boolean) {
+    onSwitchThemeClick(status: boolean) {
       this.$emit(THEME_SWITCH_EVENT_NAME, status);
     },
   },

@@ -3,7 +3,7 @@
   "TOKEN_COOKIE_KEY": "token",
   "TOKEN_QUERY_PARAM": "t",
   "REDIRECT_QUERY_PARAM": "r",
-  "RAUTH_SERVER_URI": "http://localhost:8080",
+  "RAUTH_BASE_URI": "http://localhost:8080",
   "DEFAULT_REDIRECT": "http://google.com",
   "ALVIDIR_LOGO_URI": "https://raw.githubusercontent.com/alvidir/statics/main/pictures/svg/alvidir_logo.svg",
   "ALVIDIR_BASE_URI": "alvidir.com",
