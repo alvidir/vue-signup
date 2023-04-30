@@ -41,7 +41,7 @@ jobs:
           fetch-depth: 0
 
       - name: Generate protos
-        run: make all
+        run: make
 
       - name: Build project
         run: |
