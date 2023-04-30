@@ -64,8 +64,8 @@ const login = (
       request.setTotp(totp);
 
       sessionClient
-        .login(request, headers, (resp) => {
-          console.log(resp);
+        .login(request, headers, () => {
+          return;
         })
         .on("status", (status: grpcWeb.Status) => {
           if (status.code !== grpcWeb.StatusCode.OK) {
@@ -89,8 +89,8 @@ const logout = (headers: Metadata): Promise<void> => {
       reject: (reason: Warning) => void
     ) => {
       sessionClient
-        .logout(new Empty(), headers, (resp) => {
-          console.log(resp);
+        .logout(new Empty(), headers, () => {
+          return;
         })
         .on("status", (status: grpcWeb.Status) => {
           if (status.code !== grpcWeb.StatusCode.OK) resolve();
@@ -117,8 +117,8 @@ const reset = (
       request.setPwd(newPwd);
 
       userClient
-        .reset(request, headers, (resp) => {
-          console.log(resp);
+        .reset(request, headers, () => {
+          return;
         })
         .on("status", (status: grpcWeb.Status) => {
           if (status.code === grpcWeb.StatusCode.OK) resolve();
