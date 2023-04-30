@@ -32,7 +32,8 @@ jobs:
     needs: changelog
     if: |
       contains(needs.changelog.outputs.changelog, 'src') ||
-      contains(needs.changelog.outputs.changelog, 'proto')
+      contains(needs.changelog.outputs.changelog, 'proto') ||
+      contains(needs.changelog.outputs.changelog, 'package.json')
 
     steps:
       - name: Checkout code
