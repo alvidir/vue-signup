@@ -1,24 +1,19 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
-import { include as includeFieldsComponents } from "vue-fields/src/main";
-import { include as includeButtonsComponents } from "vue-buttons/src/main";
-import { include as includeCardsComponents } from "vue-cards/src/main";
+import includeFields from "vue-fields/src/main";
+import includeButtons from "vue-buttons/src/main";
+import includeCards from "vue-cards/src/main";
+import router from "./router";
 
 const app = createApp(App);
-includeFieldsComponents(app);
-includeButtonsComponents(app);
-includeCardsComponents(app);
+app.use(router);
+
+const pinia = createPinia();
+app.use(pinia);
+
+includeFields(app);
+includeButtons(app);
+includeCards(app);
+
 app.mount("#app");
-
-// Components as a library
-import SignOn from "./components/SignOn.vue";
-import RauthService from "./rauth.service";
-
-const SIGN_ON_TAG = "sign-on";
-
-export { SignOn, RauthService };
-
-// eslint-disable-next-line
-export function include(app: any): any {
-  app.component(SIGN_ON_TAG, SignOn);
-}
