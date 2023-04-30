@@ -4,7 +4,8 @@
   "TOKEN_QUERY_PARAM": "t",
   "REDIRECT_QUERY_PARAM": "r",
   "RAUTH_BASE_URI": "http://localhost:8080",
-  "DEFAULT_REDIRECT": "http://google.com",
+  "LOGIN_REDIRECT": "http://google.com",
+  "LOGOUT_REDIRECT": "http://localhost:8081/login",
   "ALVIDIR_LOGO_URI": "https://raw.githubusercontent.com/alvidir/statics/main/pictures/svg/alvidir_logo.svg",
   "ALVIDIR_BASE_URI": "alvidir.com",
   "ALVIDIR_VERSION": "alpha"

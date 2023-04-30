@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import { ref, reactive } from "vue";
-import Warning from "@/warning";
+import { Warning } from "@/warning";
 
 export const useWarningStore = defineStore("warning", () => {
-  const max = ref(3);
+  const max = ref(1);
   const warnings = reactive(new Array<Warning>());
 
   const add = (warning: Warning): void => {

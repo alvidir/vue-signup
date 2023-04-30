@@ -24,6 +24,7 @@ div {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin-bottom: $fib-9 * 1px;
 }
 
 span {

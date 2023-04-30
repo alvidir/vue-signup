@@ -1,16 +1,16 @@
 import * as grpcWeb from "grpc-web";
 import { UserClient } from "@/proto/UserServiceClientPb";
-import { SignupRequest, ResetRequest, Empty } from "@/proto/user_pb";
+import { SignupRequest, ResetRequest } from "@/proto/user_pb";
 import { SessionClient } from "@/proto/SessionServiceClientPb";
-import { LoginRequest } from "@/proto/session_pb";
+import { LoginRequest, Empty } from "@/proto/session_pb";
 import config from "@/config.json";
 import urlJoin from "url-join";
-import Warning, { getWarning } from "@/warning";
+import { Warning, getWarning } from "@/warning";
 
 type Token = string;
 type Metadata = { [key: string]: string };
 
-const url = urlJoin(config.RAUTH_BASE_URI, "rpc");
+const url = urlJoin(config.RAUTH_BASE_URI);
 const userClient: UserClient = new UserClient(url, null, null);
 const sessionClient: SessionClient = new SessionClient(url, null, null);
 
@@ -29,14 +29,16 @@ const signup = (
       request.setPwd(password);
 
       userClient
-        .signup(request, headers, () => {})
+        .signup(request, headers, (resp) => {
+          console.log(resp);
+        })
         .on("status", (status: grpcWeb.Status) => {
           if (status.code !== grpcWeb.StatusCode.OK) {
             reject(getWarning(status.details));
           }
         })
         .on("metadata", (metadata: grpcWeb.Metadata) => {
-          let token = metadata ? metadata[config.JWT_HEADER] : undefined;
+          const token = metadata ? metadata[config.JWT_HEADER] : undefined;
           if (token) {
             resolve(token);
           }
@@ -62,17 +64,37 @@ const login = (
       request.setTotp(totp);
 
       sessionClient
-        .login(request, headers, () => {})
+        .login(request, headers, (resp) => {
+          console.log(resp);
+        })
         .on("status", (status: grpcWeb.Status) => {
           if (status.code !== grpcWeb.StatusCode.OK) {
             reject(getWarning(status.details));
           }
         })
         .on("metadata", (metadata: grpcWeb.Metadata) => {
-          let token = metadata ? metadata[config.JWT_HEADER] : undefined;
+          const token = metadata ? metadata[config.JWT_HEADER] : undefined;
           if (token) {
             resolve(token);
           }
+        });
+    }
+  );
+};
+
+const logout = (headers: Metadata): Promise<void> => {
+  return new Promise(
+    (
+      resolve: (value: void | PromiseLike<void>) => void,
+      reject: (reason: Warning) => void
+    ) => {
+      sessionClient
+        .logout(new Empty(), headers, (resp) => {
+          console.log(resp);
+        })
+        .on("status", (status: grpcWeb.Status) => {
+          if (status.code !== grpcWeb.StatusCode.OK) resolve();
+          else reject(getWarning(status.details));
         });
     }
   );
@@ -95,7 +117,9 @@ const reset = (
       request.setPwd(newPwd);
 
       userClient
-        .reset(request, headers, () => {})
+        .reset(request, headers, (resp) => {
+          console.log(resp);
+        })
         .on("status", (status: grpcWeb.Status) => {
           if (status.code === grpcWeb.StatusCode.OK) resolve();
           else reject(getWarning(status.details));
@@ -104,5 +128,4 @@ const reset = (
   );
 };
 
-export default Token;
-export { signup, login, reset };
+export { Token, signup, login, logout, reset };

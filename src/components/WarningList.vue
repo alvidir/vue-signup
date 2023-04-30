@@ -21,9 +21,8 @@ const warningStore = useWarningStore();
 @import "fibonacci-styles";
 
 #warning-list {
-  position: absolute;
   width: fit-content;
-  margin: $fib-7 * 1px;
+  margin-bottom: $fib-7 * 1px;
   right: 0;
   z-index: 2;
 
@@ -47,7 +46,7 @@ const warningStore = useWarningStore();
 
 .list-enter-from {
   opacity: 0;
-  transform: translateX($fib-7 * 1px);
+  transform: translateY($fib-7 * 1px);
 }
 
 .list-leave-to {

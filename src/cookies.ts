@@ -1,4 +1,9 @@
-function setCookie(key: string, value: string, domain?: string, exp?: number) {
+const setCookie = (
+  key: string,
+  value: string,
+  domain?: string,
+  exp?: number
+) => {
   let expires = "";
 
   if (exp) {
@@ -8,6 +13,11 @@ function setCookie(key: string, value: string, domain?: string, exp?: number) {
 
   domain = domain ? `; Domain=${domain}` : "";
   document.cookie = `${key}=${value || ""}${expires}${domain}; SameSite=Lax`;
-}
+};
 
-export { setCookie };
+const deleteCookie = (key: string, domain?: string) => {
+  domain = domain ? `Domain=${domain}` : "";
+  document.cookie = `${key}=; Expires=Thu, 01 Jan 1970 00:00:01 GMT; ${domain}; SameSite=Lax`;
+};
+
+export { setCookie, deleteCookie };
