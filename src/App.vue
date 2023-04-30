@@ -3,7 +3,6 @@ import { ref } from "vue";
 import Profile from "vue-menus/src/profile";
 import WarningList from "@/components/WarningList.vue";
 import BottomNavbar from "./components/BottomNavbar.vue";
-import config from "@/config.json";
 
 const profile = ref<Profile>(new Profile(""));
 </script>
@@ -12,7 +11,6 @@ const profile = ref<Profile>(new Profile(""));
   <div id="main">
     <warning-list></warning-list>
     <regular-card class="shadow-box">
-      <img id="logo" :src="config.ALVIDIR_LOGO_URI" />
       <router-view />
     </regular-card>
   </div>
@@ -45,15 +43,6 @@ body {
 #main {
   width: $fib-13 * 1px;
   padding-top: $fib-10 * 1px;
-}
-
-img {
-  box-sizing: border-box;
-  padding: $fib-5 * 1px;
-  margin-top: $fib-8 * 1px;
-  margin-bottom: $fib-5 * 1px;
-  height: $fib-10 * 1px;
-  width: 100%;
 }
 
 nav {

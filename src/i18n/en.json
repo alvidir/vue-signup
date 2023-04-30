@@ -18,6 +18,8 @@
   "UsernameOrEmail": "Username or email",
   "Password": "Password",
   "OneTimePassword": "One time password",
+  "LogoutTitle": "Logging out from Alvidir",
+  "HopeToSeeYouSoon": "Bye! We hope to see you soon.",
   "CreateAnAccount": "Create an account",
   "ForgotPassword": "Forgot password?",
   "ResetTitle": "Recover account",

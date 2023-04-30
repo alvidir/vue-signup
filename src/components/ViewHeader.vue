@@ -10,6 +10,7 @@ defineProps<Props>();
 </script>
 
 <template>
+  <img id="logo" :src="config.ALVIDIR_LOGO_URI" />
   <div>
     <span>{{ title }}</span>
     <small>{{ config.ALVIDIR_VERSION }}</small>
@@ -50,5 +51,14 @@ small {
   &:not(:active) {
     background: transparent;
   }
+}
+
+img {
+  box-sizing: border-box;
+  padding: $fib-5 * 1px;
+  margin-top: $fib-8 * 1px;
+  margin-bottom: $fib-5 * 1px;
+  height: $fib-10 * 1px;
+  width: 100%;
 }
 </style>
