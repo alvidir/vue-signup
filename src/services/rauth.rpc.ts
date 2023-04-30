@@ -93,7 +93,7 @@ const logout = (headers: Metadata): Promise<void> => {
           return;
         })
         .on("status", (status: grpcWeb.Status) => {
-          if (status.code !== grpcWeb.StatusCode.OK) resolve();
+          if (status.code === grpcWeb.StatusCode.OK) resolve();
           else reject(getWarning(status.details));
         });
     }

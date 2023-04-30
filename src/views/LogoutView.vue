@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import ViewHeader from "@/components/ViewHeader.vue";
 import { logout } from "@/services/rauth.rpc";
 import config from "@/config.json";
 import { deleteCookie } from "@/cookies";
@@ -19,7 +17,6 @@ logout({})
     window.location.replace(targetLocation);
   })
   .catch((warning) => {
-    console.log(warning);
     warningStore.add(warning);
   });
 </script>
