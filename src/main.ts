@@ -7,12 +7,13 @@ import includeCards from "vue-cards/src/main";
 import router from "./router";
 
 const app = createApp(App);
-includeFields(app);
-includeButtons(app);
-includeCards(app);
+app.use(router);
 
 const pinia = createPinia();
 app.use(pinia);
 
-app.use(router);
+includeFields(app);
+includeButtons(app);
+includeCards(app);
+
 app.mount("#app");

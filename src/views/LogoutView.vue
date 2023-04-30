@@ -27,7 +27,7 @@ onBeforeMount(() => {
 
 <template>
   <div>
-    <view-header title="Log in Alvidir"></view-header>
+    <view-header title="Logout from Alvidir"></view-header>
   </div>
 </template>
 

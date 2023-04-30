@@ -2,11 +2,6 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/login",
-    name: "login",
-    component: () => import("../views/LoginView.vue"),
-  },
-  {
     path: "/logout",
     name: "logout",
     component: () => import("../views/LogoutView.vue"),
@@ -20,6 +15,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/reset",
     name: "reset",
     component: () => import("../views/ResetView.vue"),
+  },
+  {
+    path: "/:pathMatch(.*)",
+    name: "login",
+    component: () => import("../views/LoginView.vue"),
   },
 ];
 

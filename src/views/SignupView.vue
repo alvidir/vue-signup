@@ -8,6 +8,7 @@ import { setCookie } from "@/cookies";
 import { redirect, token } from "@/queryParams";
 import { useWarningStore } from "@/stores/warning";
 import { emailRegex, passwordRegex } from "@/regex";
+import i18n from "@/i18n/en.json";
 
 const warningStore = useWarningStore();
 
@@ -31,7 +32,7 @@ const isValid = computed((): boolean => {
 const onEmailInput = () => {
   const ident = email.value?.text() ?? "";
   if (ident.length && !emailRegex.test(ident)) {
-    emailError.value = "Invalid email address.";
+    emailError.value = i18n.ErrInvalidEmail;
   } else {
     emailError.value = "";
   }
@@ -40,8 +41,7 @@ const onEmailInput = () => {
 const onPasswordInput = () => {
   const pwd = password.value?.text() ?? "";
   if (pwd.length && !passwordRegex.test(pwd)) {
-    passwordError.value =
-      "A password must be at least 8 characters long, including at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    passwordError.value = i18n.ErrInvalidPassword;
   } else {
     passwordError.value = "";
   }
@@ -80,9 +80,9 @@ onBeforeMount(() => {
 
 <template>
   <div>
-    <view-header title="Sign on Alvidir"></view-header>
+    <view-header :title="i18n.SignupTitle"></view-header>
     <regular-field
-      placeholder="Email"
+      :placeholder="i18n.Email"
       :error="emailError"
       ref="email"
       @input="onEmailInput"
@@ -90,7 +90,7 @@ onBeforeMount(() => {
     ></regular-field>
 
     <regular-field
-      placeholder="Password"
+      :placeholder="i18n.Password"
       :error="passwordError"
       type="password"
       ref="password"
@@ -104,11 +104,11 @@ onBeforeMount(() => {
       @submit="onSubmit()"
       large
     >
-      Sign up
+      {{ i18n.Signup }}
     </submit-button>
 
     <nav>
-      <router-link to="/login">Already have an account? Log in!</router-link>
+      <router-link to="/login">{{ i18n.AlreadyHaveAnAccount }}</router-link>
     </nav>
   </div>
 </template>

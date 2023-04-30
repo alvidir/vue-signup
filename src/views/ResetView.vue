@@ -9,6 +9,7 @@ import { Code } from "@/warning";
 import { useWarningStore } from "@/stores/warning";
 import { emailRegex, passwordRegex } from "@/regex";
 import router from "@/router";
+import i18n from "@/i18n/en.json";
 
 const warningStore = useWarningStore();
 
@@ -34,7 +35,7 @@ const isValid = computed((): boolean => {
 const onEmailInput = () => {
   const ident = email.value?.text() ?? "";
   if (ident.length && !emailRegex.test(ident)) {
-    emailError.value = "Invalid email address.";
+    emailError.value = i18n.ErrInvalidEmail;
   } else {
     emailError.value = "";
   }
@@ -43,8 +44,7 @@ const onEmailInput = () => {
 const onPasswordInput = () => {
   const pwd = password.value?.text() ?? "";
   if (pwd.length && !passwordRegex.test(pwd)) {
-    passwordError.value =
-      "A password must be at least 8 characters long, including at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    passwordError.value = i18n.ErrInvalidPassword;
   } else {
     passwordError.value = "";
   }
@@ -77,10 +77,10 @@ const onSubmit = () => {
 
 <template>
   <div>
-    <view-header title="Recover account"></view-header>
+    <view-header :title="i18n.ResetTitle"></view-header>
     <regular-field
       v-show="!token"
-      placeholder="Email"
+      :placeholder="i18n.Email"
       :error="emailError"
       ref="email"
       @input="onEmailInput"
@@ -89,7 +89,7 @@ const onSubmit = () => {
 
     <regular-field
       v-show="token && !showTotp"
-      placeholder="Password"
+      :placeholder="i18n.Password"
       :error="passwordError"
       type="password"
       ref="password"
@@ -101,7 +101,7 @@ const onSubmit = () => {
       v-show="showTotp"
       lenght="6"
       ref="totp"
-      placeholder="One time password"
+      :placeholder="i18n.OneTimePassword"
       @input="onPasswordInput"
       large
     >
@@ -113,11 +113,11 @@ const onSubmit = () => {
       @submit="onSubmit()"
       large
     >
-      Reset
+      {{ i18n.Reset }}
     </submit-button>
 
     <nav>
-      <router-link to="/login">Return to the log in page</router-link>
+      <router-link to="/login">{{ i18n.ReturnToLogin }}</router-link>
     </nav>
   </div>
 </template>

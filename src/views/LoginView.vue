@@ -8,6 +8,7 @@ import { setCookie } from "@/cookies";
 import { redirect } from "@/queryParams";
 import { Code } from "@/warning";
 import { useWarningStore } from "@/stores/warning";
+import i18n from "@/i18n/en.json";
 
 const warningStore = useWarningStore();
 
@@ -57,10 +58,10 @@ const onSubmit = () => {
 
 <template>
   <div>
-    <view-header title="Log in Alvidir"></view-header>
+    <view-header :title="i18n.LoginTitle"></view-header>
     <regular-field
       v-show="!showTotp"
-      placeholder="Username or email"
+      :placeholder="i18n.UsernameOrEmail"
       ref="user"
       @input="onInput"
       large
@@ -68,7 +69,7 @@ const onSubmit = () => {
 
     <regular-field
       v-show="!showTotp"
-      placeholder="Password"
+      :placeholder="i18n.Password"
       type="password"
       ref="password"
       @input="onInput"
@@ -79,7 +80,7 @@ const onSubmit = () => {
       v-show="showTotp"
       lenght="6"
       ref="totp"
-      placeholder="One time password"
+      :placeholder="i18n.OneTimePassword"
       @input="onInput"
       large
     >
@@ -91,13 +92,13 @@ const onSubmit = () => {
       @submit="onSubmit()"
       large
     >
-      Log in
+      {{ i18n.Login }}
     </submit-button>
 
     <nav>
-      <router-link to="/signup">Create an account</router-link>
+      <router-link to="/signup">{{ i18n.CreateAnAccount }}</router-link>
       <span>&#124;</span>
-      <router-link to="/reset">Forgot password?</router-link>
+      <router-link to="/reset">{{ i18n.ForgotPassword }}</router-link>
     </nav>
   </div>
 </template>
