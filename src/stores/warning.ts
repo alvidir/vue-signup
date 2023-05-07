@@ -18,9 +18,9 @@ export const useWarningStore = defineStore("warning", () => {
     warnings.splice(warnings.indexOf(warning), 1);
   };
 
-  const list = (): Array<Warning> => {
+  const all = (): Array<Warning> => {
     return warnings;
   };
 
-  return { add, remove, list };
+  return { add, remove, all };
 });

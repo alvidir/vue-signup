@@ -7,7 +7,7 @@ const warningStore = useWarningStore();
   <div id="warning-list">
     <transition-group name="list">
       <notice-card
-        v-for="warning in warningStore.list()"
+        v-for="warning in warningStore.all()"
         :key="warning"
         v-bind="warning"
         @close="warningStore.remove(warning)"
