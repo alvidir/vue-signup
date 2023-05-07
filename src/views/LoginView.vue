@@ -2,11 +2,11 @@
 import { ref } from "vue";
 import ViewHeader from "@/components/ViewHeader.vue";
 import { Field } from "vue-fields/src/types";
-import { login } from "@/services/rauth.rpc";
+import { Token, login } from "@/services/rauth.rpc";
 import config from "@/config.json";
 import { setCookie } from "@/cookies";
 import { redirect } from "@/queryParams";
-import { Code } from "@/warning";
+import { Code, Warning } from "@/warning";
 import { useWarningStore } from "@/stores/warning";
 import i18n from "@/i18n/en.json";
 
@@ -37,7 +37,7 @@ const onSubmit = () => {
   const tfa = totp.value?.text() ?? "";
 
   login(ident, pwd, tfa, {})
-    .then((token) => {
+    .then((token: Token) => {
       const key = config.TOKEN_COOKIE_KEY;
       const domain = config.ALVIDIR_BASE_URI;
       setCookie(key, token, domain);
@@ -45,9 +45,8 @@ const onSubmit = () => {
       const targetLocation = redirect ?? config.LOGIN_REDIRECT;
       window.location.replace(targetLocation);
     })
-    .catch((warning) => {
-      console.log(warning);
-      if (warning === Code.ErrUnauthorized) showTotp.value = true;
+    .catch((warning: Warning) => {
+      if (warning.code === Code.ErrUnauthorized) showTotp.value = true;
       else warningStore.add(warning);
     })
     .finally(() => {

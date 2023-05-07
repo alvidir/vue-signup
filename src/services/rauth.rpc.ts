@@ -29,8 +29,8 @@ const signup = (
       request.setPwd(password);
 
       userClient
-        .signup(request, headers, (resp) => {
-          console.log(resp);
+        .signup(request, headers, () => {
+          return;
         })
         .on("status", (status: grpcWeb.Status) => {
           if (status.code !== grpcWeb.StatusCode.OK) {
@@ -39,9 +39,7 @@ const signup = (
         })
         .on("metadata", (metadata: grpcWeb.Metadata) => {
           const token = metadata ? metadata[config.JWT_HEADER] : undefined;
-          if (token) {
-            resolve(token);
-          }
+          if (token) resolve(token);
         });
     }
   );
@@ -74,9 +72,7 @@ const login = (
         })
         .on("metadata", (metadata: grpcWeb.Metadata) => {
           const token = metadata ? metadata[config.JWT_HEADER] : undefined;
-          if (token) {
-            resolve(token);
-          }
+          if (token) resolve(token);
         });
     }
   );

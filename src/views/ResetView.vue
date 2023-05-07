@@ -5,7 +5,7 @@ import { Field } from "vue-fields/src/types";
 import { reset } from "@/services/rauth.rpc";
 import config from "@/config.json";
 import { token } from "@/queryParams";
-import { Code } from "@/warning";
+import { Code, Warning } from "@/warning";
 import { useWarningStore } from "@/stores/warning";
 import { emailRegex, passwordRegex } from "@/regex";
 import router from "@/router";
@@ -65,8 +65,8 @@ const onSubmit = () => {
     .then(() => {
       router.push("/login");
     })
-    .catch((warning) => {
-      if (warning === Code.ErrUnauthorized) showTotp.value = true;
+    .catch((warning: Warning) => {
+      if (warning.code === Code.ErrUnauthorized) showTotp.value = true;
       else warningStore.add(warning);
     })
     .finally(() => {

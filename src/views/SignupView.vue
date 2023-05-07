@@ -2,10 +2,11 @@
 import { ref, computed, onBeforeMount } from "vue";
 import ViewHeader from "@/components/ViewHeader.vue";
 import { Field } from "vue-fields/src/types";
-import { signup } from "@/services/rauth.rpc";
+import { Token, signup } from "@/services/rauth.rpc";
 import config from "@/config.json";
 import { setCookie } from "@/cookies";
 import { redirect, token } from "@/queryParams";
+import { Warning } from "@/warning";
 import { useWarningStore } from "@/stores/warning";
 import { emailRegex, passwordRegex } from "@/regex";
 import i18n from "@/i18n/en.json";
@@ -58,14 +59,14 @@ const onSubmit = () => {
     : {};
 
   signup(ident, pwd, headers)
-    .then((token) => {
+    .then((token: Token) => {
       const key = config.TOKEN_COOKIE_KEY;
       const domain = config.ALVIDIR_BASE_URI;
       setCookie(key, token, domain);
       const targetLocation = redirect ?? config.LOGIN_REDIRECT;
       window.location.replace(targetLocation);
     })
-    .catch((warning) => {
+    .catch((warning: Warning) => {
       warningStore.add(warning);
     })
     .finally(() => {

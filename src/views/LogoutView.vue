@@ -4,6 +4,7 @@ import config from "@/config.json";
 import { deleteCookie } from "@/cookies";
 import { redirect } from "@/queryParams";
 import { useWarningStore } from "@/stores/warning";
+import { Warning } from "@/warning";
 import i18n from "@/i18n/en.json";
 
 const warningStore = useWarningStore();
@@ -16,7 +17,7 @@ logout({})
     const targetLocation = redirect ?? config.LOGOUT_REDIRECT;
     window.location.replace(targetLocation);
   })
-  .catch((warning) => {
+  .catch((warning: Warning) => {
     warningStore.add(warning);
   });
 </script>
