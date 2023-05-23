@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import Profile from "vue-menus/src/profile";
+import { reactive, provide } from "vue";
+import { Profile, apply, load } from "vue-profile/src/profile";
 import WarningList from "@/components/WarningList.vue";
 import BottomNavbar from "./components/BottomNavbar.vue";
 
-const profile = ref<Profile>(new Profile(""));
+const profile = reactive<Profile>(load());
+provide("profile", profile);
+apply(profile);
 </script>
 
 <template>

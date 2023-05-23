@@ -1,19 +1,27 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
-import Profile from "vue-menus/src/profile";
+import { inject } from "vue";
+import { Profile, Theme, storeAndApply } from "vue-profile/src/profile";
 
-interface Props {
-  profile: Profile;
-}
+const profile = inject<Profile>("profile");
 
-defineProps<Props>();
+const switchTheme = () => {
+  if (!profile) return;
+
+  let next = {
+    [Theme.Dark]: Theme.Light,
+    [Theme.Light]: Theme.Dark,
+  };
+
+  profile.theme = next[profile.theme ?? Theme.Light];
+  storeAndApply(profile);
+};
 </script>
 
 <template>
   <div class="navbar">
     <switch-button
-      @switch="profile.theme.switchTheme()"
-      :checked="profile.theme.isDarkTheme()"
+      @switch="switchTheme()"
+      :checked="profile?.theme == Theme.Dark"
       color="var(--color-accent)"
     ></switch-button>
     <i class="bx bxs-moon"></i>

@@ -12,7 +12,6 @@
     "useDefineForClassFields": true,
     "resolveJsonModule": true,
     "sourceMap": true,
-    "allowJs": false,
     "baseUrl": ".",
     "types": ["webpack-env"],
     "paths": {
