@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { reactive, provide } from "vue";
-import { Profile, apply, load } from "vue-profile/src/profile";
+import { loadAndApply } from "vue-profile/src/profile";
 import WarningList from "@/components/WarningList.vue";
 import BottomNavbar from "./components/BottomNavbar.vue";
 
-const profile = reactive<Profile>(load());
-provide("profile", profile);
-apply(profile);
+const profile = loadAndApply();
 </script>
 
 <template>
@@ -17,7 +14,7 @@ apply(profile);
     </regular-card>
   </div>
   <span class="inflate"></span>
-  <bottom-navbar></bottom-navbar>
+  <bottom-navbar :profile="profile"></bottom-navbar>
 </template>
 
 <style lang="scss">
