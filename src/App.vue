@@ -17,7 +17,7 @@ apply(profile);
     </regular-card>
   </div>
   <span class="inflate"></span>
-  <bottom-navbar :profile="profile"></bottom-navbar>
+  <bottom-navbar></bottom-navbar>
 </template>
 
 <style lang="scss">

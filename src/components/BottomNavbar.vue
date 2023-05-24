@@ -5,14 +5,14 @@ import { Profile, Theme, storeAndApply } from "vue-profile/src/profile";
 const profile = inject<Profile>("profile");
 
 const switchTheme = () => {
-  if (!profile) return;
+  if (!profile || !profile.theme) return;
 
   let next = {
     [Theme.Dark]: Theme.Light,
     [Theme.Light]: Theme.Dark,
   };
 
-  profile.theme = next[profile.theme ?? Theme.Light];
+  profile.theme = next[profile.theme];
   storeAndApply(profile);
 };
 </script>
