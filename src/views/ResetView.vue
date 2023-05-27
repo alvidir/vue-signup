@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import ViewHeader from "@/components/ViewHeader.vue";
-import { Field } from "vue-fields/src/types";
 import { reset } from "@/services/rauth.rpc";
 import config from "@/config.json";
 import { token } from "@/queryParams";
@@ -13,28 +12,27 @@ import i18n from "@/i18n/en.json";
 
 const warningStore = useWarningStore();
 
-const email = ref<Field | undefined>(undefined);
+const email = ref("");
 const emailError = ref("");
 
-const password = ref<Field | undefined>(undefined);
+const password = ref("");
 const passwordError = ref("");
 
-const totp = ref<Field | undefined>(undefined);
+const totp = ref("");
 
 const showTotp = ref(false);
 const loading = ref(false);
 
 const isValid = computed((): boolean => {
   return (
-    (!token && !!email.value?.text() && !emailError.value) ||
-    (!!token && !!password.value?.text() && !passwordError.value) ||
-    (showTotp.value && !!totp.value?.text())
+    (!token && !!email.value && !emailError.value) ||
+    (!!token && !!password.value && !passwordError.value) ||
+    (showTotp.value && !!totp.value)
   );
 });
 
 const onEmailInput = () => {
-  const ident = email.value?.text() ?? "";
-  if (ident.length && !emailRegex.test(ident)) {
+  if (email.value.length && !emailRegex.test(email.value)) {
     emailError.value = i18n.ErrInvalidEmail;
   } else {
     emailError.value = "";
@@ -42,8 +40,7 @@ const onEmailInput = () => {
 };
 
 const onPasswordInput = () => {
-  const pwd = password.value?.text() ?? "";
-  if (pwd.length && !passwordRegex.test(pwd)) {
+  if (password.value.length && !passwordRegex.test(password.value)) {
     passwordError.value = i18n.ErrInvalidPassword;
   } else {
     passwordError.value = "";
@@ -52,16 +49,13 @@ const onPasswordInput = () => {
 
 const onSubmit = () => {
   loading.value = true;
-  const ident = email.value?.text() ?? "";
-  const pwd = password.value?.text() ?? "";
-  const tfa = totp.value?.text() ?? "";
   const headers = token
     ? {
         [config.JWT_HEADER]: token,
       }
     : {};
 
-  reset(ident, pwd, tfa, headers)
+  reset(email.value, password.value, totp.value, headers)
     .then(() => {
       router.push("/login");
     })
@@ -79,29 +73,32 @@ const onSubmit = () => {
   <div>
     <view-header :title="i18n.ResetTitle"></view-header>
     <regular-field
+      v-model="email"
       v-show="!token"
       :placeholder="i18n.Email"
       :error="emailError"
-      ref="email"
+      :readonly="loading"
       @input="onEmailInput"
       large
     ></regular-field>
 
     <regular-field
+      v-model="password"
       v-show="token && !showTotp"
       :placeholder="i18n.Password"
       :error="passwordError"
+      :readonly="loading"
       type="password"
-      ref="password"
       @input="onPasswordInput"
       large
     ></regular-field>
 
     <discret-field
+      v-model="totp"
       v-show="showTotp"
       lenght="6"
-      ref="totp"
       :placeholder="i18n.OneTimePassword"
+      :readonly="loading"
       @input="onPasswordInput"
       large
     >

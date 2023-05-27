@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import ViewHeader from "@/components/ViewHeader.vue";
-import { Field } from "vue-fields/src/types";
 import { Token, login } from "@/services/rauth.rpc";
 import config from "@/config.json";
 import { setCookie } from "@/cookies";
@@ -12,31 +11,25 @@ import i18n from "@/i18n/en.json";
 
 const warningStore = useWarningStore();
 
-const user = ref<Field | undefined>(undefined);
-const password = ref<Field | undefined>(undefined);
-const totp = ref<Field | undefined>(undefined);
+const user = ref("");
+const password = ref("");
+const totp = ref("");
 
 const showTotp = ref(false);
 const isValid = ref(false);
 const loading = ref(false);
 
 const onInput = () => {
-  const ident = user.value?.text() ?? "";
-  const pwd = password.value?.text() ?? "";
-  const tfa = totp.value?.text() ?? "";
-
   isValid.value =
-    ident.length > 0 && pwd.length > 7 && (!showTotp.value || tfa.length > 5);
+    user.value.length > 0 &&
+    password.value.length > 7 &&
+    (!showTotp.value || totp.value.length > 5);
 };
 
 const onSubmit = () => {
   loading.value = true;
 
-  const ident = user.value?.text() ?? "";
-  const pwd = password.value?.text() ?? "";
-  const tfa = totp.value?.text() ?? "";
-
-  login(ident, pwd, tfa, {})
+  login(user.value, password.value, totp.value, {})
     .then((token: Token) => {
       const key = config.TOKEN_COOKIE_KEY;
       const domain = config.ALVIDIR_BASE_URI;
@@ -59,27 +52,30 @@ const onSubmit = () => {
   <div>
     <view-header :title="i18n.LoginTitle"></view-header>
     <regular-field
+      v-model="user"
       v-show="!showTotp"
       :placeholder="i18n.UsernameOrEmail"
-      ref="user"
+      :readonly="loading"
       @input="onInput"
       large
     ></regular-field>
 
     <regular-field
+      v-model="password"
       v-show="!showTotp"
       :placeholder="i18n.Password"
+      :readonly="loading"
       type="password"
-      ref="password"
       @input="onInput"
       large
     ></regular-field>
 
     <discret-field
+      v-model="totp"
       v-show="showTotp"
       lenght="6"
-      ref="totp"
       :placeholder="i18n.OneTimePassword"
+      :readonly="loading"
       @input="onInput"
       large
     >

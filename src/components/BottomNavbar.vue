@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import {
   Profile,
   ColorPalette,
@@ -16,13 +17,17 @@ const onSwitchColorPalette = () => {
   switchColorPalette(props.profile);
   storeAndApply(props.profile);
 };
+
+const isDarkTheme = computed({
+  get: (): boolean => props.profile.palette == ColorPalette.Dark,
+  set: () => onSwitchColorPalette(),
+});
 </script>
 
 <template>
   <div class="navbar">
     <switch-button
-      @switch="onSwitchColorPalette()"
-      :checked="profile.palette == ColorPalette.Dark"
+      v-model="isDarkTheme"
       color="var(--color-accent)"
     ></switch-button>
     <i class="bx bxs-moon"></i>
